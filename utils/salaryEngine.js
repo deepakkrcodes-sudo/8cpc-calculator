@@ -60,7 +60,20 @@ export function getTABase(level, basic, tptaType) {
 // ===============================
 // INCOME TAX (NEW REGIME)
 // ===============================
-export function calculateIncomeTaxAnnual(annualIncome) {
+export function calculateIncomeTaxAnnual(annualGrossIncome) {
+
+  const STANDARD_DEDUCTION = 75000;
+
+  // Step 1: Deduct standard deduction
+  const taxableIncome = Math.max(
+    annualGrossIncome - STANDARD_DEDUCTION,
+    0
+  );
+
+  // Step 2: Rebate condition
+  if (taxableIncome <= 1200000) {
+    return 0;
+  }
 
   const slabs = [
     { upto: 400000, rate: 0 },
@@ -77,10 +90,10 @@ export function calculateIncomeTaxAnnual(annualIncome) {
 
   for (let slab of slabs) {
 
-    if (annualIncome > previousLimit) {
+    if (taxableIncome > previousLimit) {
 
       const taxableInThisSlab =
-        Math.min(annualIncome, slab.upto) - previousLimit;
+        Math.min(taxableIncome, slab.upto) - previousLimit;
 
       tax += taxableInThisSlab * slab.rate;
 
@@ -92,8 +105,10 @@ export function calculateIncomeTaxAnnual(annualIncome) {
 
   }
 
-  return Math.round(tax);
+  // Step 3: Add 4% cess
+  const taxWithCess = tax * 1.04;
 
+  return Math.round(taxWithCess);
 }
 // ===============================
 // CORE SALARY CALCULATOR
@@ -158,17 +173,11 @@ export function calculateSalary({
 
   const annual7 = gross7 * 12;
 
-  const taxable7 = Math.max(
-    annual7 - 50000 - (nps7 * 12),
-    0
-  );
+  const taxAnnual7 = calculateIncomeTaxAnnual(annual7);
 
-  const baseTax7 = calculateIncomeTaxAnnual(taxable7);
+  const tax7 = Math.round(taxAnnual7 / 12);
 
-  // Add 4% cess
-  const totalTaxAnnual7 = Math.round(baseTax7 * 1.04);
 
-  const tax7 = Math.round(totalTaxAnnual7 / 12);
 
   const otherDed7 =
     otherDeductions.reduce((sum, d) => sum + (d.amount || 0), 0);
@@ -229,17 +238,9 @@ export function calculateSalary({
 
   const annual8 = gross8 * 12;
 
-  const taxable8 = Math.max(
-    annual8 - 50000 - (nps8 * 12),
-    0
-  );
+  const taxAnnual8 = calculateIncomeTaxAnnual(annual8);
 
-  const baseTax8 = calculateIncomeTaxAnnual(taxable8);
-
-
-  const totalTaxAnnual8 = Math.round(baseTax8 * 1.04);
-
-  const tax8 = Math.round(totalTaxAnnual8 / 12);
+  const tax8 = Math.round(taxAnnual8 / 12);
 
 
   const otherDed8 =
