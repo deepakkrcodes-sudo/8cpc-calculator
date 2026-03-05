@@ -1,469 +1,234 @@
 // utils/arrearEngine.js
 
 import { payMatrix } from "@/data/payMatrix";
-import {
-  calculateIncomeTaxAnnual,
-  getTABase,
-  getCGHS
-} from "./salaryEngine";
 
+import { generatePeriods, parsePeriod, addMonths }
+    from "./arrearPeriodGenerator";
 
-// ==========================
-// DATE HELPERS
-// ==========================
+import { applyPromotion }
+    from "./arrearPromotionHandler";
 
-function parsePeriod(periodStr) {
+import { applyIncrement }
+    from "./arrearIncrementHandler";
 
-  const [monthStr, yearStr] = periodStr.split(" ");
-
-  const monthMap = {
-    Jan: 0,
-    July: 6
-  };
-
-  return new Date(
-    Number(yearStr),
-    monthMap[monthStr],
-    1
-  );
-
-}
-
-
-function addMonths(date, months) {
-
-  const d = new Date(date);
-
-  d.setMonth(d.getMonth() + months);
-
-  return d;
-
-}
-
-
-// ==========================
-// GENERATE PERIODS
-// ==========================
-
-export function generatePeriods(
-  implementationPeriod
-) {
-
-  const periods = [];
-
-  let current =
-    new Date(2026, 0, 1);
-
-  const end =
-    parsePeriod(implementationPeriod);
-
-  while (current < end) {
-
-    const label =
-      current.getMonth() === 0
-        ? `Jan ${current.getFullYear()}`
-        : `July ${current.getFullYear()}`;
-
-    periods.push({
-      label,
-      date: new Date(current)
-    });
-
-    current =
-      addMonths(current, 6);
-
-  }
-
-  return periods;
-
-}
-
-
-// ==========================
-// CORE ENGINE
-// ==========================
+import { calculatePeriodSalary }
+    from "./arrearSalaryCalculator";
 
 export function calculateArrear({
 
-  level,
-  basic,
-
-  fitmentFactor,
-
-  implementationPeriod,
-
-  daRates,
-
-  city,
-  hra7Percent,
-  hra8Percent,
-
-  tptaType,
-
-  incrementDate,
-
-  promotion
+    level,
+    basic,
+    fitmentFactor,
+    implementationPeriod,
+    daRates,
+    city,
+    hra7Percent,
+    hra8Percent,
+    tptaType,
+    incrementDate,
+    promotion
 
 }) {
 
-  const periods =
-    generatePeriods(
-      implementationPeriod
-    );
+    const periods =
+        generatePeriods(implementationPeriod);
 
+    let currentLevel = level;
 
-  // ======================
-  // INITIAL STATE
-  // ======================
+    let currentBasicIndex =
+        payMatrix[level].indexOf(basic);
 
-  let currentLevel =
-    level;
-
-  let currentBasicIndex =
-    payMatrix[level]
-      .indexOf(basic);
-
-
-  let nextIncrementDate =
-    incrementDate
-      ? parsePeriod(incrementDate)
-      : null;
-
-
-  let promotionApplied =
-    false;
-
-
-  let da7 = 58;
-  let da8 = 0;
-
-
-  let totalGrossArrear = 0;
-  let totalNetArrear = 0;
-
-
-  const periodResults = [];
-
-
-  // ======================
-  // LOOP PERIODS
-  // ======================
-
-  periods.forEach(
-    (period, i) => {
-
-      const date =
-        period.date;
-
-
-      // ==================
-      // APPLY PROMOTION
-      // ==================
-
-      let isPromotion =
-        false;
-
-      if (
-        promotion?.applicable &&
-        !promotionApplied &&
-        date >= new Date(promotion.date)
-      ) {
-
-        currentLevel =
-          promotion.level;
-
-        currentBasicIndex =
-          payMatrix[promotion.level]
-            .indexOf(
-              promotion.basic
-            );
-
-        promotionApplied =
-          true;
-
-        isPromotion = true;
-
-
-        // Reset increment cycle after promotion
-
-        nextIncrementDate =
-          promotion.incrementDate
-            ? parsePeriod(
-                promotion.incrementDate
-              )
+    let nextIncrementDate =
+        incrementDate
+            ? parsePeriod(incrementDate)
             : null;
 
-      }
+    let promotionApplied = false;
 
+    let da7 = 60;
+    let da8 = 0;
 
-      // ==================
-      // APPLY INCREMENT
-      // ==================
+    let totalGrossArrear = 0;
+    let totalNetArrear = 0;
 
-      let isIncrement =
-        false;
+    const periodResults = [];
 
-      if (
-        nextIncrementDate &&
-        date >= nextIncrementDate
-      ) {
+    periods.forEach((period, i) => {
+
+        const date = period.date;
+
+        let isPromotion = false;
+        let isIncrement = false;
+
+        // ======================
+        // PROMOTION
+        // ======================
 
         if (
-          currentBasicIndex <
-          payMatrix[currentLevel]
-            .length - 1
+            promotion?.applicable &&
+            !promotionApplied &&
+            period.label === promotion.period
         ) {
 
-          currentBasicIndex++;
+            currentLevel = promotion.level;
 
-          isIncrement = true;
+            currentBasicIndex =
+                payMatrix[promotion.level]
+                    .indexOf(promotion.basic);
+
+            promotionApplied = true;
+            isPromotion = true;
+
+            nextIncrementDate =
+                promotion.incrementDate
+                    ? parsePeriod(promotion.incrementDate)
+                    : null;
 
         }
 
-        nextIncrementDate =
-          addMonths(
-            nextIncrementDate,
-            12
-          );
+        // ======================
+        // INCREMENT
+        // ======================
 
-      }
+        if (
+            nextIncrementDate &&
+            date.getFullYear() === nextIncrementDate.getFullYear() &&
+            date.getMonth() === nextIncrementDate.getMonth()
+        ) {
 
+            if (
+                currentBasicIndex <
+                payMatrix[currentLevel].length - 1
+            ) {
 
-      const basic7 =
-        payMatrix[currentLevel]
-          [currentBasicIndex];
+                currentBasicIndex++;
+                isIncrement = true;
 
+            }
 
-      const basic8 =
-        Math.round(
-          basic7 *
-          fitmentFactor
-        );
+            nextIncrementDate =
+                addMonths(nextIncrementDate, 12);
 
+        }
 
-      // ==================
-      // DA UPDATE
-      // ==================
+        // ======================
+        // DA UPDATE
+        // ======================
 
-      const daIncrease =
-        daRates[i] || 2;
+        if (i > 0) {
 
-      da7 += daIncrease;
+            const daIncrease =
+                Number(daRates?.[i] ?? 2);
 
-      da8 += daIncrease;
+            da7 += daIncrease;
+            da8 += daIncrease;
 
+        }
 
-      const da7Amount =
-        Math.round(
-          basic7 *
-          da7 / 100
-        );
+        // ======================
+        // SALARY
+        // ======================
 
+        const salary =
+            calculatePeriodSalary({
 
-      const da8Amount =
-        Math.round(
-          basic8 *
-          da8 / 100
-        );
+                currentLevel,
+                currentBasicIndex,
+                fitmentFactor,
+                city,
+                hra7Percent,
+                hra8Percent,
+                tptaType,
+                da7,
+                da8
 
+            });
 
-      // ==================
-      // HRA
-      // ==================
-
-      const hra7 =
-        hra7Percent === 0
-          ? 0
-          : Math.round(
-              basic7 *
-              hra7Percent / 100
+        const grossDiff =
+            Math.round(
+                salary.gross8 -
+                salary.gross7
             );
 
-
-      const hra8 =
-        hra8Percent === 0
-          ? 0
-          : Math.round(
-              basic8 *
-              hra8Percent / 100
+        const netDiff =
+            Math.round(
+                salary.net8 -
+                salary.net7
             );
 
+        const grossArrear =
+            grossDiff * 6;
 
-      // ==================
-      // TA
-      // ==================
+        const netArrear =
+            netDiff * 6;
 
-      const taBase =
-        getTABase(
-          currentLevel,
-          basic7,
-          tptaType
-        );
+        totalGrossArrear += grossArrear;
+        totalNetArrear += netArrear;
 
+        periodResults.push({
 
-      const ta7 =
-        Math.round(
-          taBase *
-          (1 + da7 / 100)
-        );
+            period: period.label,
 
+            level: currentLevel,
 
-      const ta8 =
-        Math.round(
-          taBase *
-          (1 + da8 / 100)
-        );
+            basic7: salary.basic7,
+            basic8: salary.basic8,
 
+            gross7: salary.gross7,
+            gross8: salary.gross8,
 
-      // ==================
-      // GROSS
-      // ==================
+            net7: salary.net7,
+            net8: salary.net8,
 
-      const gross7 =
-        basic7 +
-        da7Amount +
-        hra7 +
-        ta7;
+            grossArrear,
+            netArrear,
 
+            isPromotion,
+            isIncrement
 
-      const gross8 =
-        basic8 +
-        da8Amount +
-        hra8 +
-        ta8;
+        });
 
+        const debugRows = [];
 
-      // ==================
-      // DEDUCTIONS
-      // ==================
+        debugRows.push({
 
-      const nps7 =
-        Math.round(
-          (basic7 +
-           da7Amount) *
-          0.10
-        );
+            period: period.label,
 
+            basic7: salary.basic7,
+            da7Percent: da7,
+            hra7: salary.hra7,
+            ta7: salary.ta7,
+            gross7: salary.gross7,
+            nps7: salary.nps7,
+            cghs: salary.cghs,
+            tax7: salary.tax7,
+            net7: salary.net7,
 
-      const nps8 =
-        Math.round(
-          (basic8 +
-           da8Amount) *
-          0.10
-        );
+            basic8: salary.basic8,
+            da8Percent: da8,
+            hra8: salary.hra8,
+            ta8: salary.ta8,
+            gross8: salary.gross8,
+            nps8: salary.nps8,
+            tax8: salary.tax8,
+            net8: salary.net8,
 
+            diff: salary.net8 - salary.net7
 
-      const cghs =
-        getCGHS(
-          currentLevel
-        );
+        });
 
+    });
 
-      const tax7 =
-        Math.round(
-          calculateIncomeTaxAnnual(
-            gross7 * 12
-          ) / 12
-        );
+    return {
 
+        periods: periodResults,
 
-      const tax8 =
-        Math.round(
-          calculateIncomeTaxAnnual(
-            gross8 * 12
-          ) / 12
-        );
+        totalGrossArrear:
+            Math.round(totalGrossArrear),
 
+        totalNetArrear:
+            Math.round(totalNetArrear)
 
-      const net7 =
-        gross7 -
-        nps7 -
-        cghs -
-        tax7;
-
-
-      const net8 =
-        gross8 -
-        nps8 -
-        cghs -
-        tax8;
-
-
-      // ==================
-      // ARREAR
-      // ==================
-
-      const grossArrear =
-        (gross8 -
-         gross7) * 6;
-
-
-      const netArrear =
-        (net8 -
-         net7) * 6;
-
-
-      totalGrossArrear +=
-        grossArrear;
-
-
-      totalNetArrear +=
-        netArrear;
-
-
-      periodResults.push({
-
-        period:
-          period.label,
-
-        level:
-          currentLevel,
-
-        basic7,
-
-        basic8,
-
-        gross7,
-        gross8,
-
-        net7,
-        net8,
-
-        grossArrear:
-          Math.round(
-            grossArrear
-          ),
-
-        netArrear:
-          Math.round(
-            netArrear
-          ),
-
-        isPromotion,
-
-        isIncrement
-
-      });
-
-    }
-  );
-
-
-  return {
-
-    periods:
-      periodResults,
-
-    totalGrossArrear:
-      Math.round(
-        totalGrossArrear
-      ),
-
-    totalNetArrear:
-      Math.round(
-        totalNetArrear
-      )
-
-  };
+    };
 
 }

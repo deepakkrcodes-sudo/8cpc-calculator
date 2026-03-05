@@ -13,10 +13,11 @@ export default function Header() {
         {/* Left: Logo + Name */}
         <Link href="/" className="flex items-center gap-2">
 
-          {/* Logo icon */}
-          <div className="w-8 h-8 bg-blue-600 text-white flex items-center justify-center rounded-md font-bold">
-            ₹
-          </div>
+          <img
+            src="/logo.png"
+            alt="8th CPC Calculator"
+            className="w-8 h-8 rounded"
+          />
 
           {/* App Name */}
           <div className="flex flex-col leading-tight">

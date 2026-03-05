@@ -2,7 +2,8 @@
 
 import { useState, useMemo } from "react";
 import { payMatrix } from "@/data/payMatrix";
-import { calculateArrear, generatePeriods } from "@/utils/arrearEngine";
+import { generatePeriods } from "@/utils/arrearPeriodGenerator";
+import { calculateArrear } from "@/utils/arrearEngine";
 import ArrearSummaryCard from "@/components/arrear/ArrearSummaryCard";
 import ArrearTimelineChart from "@/components/arrear/ArrearTimelineChart";
 import ArrearBreakdownTable from "@/components/arrear/ArrearBreakdownTable";
@@ -327,7 +328,7 @@ export default function ArrearCalculatorPage() {
                             Select
                         </option>
 
-                        {[1.92, 2.08, 2.86, 3.05, 3.10, 3.15]
+                        {[1.92, 2.08, 2.86, 3.05, 3.10, 3.15, 3.20, 3.25]
                             .map(f => (
                                 <option key={f}>
                                     {f}
