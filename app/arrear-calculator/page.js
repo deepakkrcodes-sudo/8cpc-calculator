@@ -8,6 +8,12 @@ import ArrearSummaryCard from "@/components/arrear/ArrearSummaryCard";
 import ArrearTimelineChart from "@/components/arrear/ArrearTimelineChart";
 import ArrearBreakdownTable from "@/components/arrear/ArrearBreakdownTable";
 
+export const metadata = {
+  title: "8th CPC Arrear Calculator",
+  description:
+    "Calculate expected arrears of 8th Pay Commission from Jan 2026 with increment and promotion scenarios."
+};
+
 export default function ArrearCalculatorPage() {
 
     // =========================
@@ -207,7 +213,7 @@ export default function ArrearCalculatorPage() {
 
                 <h1 className="text-lg font-semibold text-center">
 
-                    8th CPC Arrear Calculator (Tentative)
+                    8th CPC Arrear Calculator 
 
                 </h1>
 
@@ -474,30 +480,42 @@ export default function ArrearCalculatorPage() {
                 </div>
 
                 {periods.map((p, i) => (
+
                     <div key={i} className="flex justify-between mb-2">
 
                         <div>{p.label}</div>
 
-                        <select
-                            className="border rounded px-2"
-                            value={daRates[i]}
-                            onChange={(e) =>
-                                updateDARate(
-                                    i,
-                                    e.target.value
-                                )
-                            }
-                        >
+                        {i === 0 ? (
 
-                            {[2, 3, 4, 5].map(v => (
-                                <option key={v}>
-                                    {v}
-                                </option>
-                            ))}
+                            <div className="text-black-500 text-m align-left px-5 py-0.5 rounded bg-gray-100">
+                                 2%
+                            </div>
 
-                        </select>
+                        ) : (
+
+                            <select
+                                className="border rounded px-2"
+                                value={daRates[i - 1] ?? 2}
+                                onChange={(e) =>
+                                    updateDARate(
+                                        i - 1,
+                                        Number(e.target.value)
+                                    )
+                                }
+                            >
+
+                                {[2, 3, 4, 5].map(v => (
+                                    <option key={v} value={v}>
+                                        {v}%
+                                    </option>
+                                ))}
+
+                            </select>
+
+                        )}
 
                     </div>
+
                 ))}
 
             </div>
@@ -572,7 +590,7 @@ export default function ArrearCalculatorPage() {
 
                         </select>
 
-                        
+
 
 
                         <input
