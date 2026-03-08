@@ -17,7 +17,7 @@ export default function Footer() {
         </p>
 
         <p className="text-xs text-gray-400 mt-3">
-          © 2026 8cpcsalarycalculator.com
+          © 2026 8cpccalculator.com
         </p>
 
       </div>
