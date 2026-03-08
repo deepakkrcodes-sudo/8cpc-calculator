@@ -27,6 +27,10 @@ export const metadata = {
     canonical: "https://8cpccalculator.com"
   },
 
+  verification: {
+    google: "qjOhZnJgIVxdbydhzncJ0pppVQBIcH7NBKgtupUjzt0"
+  },
+
   openGraph: {
     title: "8th CPC Salary Calculator",
     description:
