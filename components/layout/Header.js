@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Header() {
 
@@ -13,20 +14,21 @@ export default function Header() {
         {/* Left: Logo + Name */}
         <Link href="/" className="flex items-center gap-2">
 
-          <img
+          <Image
             src="/logo.png"
             alt="8th CPC Calculator"
-            className="w-8 h-8 rounded"
+            width={36}
+            height={36}
           />
 
           {/* App Name */}
           <div className="flex flex-col leading-tight">
 
-            <span className="font-semibold text-blue-700 text-sm">
+            <span className="font-semibold text-blue-1000 text-md">
               8th CPC Calculator
             </span>
 
-            <span className="text-xs text-gray-500">
+            <span className="text-sm text-gray-500">
               Salary & Arrear Estimator
             </span>
 

@@ -8,11 +8,7 @@ import ArrearSummaryCard from "@/components/arrear/ArrearSummaryCard";
 import ArrearTimelineChart from "@/components/arrear/ArrearTimelineChart";
 import ArrearBreakdownTable from "@/components/arrear/ArrearBreakdownTable";
 
-export const metadata = {
-  title: "8th CPC Arrear Calculator",
-  description:
-    "Calculate expected arrears of 8th Pay Commission from Jan 2026 with increment and promotion scenarios."
-};
+
 
 export default function ArrearCalculatorPage() {
 

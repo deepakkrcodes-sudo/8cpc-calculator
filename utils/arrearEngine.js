@@ -115,10 +115,12 @@ export function calculateArrear({
         // DA UPDATE
         // ======================
 
+        let daIncrease = 0;
+
         if (i > 0) {
 
-            const daIncrease =
-                Number(daRates?.[i] ?? 2);
+            // user entered DA increase for Jul 2026 onward
+            daIncrease = Number(daRates?.[i - 1] ?? 2);
 
             da7 += daIncrease;
             da8 += daIncrease;

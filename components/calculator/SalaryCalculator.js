@@ -577,15 +577,7 @@ export default function SalaryCalculator() {
                     <SalaryIncreaseCard result={result} />
                     <SalaryCharts result={result} />
 
-                    <div >
-                        <h2>What is the 8th Pay Commission?</h2>
 
-                        <p>
-                            The 8th Central Pay Commission is expected to revise salary structure
-                            for central government employees from 2026. This calculator estimates
-                            salary based on fitment factor, HRA and DA projections.
-                        </p>
-                    </div>
 
                 </div>
 
@@ -594,6 +586,16 @@ export default function SalaryCalculator() {
 
 
             )}
+
+             <div className="bg-white p-4 rounded-xl shadow-sm space-y-3">
+                <h2>What is the 8th Pay Commission?</h2>
+
+                <p>
+                    The 8th Central Pay Commission is expected to revise salary structure
+                    for central government employees from 2026. This calculator estimates
+                    salary based on fitment factor, HRA and DA projections.
+                </p>
+            </div>
 
         </div>
 

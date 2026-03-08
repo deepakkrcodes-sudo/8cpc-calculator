@@ -34,7 +34,14 @@ export const metadata = {
     url: "https://8cpccalculator.com",
     siteName: "8CPC Calculator",
     locale: "en_IN",
-    type: "website"
+    type: "website",
+    images: [
+    {
+      url: "/logo.png",
+      width: 512,
+      height: 512
+    }
+  ]
   },
 
   twitter: {
