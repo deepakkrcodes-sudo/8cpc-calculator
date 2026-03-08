@@ -28,7 +28,7 @@ export default function Header() {
               8th CPC Calculator
             </span>
 
-            <span className="text-sm text-gray-500">
+            <span className="text-sm text-gray-500 border-t border-gray-300 pt-1 mt-1">
               Salary & Arrear Estimator
             </span>
 

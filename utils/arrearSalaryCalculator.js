@@ -104,10 +104,7 @@ export function calculatePeriodSalary({
       calculateIncomeTaxAnnual(annualGross7) / 12
     );
 
-  const tax8 =
-    Math.round(
-      calculateIncomeTaxAnnual(annualGross8) / 12
-    );
+  const tax8 = tax7;
 
   const net7 =
     gross7 -

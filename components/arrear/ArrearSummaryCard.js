@@ -17,7 +17,11 @@ export default function ArrearSummaryCard({
       </div>
 
       <div className="text-2xl font-bold mt-1">
-       ₹ {formatINR(result.totalNetArrear)}
+        ₹ {formatINR(result.totalNetArrear)}
+      </div>
+
+      <div className="text-xs opacity-80 mt-1">
+        Estimated value (±5%)
       </div>
 
 

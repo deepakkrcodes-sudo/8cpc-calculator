@@ -53,6 +53,8 @@ export function calculateArrear({
 
     const periodResults = [];
 
+    
+
     periods.forEach((period, i) => {
 
         const date = period.date;
@@ -188,6 +190,8 @@ export function calculateArrear({
             isPromotion,
             isIncrement
 
+            
+
         });
 
         const debugRows = [];
@@ -218,6 +222,8 @@ export function calculateArrear({
             diff: salary.net8 - salary.net7
 
         });
+
+        
 
     });
 
