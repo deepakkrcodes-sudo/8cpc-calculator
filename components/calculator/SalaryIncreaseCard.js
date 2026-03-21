@@ -7,48 +7,64 @@ function IncreaseCard({
   color = "blue"
 }) {
 
-  const increase = after - before;
+  const valBefore = Number(before) || 0;
+  const valAfter = Number(after) || 0;
+
+  const increase = valAfter - valBefore;
 
   const percent =
-    before > 0
-      ? Math.round((increase / before) * 100)
+    valBefore > 0
+      ? Math.round((increase / valBefore) * 100)
       : 0;
 
-  const progressWidth =
-    Math.min(percent, 100);
+  const progressWidth = Math.min(percent, 100);
 
-  const bgColor =
+  // Soft theme colors
+  const theme =
     color === "green"
-      ? "from-green-600 to-green-500"
-      : "from-blue-600 to-blue-500";
-
-  const progressColor =
-    color === "green"
-      ? "bg-green-200"
-      : "bg-blue-200";
+      ? {
+          bg: "bg-green-50/60",
+          text: "text-green-700",
+          sub: "text-green-600",
+          bar: "bg-green-500",
+          track: "bg-green-200"
+        }
+      : {
+          bg: "bg-blue-50/60",
+          text: "text-blue-700",
+          sub: "text-blue-600",
+          bar: "bg-blue-500",
+          track: "bg-blue-200"
+        };
 
   return (
 
-    <div className={`bg-gradient-to-r ${bgColor} text-white rounded-xl p-4 shadow-sm`}>
+    <div className={`rounded-xl p-4 shadow-sm ${theme.bg}`}>
 
       {/* Title */}
-      <div className="text-sm opacity-90">
+      <div className="text-sm text-gray-600">
         {title}
       </div>
 
       {/* Before → After */}
-      <div className="mt-1 text-lg font-semibold">
+      <div className={`mt-1 text-lg font-semibold flex items-center justify-between`}>
 
-        ₹ {before.toLocaleString()}
-        <span className="mx-2 opacity-80">→</span>
-        ₹ {after.toLocaleString()}
+        <span>
+          ₹ {valBefore.toLocaleString("en-IN")}
+        </span>
+
+        <span className="text-gray-400 text-base">→</span>
+
+        <span className={theme.text}>
+          ₹ {valAfter.toLocaleString("en-IN")}
+        </span>
 
       </div>
 
       {/* Increase */}
-      <div className="mt-1 text-sm">
+      <div className={`mt-1 text-sm ${theme.sub}`}>
 
-        +₹ {increase.toLocaleString()} / month
+        +₹ {increase.toLocaleString("en-IN")} / month
 
         <span className="ml-2 font-semibold">
           (+{percent}%)
@@ -57,13 +73,11 @@ function IncreaseCard({
       </div>
 
       {/* Progress Bar */}
-      <div className={`mt-3 ${progressColor} rounded-full h-2`}>
+      <div className={`mt-3 ${theme.track} rounded-full h-2`}>
 
         <div
-          className="bg-white h-2 rounded-full transition-all duration-700"
-          style={{
-            width: `${progressWidth}%`
-          }}
+          className={`${theme.bar} h-2 rounded-full transition-all duration-700`}
+          style={{ width: `${progressWidth}%` }}
         />
 
       </div>
@@ -74,41 +88,26 @@ function IncreaseCard({
 
 }
 
-
-
-export default function SalaryIncreaseCards({ result }) {
+export default function SalaryIncreaseCard({ result }) {
 
   if (!result) return null;
 
   return (
 
-    <div className="space-y-3">
+    <div className="space-y-4">
 
-      {/* Gross Salary Card */}
       <IncreaseCard
-
         title="Gross Salary Increase"
-
         before={result.seventh.gross}
-
         after={result.eighth.gross}
-
         color="blue"
-
       />
 
-
-      {/* Net Salary Card */}
       <IncreaseCard
-
         title="Net Salary Increase"
-
         before={result.seventh.net}
-
         after={result.eighth.net}
-
         color="green"
-
       />
 
     </div>

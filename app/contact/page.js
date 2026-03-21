@@ -1,3 +1,5 @@
+import OtherToolsSection from "@/components/tools/OtherToolsSection";
+
 export const metadata = {
   title: "Contact | 8 CPC Calculator",
   description:
@@ -21,7 +23,7 @@ export default function Contact() {
         </p>
 
         <p className="text-sm text-gray-700 leading-relaxed">
-          Email: 
+          Email:
           <span className="text-blue-600 ml-1">
             support@8cpccalculator.com
           </span>
@@ -31,6 +33,10 @@ export default function Contact() {
           We aim to respond to queries as soon as possible.
         </p>
 
+      </div>
+
+      <div className="block bg-gray-200 p-4 rounded-xl shadow-sm hover:shadow-md transition">
+        <OtherToolsSection />
       </div>
 
     </main>

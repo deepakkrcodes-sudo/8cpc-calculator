@@ -1,131 +1,83 @@
 "use client";
 
 import {
-  PieChart,
-  Pie,
-  Cell,
   ResponsiveContainer,
-  Tooltip,
   BarChart,
   Bar,
   XAxis,
   YAxis,
-  CartesianGrid
+  Tooltip,
+  CartesianGrid,
+  Legend
 } from "recharts";
-
-const COLORS = [
-  "#2563eb", // blue
-  "#16a34a", // green
-  "#f59e0b", // amber
-  "#dc2626", // red
-  "#7c3aed"  // purple
-];
 
 export default function SalaryCharts({ result }) {
 
   if (!result) return null;
 
   // ==========================
-  // PIE DATA (8TH CPC)
+  // COMPARISON DATA
   // ==========================
-
-  const pieData = [
-
+  const comparisonData = [
     {
-      name: "Basic",
-      value: result.eighth.basic
+      name: "Net Salary",
+      "7th CPC": result.seventh.net,
+      "8th CPC": result.eighth.net
     },
-
     {
-      name: "HRA",
-      value: result.eighth.hra
-    },
-
-    {
-      name: "TA",
-      value: result.eighth.ta
-    },
-
-    {
-      name: "DA",
-      value: result.eighth.da
+      name: "Gross Salary",
+      "7th CPC": result.seventh.gross,
+      "8th CPC": result.eighth.gross
     }
-
   ];
 
-
   // ==========================
-  // BAR DATA (COMPARISON)
+  // PERCENT INCREASE DATA
   // ==========================
-
-  const barData = [
-
+  const percentData = [
     {
-      name: "7th CPC",
-      salary: result.seventh.net
+      name: "Net",
+      increase:
+        result.seventh.net > 0
+          ? Math.round(
+              ((result.eighth.net - result.seventh.net) /
+                result.seventh.net) *
+                100
+            )
+          : 0
     },
-
     {
-      name: "8th CPC",
-      salary: result.eighth.net
+      name: "Gross",
+      increase:
+        result.seventh.gross > 0
+          ? Math.round(
+              ((result.eighth.gross - result.seventh.gross) /
+                result.seventh.gross) *
+                100
+            )
+          : 0
     }
-
   ];
-
 
   return (
 
     <div className="space-y-6">
 
+      {/* ===================== */}
+      {/* COMPARISON CHART */}
+      {/* ===================== */}
+      <div className="bg-white rounded-xl shadow-sm p-5">
 
-      {/* PIE CHART */}
-      <div className="bg-white p-4 rounded-xl shadow-sm">
-
-        <div className="text-sm font-semibold mb-2">
-          8th CPC Salary Structure
+        <div className="flex items-center gap-2 mb-3">
+          <span>📊</span>
+          <div className="text-sm font-semibold">
+            7th vs 8th CPC Comparison
+          </div>
         </div>
 
-        <ResponsiveContainer width="100%" height={220}>
+        <ResponsiveContainer width="100%" height={260}>
 
-          <PieChart>
-
-            <Pie
-              data={pieData}
-              dataKey="value"
-              outerRadius={80}
-              label
-            >
-
-              {pieData.map((entry, index) => (
-
-                <Cell
-                  key={index}
-                  fill={COLORS[index % COLORS.length]}
-                />
-
-              ))}
-
-            </Pie>
-
-            <Tooltip />
-
-          </PieChart>
-
-        </ResponsiveContainer>
-
-      </div>
-
-
-      {/* BAR CHART */}
-      <div className="bg-white p-4 rounded-xl shadow-sm">
-
-        <div className="text-sm font-semibold mb-2">
-          Net Salary Comparison
-        </div>
-
-        <ResponsiveContainer width="100%" height={220}>
-
-          <BarChart data={barData}>
+          <BarChart data={comparisonData}>
 
             <CartesianGrid strokeDasharray="3 3" />
 
@@ -135,10 +87,18 @@ export default function SalaryCharts({ result }) {
 
             <Tooltip />
 
+            <Legend />
+
             <Bar
-              dataKey="salary"
-              fill="#2563eb"
-              radius={[6,6,0,0]}
+              dataKey="7th CPC"
+              fill="#94a3b8"   // gray
+              radius={[6, 6, 0, 0]}
+            />
+
+            <Bar
+              dataKey="8th CPC"
+              fill="#2563eb"   // blue
+              radius={[6, 6, 0, 0]}
             />
 
           </BarChart>
@@ -146,6 +106,12 @@ export default function SalaryCharts({ result }) {
         </ResponsiveContainer>
 
       </div>
+
+
+      {/* ===================== */}
+      {/* PERCENT INCREASE */}
+      {/* ===================== */}
+      
 
     </div>
 

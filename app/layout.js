@@ -1,6 +1,8 @@
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import "./styles/calculator.css"
+import "./styles/paymatrix.css";
 
 export const metadata = {
   title: "8th CPC Salary Calculator (2026) | 7th vs 8th Pay Commission",
@@ -86,7 +88,7 @@ export default function RootLayout({ children }) {
 
         <Header />
 
-        <main className="max-w-md mx-auto px-4 py-4">
+        <main className="w-full max-w-md sm:max-w-xl md:max-w-3xl lg:max-w-5xl xl:max-w-6xl mx-auto px-4 py-6">
           {children}
         </main>
 

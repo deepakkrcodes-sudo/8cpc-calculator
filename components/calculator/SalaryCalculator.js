@@ -172,19 +172,28 @@ export default function SalaryCalculator() {
 
     function Row(label, v7, v8, highlight = false) {
 
+        const val7 = Number(v7) || 0;
+        const val8 = Number(v8) || 0;
+
         return (
 
-            <div className={`grid grid-cols-3 py-2 border-b ${highlight ? "font-semibold text-blue-600" : ""
-                }`}>
+            <div className={`grid grid-cols-3 items-center py-2 text-sm 
+      ${highlight ? "bg-blue-50/50 font-semibold" : "border-b"}
+    `}>
 
-                <div>{label}</div>
-
-                <div className="text-center">
-                    ₹ {v7?.toLocaleString()}
+                {/* LABEL */}
+                <div className="text-gray-700">
+                    {label}
                 </div>
 
-                <div className="text-center">
-                    ₹ {v8?.toLocaleString()}
+                {/* 7th CPC */}
+                <div className="text-center text-gray-800">
+                    ₹ {val7.toLocaleString("en-IN")}
+                </div>
+
+                {/* 8th CPC */}
+                <div className="text-center text-blue-600 font-medium">
+                    ₹ {val8.toLocaleString("en-IN")}
                 </div>
 
             </div>
@@ -205,7 +214,7 @@ export default function SalaryCalculator() {
         <div className="space-y-4">
 
             {/* TITLE */}
-            <div className="bg-white p-4 rounded-xl shadow-sm">
+            <div >
 
                 <h1 className="text-lg font-semibold text-center">
                     8th CPC Salary Calculator
@@ -238,11 +247,22 @@ export default function SalaryCalculator() {
                             Select Level
                         </option>
 
-                        {Object.keys(payMatrix).map(l => (
-                            <option key={l}>
-                                {l}
-                            </option>
-                        ))}
+                        {Object.keys(payMatrix).map(l => {
+                            const values = payMatrix[l];
+                            const first = values[0];
+                            const last = values[values.length - 1];
+
+                            const label =
+                                values.length === 1
+                                    ? `${l} (₹${first})`
+                                    : `${l} (₹${first} - ₹${last})`;
+
+                            return (
+                                <option key={l} value={l}>
+                                    {label}
+                                </option>
+                            );
+                        })}
 
                     </select>
 
@@ -411,183 +431,159 @@ export default function SalaryCalculator() {
             {/* RESULT */}
             {result && (
 
-                <div className="bg-white p-4 rounded-xl shadow-sm space-y-3">
+                <div className="bg-white rounded-xl shadow-sm p-5 space-y-5">
 
-
-                    <div className="grid grid-cols-3 font-semibold border-b pb-2 text-sm">
-                        <div>Component</div>
-                        <div className="text-center">7th CPC</div>
-                        <div className="text-center">8th CPC</div>
-                    </div>
-
-
-                    {/* ===== Earnings ===== */}
-                    <div className="text-xs uppercase text-gray-500 font-semibold">
-                        Earnings
-                    </div>
-
-                    {Row("Basic", result.seventh.basic, result.eighth.basic)}
-                    {Row("DA", result.seventh.da, result.eighth.da)}
-                    {Row("HRA", result.seventh.hra, result.eighth.hra)}
-                    {Row("TA", result.seventh.ta, result.eighth.ta)}
-
-                    {/* Custom Allowances */}
-                    {otherAllowances.map((item, i) => (
-                        <div key={i} className="grid grid-cols-3 py-2 border-b text-sm">
-                            <div>{item.label || "Allowance"}</div>
-                            <div className="text-center">₹ {item.amount.toLocaleString()}</div>
-                            <div className="text-center">₹ {item.amount.toLocaleString()}</div>
-                        </div>
-                    ))}
-
-                    {Row("Gross", result.seventh.gross, result.eighth.gross, true)}
-
-                    {/* ===== Deductions ===== */}
-                    <div className="text-xs uppercase text-gray-500 font-semibold mt-4">
-                        Deductions (Editable)
-                    </div>
-
-                    {/* NPS */}
-                    <div className="grid grid-cols-3 py-2 border-b text-sm items-center">
-                        <div>NPS</div>
-
-                        <input
-                            type="number"
-                            value={editableDeductions.nps7}
-                            onChange={(e) =>
-                                setEditableDeductions({
-                                    ...editableDeductions,
-                                    nps7: Number(e.target.value)
-                                })
-                            }
-                            className="border p-1 rounded text-center"
-                        />
-
-                        <input
-                            type="number"
-                            value={editableDeductions.nps8}
-                            onChange={(e) =>
-                                setEditableDeductions({
-                                    ...editableDeductions,
-                                    nps8: Number(e.target.value)
-                                })
-                            }
-                            className="border p-1 rounded text-center"
-                        />
-                    </div>
-
-                    {/* CGHS */}
-                    <div className="grid grid-cols-3 py-2 border-b text-sm items-center">
-                        <div>CGHS</div>
-
-                        <input
-                            type="number"
-                            value={editableDeductions.cghs7}
-                            onChange={(e) =>
-                                setEditableDeductions({
-                                    ...editableDeductions,
-                                    cghs7: Number(e.target.value)
-                                })
-                            }
-                            className="border p-1 rounded text-center"
-                        />
-
-                        <input
-                            type="number"
-                            value={editableDeductions.cghs8}
-                            onChange={(e) =>
-                                setEditableDeductions({
-                                    ...editableDeductions,
-                                    cghs8: Number(e.target.value)
-                                })
-                            }
-                            className="border p-1 rounded text-center"
-                        />
-                    </div>
-
-                    {/* Tax */}
-                    <div className="grid grid-cols-3 py-2 border-b text-sm items-center">
-                        <div>Income Tax</div>
-
-                        <input
-                            type="number"
-                            value={editableDeductions.tax7}
-                            onChange={(e) =>
-                                setEditableDeductions({
-                                    ...editableDeductions,
-                                    tax7: Number(e.target.value)
-                                })
-                            }
-                            className="border p-1 rounded text-center"
-                        />
-
-                        <input
-                            type="number"
-                            value={editableDeductions.tax8}
-                            onChange={(e) =>
-                                setEditableDeductions({
-                                    ...editableDeductions,
-                                    tax8: Number(e.target.value)
-                                })
-                            }
-                            className="border p-1 rounded text-center"
-                        />
-                    </div>
-
-                    {/* Custom Deductions */}
-                    {otherDeductions.map((item, i) => (
-                        <div key={i} className="grid grid-cols-3 py-2 border-b text-sm">
-                            <div>{item.label || "Other Deduction"}</div>
-                            <div className="text-center">₹ {item.amount.toLocaleString()}</div>
-                            <div className="text-center">₹ {item.amount.toLocaleString()}</div>
-                        </div>
-                    ))}
-
-                    {/* ===== NET CALCULATION ===== */}
-                    <div className="grid grid-cols-3 py-3 font-semibold text-blue-600 text-sm">
-                        <div>Net Salary</div>
-
-                        <div className="text-center">
-                            ₹ {(
-                                result.seventh.gross
-                                - editableDeductions.nps7
-                                - editableDeductions.cghs7
-                                - editableDeductions.tax7
-                            ).toLocaleString()}
-                        </div>
-
-                        <div className="text-center">
-                            ₹ {(
-                                result.eighth.gross
-                                - editableDeductions.nps8
-                                - editableDeductions.cghs8
-                                - editableDeductions.tax8
-                            ).toLocaleString()}
+                    {/* HEADER */}
+                    <div className="border-b pb-3 flex items-center gap-2">
+                        <span className="text-lg">📊</span>
+                        <div>
+                            <h2 className="text-lg font-semibold">
+                                Salary Comparison
+                            </h2>
+                            <p className="text-xs text-gray-500">
+                                7th CPC vs 8th CPC detailed breakdown
+                            </p>
                         </div>
                     </div>
 
-                    {/* Increase */}
-                    <div className="text-center font-semibold text-green-600 mt-2">
-                        Increase:
-                        ₹ {result.difference.monthly.toLocaleString()}
-                        / month
-                        ({result.difference.percent}%)
+
+                    {/* ===== COLUMN HEADER ===== */}
+                    
+
+
+                    {/* ===== EARNINGS ===== */}
+                    <div className="bg-blue-50/50 rounded-lg p-4 space-y-2">
+                    <div className="text-sm font-semibold text-blue-700 flex items-center gap-2">
+                            📈 Earnings
+                        </div>
+
+                        <div className="grid grid-cols-3 border-b text-sm font-bold text-gray-500 bg-blue-50/50  p-4 space-y-2">
+                            <div>Component</div>
+                            <div className="text-center">7th CPC</div>
+                            <div className="text-center">8th CPC</div>
+                        </div>
+
+
+
+                        
+
+                        <div className="divide-y">
+
+                            <div className="divide-y">
+
+                                {Row("Basic", result.seventh.basic, result.eighth.basic)}
+                                {Row("DA", result.seventh.da, result.eighth.da)}
+                                {Row("HRA", result.seventh.hra, result.eighth.hra)}
+                                {Row("TA", result.seventh.ta, result.eighth.ta)}
+
+                            </div>
+
+                            {/* Custom Allowances */}
+                            {otherAllowances.map((item, i) => (
+                                <div key={i} className="grid grid-cols-3 py-2 text-sm">
+                                    <div>{item.label || "Allowance"}</div>
+                                    <div className="text-center">₹ {item.amount.toLocaleString("en-IN")}</div>
+                                    <div className="text-center">₹ {item.amount.toLocaleString("en-IN")}</div>
+                                </div>
+                            ))}
+
+                        </div>
+
+                        {/* GROSS */}
+                        <div className="grid grid-cols-3 pt-3  text-blue-800 font-medium">
+
+                            <div>Gross Salary</div>
+
+                            <div className="text-center">
+                                ₹ {result.seventh.gross.toLocaleString("en-IN")}
+                            </div>
+
+                            <div className="text-center">
+                                ₹ {result.eighth.gross.toLocaleString("en-IN")}
+                            </div>
+
+                        </div>
+
                     </div>
+
+
+                    {/* ===== DEDUCTIONS ===== */}
+                    <div className="bg-rose-50/50 rounded-lg p-4 space-y-2">
+
+                        <div className="text-sm font-semibold text-rose-700 flex items-center gap-2">
+                            📉 Deductions
+                        </div>
+
+                        {/* NPS */}
+                        <div className="grid grid-cols-3 items-center py-2 text-sm">
+                            <div>NPS</div>
+
+                            <input
+                                type="number"
+                                value={editableDeductions.nps7}
+                                onChange={(e) => setEditableDeductions({ ...editableDeductions, nps7: Number(e.target.value) })}
+                                className="mx-auto w-24 border rounded-lg p-1 text-center focus:ring-2 focus:ring-blue-400"
+                            />
+
+                            <input
+                                type="number"
+                                value={editableDeductions.nps8}
+                                onChange={(e) => setEditableDeductions({ ...editableDeductions, nps8: Number(e.target.value) })}
+                                className="mx-auto w-24 border rounded-lg p-1 text-center focus:ring-2 focus:ring-blue-400"
+                            />
+                        </div>
+
+                        {/* CGHS */}
+                        <div className="grid grid-cols-3 items-center py-2 text-sm">
+                            <div>CGHS</div>
+
+                            <input
+                                type="number"
+                                value={editableDeductions.cghs7}
+                                onChange={(e) => setEditableDeductions({ ...editableDeductions, cghs7: Number(e.target.value) })}
+                                className="mx-auto w-24 border rounded-lg p-1 text-center focus:ring-2 focus:ring-blue-400"
+                            />
+
+                            <input
+                                type="number"
+                                value={editableDeductions.cghs8}
+                                onChange={(e) => setEditableDeductions({ ...editableDeductions, cghs8: Number(e.target.value) })}
+                                className="mx-auto w-24 border rounded-lg p-1 text-center focus:ring-2 focus:ring-blue-400"
+                            />
+                        </div>
+
+                        {/* TAX */}
+                        <div className="grid grid-cols-3 items-center py-2 text-sm">
+                            <div>Income Tax</div>
+
+                            <input
+                                type="number"
+                                value={editableDeductions.tax7}
+                                onChange={(e) => setEditableDeductions({ ...editableDeductions, tax7: Number(e.target.value) })}
+                                className="mx-auto w-24 border rounded-lg p-1 text-center focus:ring-2 focus:ring-blue-400"
+                            />
+
+                            <input
+                                type="number"
+                                value={editableDeductions.tax8}
+                                onChange={(e) => setEditableDeductions({ ...editableDeductions, tax8: Number(e.target.value) })}
+                                className="mx-auto w-24 border rounded-lg p-1 text-center focus:ring-2 focus:ring-blue-400"
+                            />
+                        </div>
+
+                    </div>
+
+
+                    
 
                     <SalaryIncreaseCard result={result} />
                     <SalaryCharts result={result} />
 
-
-
                 </div>
-
-
-
-
 
             )}
 
-             
+
 
         </div>
 

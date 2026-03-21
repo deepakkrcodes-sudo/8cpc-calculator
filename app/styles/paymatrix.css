@@ -1,0 +1,57 @@
+.matrix-card{
+  background:white;
+  border-radius:14px;
+  padding:22px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.08);
+  margin-top:20px;
+}
+
+/* HEADER */
+
+.matrix-header{
+  margin-bottom:18px;
+}
+
+.matrix-title{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.matrix-icon{
+  font-size:26px;
+}
+
+.matrix-title h2{
+  font-size:20px;
+  font-weight:600;
+}
+
+.matrix-title p{
+  font-size:13px;
+  color:#6b7280;
+}
+
+/* TABLE */
+
+.matrix-table{
+  border-top:1px solid #f1f5f9;
+}
+
+.matrix-head-row{
+  display:flex;
+  justify-content:space-between;
+  padding:10px 0;
+  font-size:13px;
+  color:#6b7280;
+  font-weight:600;
+}
+
+.matrix-row{
+  display:flex;
+  justify-content:space-between;
+  padding:12px 0;
+  border-top:1px solid #f1f5f9;
+  align-items:center;
+}
+
