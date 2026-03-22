@@ -10,7 +10,11 @@ export const metadata = {
     "Explore projected 8th Pay Commission pay matrix with fitment factor. Check revised salary for all pay levels.",
 
   keywords:
-    ["8th CPC pay matrix", "pay level salary table", "fitment factor matrix", "government pay levels"]
+    ["8th CPC pay matrix", "pay level salary table", "fitment factor matrix", "government pay levels"],
+
+  alternates: {
+    canonical: "https://8cpccalculator.com/8th-cpc-pay-matrix"
+  }
 };
 
 

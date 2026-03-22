@@ -13,7 +13,11 @@ export const metadata = {
         "7th pay commission levels",
         "government pay scale",
         "salary progression 7th CPC"
-    ]
+    ],
+
+    alternates: {
+    canonical: "https://8cpccalculator.com/7th-cpc-pay-matrix"
+  }
 };
 
 

@@ -8,7 +8,11 @@ export const metadata = {
         "Calculate pension under 7th Pay Commission with DR and commutation details.",
 
     keywords:
-        ["7th CPC pension calculator", "government pension calculator", "DR pension", "pension calculation India"]
+        ["7th CPC pension calculator", "government pension calculator", "DR pension", "pension calculation India"],
+
+    alternates: {
+        canonical: "https://8cpccalculator.com/7th-cpc-pension-calculator"
+    }
 };
 export default function Page() {
 

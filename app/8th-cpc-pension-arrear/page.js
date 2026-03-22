@@ -9,7 +9,11 @@ export const metadata = {
     "Estimate pension arrears under the 8th Pay Commission based on DA progression and implementation timeline.",
 
   keywords:
-    ["pension arrear calculator", "8th CPC pension arrear", "DR arrears pension", "pension DA calculation"]
+    ["pension arrear calculator", "8th CPC pension arrear", "DR arrears pension", "pension DA calculation"],
+
+  alternates: {
+    canonical: "https://8cpccalculator.com/8th-cpc-pension-arrear"
+  }
 };
 
 

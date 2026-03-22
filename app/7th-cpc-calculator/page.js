@@ -11,7 +11,11 @@ export const metadata = {
     "Calculate your salary under the 7th Pay Commission including DA, HRA, TA and deductions. Estimate your in-hand salary instantly.",
 
   keywords:
-    ["7th CPC calculator", "7th pay commission salary", "DA HRA calculator", "government salary 7th CPC"]
+    ["7th CPC calculator", "7th pay commission salary", "DA HRA calculator", "government salary 7th CPC"],
+
+  alternates: {
+    canonical: "https://8cpccalculator.com/7th-cpc-calculator"
+  }
 
 };
 

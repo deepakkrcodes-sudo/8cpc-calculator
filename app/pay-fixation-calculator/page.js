@@ -7,7 +7,11 @@ export const metadata = {
     "Calculate pay fixation from 7th to 8th Pay Commission using fitment factor and pay matrix rules.",
 
   keywords:
-    ["pay fixation calculator", "pay fixation 7th CPC", "salary fixation rules", "government pay fixation"]
+    ["pay fixation calculator", "pay fixation 7th CPC", "salary fixation rules", "government pay fixation"],
+
+  alternates: {
+    canonical: "https://8cpccalculator.com/pay-fixation-calculator"
+  }
 
 };
 
