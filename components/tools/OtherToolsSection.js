@@ -8,66 +8,74 @@ export default function OtherToolsSection() {
 
         {
             title: "8th CPC Pension Arrear",
-            desc: "Pension arrear estimate",
+            desc: "Calculate pension arrears easily",
             icon: "💵",
             link: "/8th-cpc-pension-arrear"
         },
 
         {
             title: "8th CPC Salary Calculator",
-            desc: "Estimate revised salary",
+            desc: "Calculate revised salary instantly",
             icon: "🧮",
             link: "/"
         },
 
         {
             title: "8th CPC Pension Calculator",
-            desc: "Estimate revised pension",
+            desc: "Calculate revised pension instantly",
             icon: "👴",
             link: "/8th-cpc-pension-calculator"
         },
 
         {
             title: "8th CPC Arrear Calculator",
-            desc: "Salary arrear estimation",
+            desc: "Calculate salary arrears easily",
             icon: "💰",
             link: "/8th-cpc-arrear"
         },
 
         {
             title: "8th CPC Pay Matrix",
-            desc: "Projected pay matrix",
+            desc: "View projected pay matrix levels",
             icon: "📈",
             link: "/8th-cpc-pay-matrix"
         },
 
         {
             title: "7th CPC Salary Calculator",
-            desc: "Calculate current salary",
+            desc: "Calculate current salary instantly",
             icon: "📊",
             link: "/7th-cpc-calculator"
         },
 
         {
             title: "7th CPC Pension Calculator",
-            desc: "Calculate current pension",
+            desc: "Calculate current pension instantly",
             icon: "📉",
             link: "/7th-cpc-pension-calculator"
         },
 
         {
             title: "Pay Fixation Calculator",
-            desc: "Promotion pay fixation",
+            desc: "Calculate pay fixation after promotion",
             icon: "📌",
             link: "/pay-fixation-calculator"
         },
 
         {
             title: "7th CPC Pay Matrix",
-            desc: "Complete pay level table",
+            desc: "View complete pay matrix levels",
             icon: "📋",
             link: "/7th-cpc-pay-matrix"
+        },
+
+        {
+            title: "LTC Calculator & Guide",
+            desc: "Calculate LTC benefits and plan",
+            icon: "📋",
+            link: "/ltc-calculator"
         }
+
     ];
 
     return (
