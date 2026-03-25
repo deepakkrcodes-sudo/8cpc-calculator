@@ -220,23 +220,17 @@ export default function SalaryCalculator() {
                     8th CPC Salary Calculator
                 </h1>
 
+                <p className="text-sm text-gray-600 max-w-md mx-auto text-center">
+                    Estimate your expected salary under the 8th Pay Commission based on projected fitment factors and assumptions.
+                </p>
+
             </div>
 
 
             {/* INPUT CARD */}
             <div className="bg-white p-4 rounded-xl shadow-sm space-y-3">
 
-                <div className="text-center space-y-2 py-4">
 
-                    <h1 className="text-lg sm:text-xl font-semibold text-gray-900">
-                        8th CPC Salary Calculator
-                    </h1>
-
-                    <p className="text-sm text-gray-600 max-w-md mx-auto">
-                        Estimate your expected salary under the 8th Pay Commission based on projected fitment factors and assumptions.
-                    </p>
-
-                </div>
                 {/* LEVEL */}
                 <div>
 
