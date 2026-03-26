@@ -22,10 +22,10 @@ export default function PensionInputForm({ onCalculate }) {
   const periods = generateDAPeriods(implementationPeriod);
 
   const [daRates, setDaRates] = useState([
-    { period: "Jan 2026", da: 0 },
+    { period: "Jan 2026", da: 2 }, 
     { period: "Jul 2026", da: 3 },
-    { period: "Jan 2027", da: 6 },
-    { period: "Jul 2027", da: 9 }
+    { period: "Jan 2027", da: 2 },
+    { period: "Jul 2027", da: 3 }
   ]);
 
   const updateDARate = (index, value) => {
@@ -64,7 +64,7 @@ export default function PensionInputForm({ onCalculate }) {
         {/* BASIC */}
         <div>
           <h3 className="font-semibold text-md">
-            Current Basic Pension (7th CPC)
+            Current Basic Pension (7th CPC, excluding DR)
           </h3>
 
           <input

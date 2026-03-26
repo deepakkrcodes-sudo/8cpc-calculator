@@ -49,9 +49,9 @@ export default function DAProgressionTable({ periods, daRates, updateDARate }) {
 
               <select
                 className="border rounded px-2 py-1 text-sm"
-                value={daRates[i - 1]?.da ?? 3}
+                value={daRates[i]?.da ?? 2}
                 onChange={(e) =>
-                  updateDARate(i - 1, Number(e.target.value))
+                  updateDARate(i, Number(e.target.value))
                 }
               >
 
