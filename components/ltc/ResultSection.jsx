@@ -10,8 +10,7 @@ export default function ResultSection({ result }) {
       {result && (
         <div className="grid md:grid-cols-2 gap-4 mt-4">
           <EligibilityCard data={result.eligibility} />
-          <TimelineCard data={result.timeline} />
-          <TravelCard data={result.travel} />
+          
           <SuggestionCard data={result.suggestion} />
           <PlannerCard data={result.planner} />
         </div>

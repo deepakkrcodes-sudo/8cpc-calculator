@@ -4,119 +4,114 @@ export function getEligibility(data) {
   if (!doj) return null;
 
   const currentYear = new Date().getFullYear();
-  const joiningYear = new Date(doj).getFullYear();
 
-  // Joining year NOT counted
-  const serviceYear = currentYear - joiningYear;
+  // DOJ is year
+  const joiningYear = Number(doj);
+
+  // completed service years
+  const serviceYears = currentYear - joiningYear;
 
   const isSameState =
     hometown?.toLowerCase() === office?.toLowerCase();
 
-  let phase = "";
-  let eligibilityMap = [];
+  // =====================================================
+  // 🔵 PHASE 1 — FIRST 8 YEARS
+  // =====================================================
+  if (serviceYears <= 8) {
+    const phase = "FIRST_8_YEARS";
 
-  // =========================
-  // PHASE 1: FIRST 8 YEARS
-  // =========================
-  if (serviceYear <= 8) {
-    phase = "FIRST_8_YEARS";
+    const eligibilityMap = [];
 
-    if (isSameState) {
-      // Only All India in 4th & 8th year
-      for (let i = 1; i <= serviceYear; i++) {
-        let type = "NONE";
+    for (let i = 1; i <= serviceYears; i++) {
+      let type = "NONE";
 
+      if (isSameState) {
+        // Only AI in 4th & 8th year
         if (i === 4 || i === 8) {
           type = "AI";
         }
-
-        eligibilityMap.push({
-          serviceYear: i,
-          type,
-        });
-      }
-    } else {
-      // HT for 1-3, AI in 4, repeat
-      for (let i = 1; i <= serviceYear; i++) {
-        let type = "HT";
-
+      } else {
+        // HT for 1–3, AI in 4
         if (i % 4 === 0) {
           type = "AI";
+        } else {
+          type = "HT";
         }
-
-        eligibilityMap.push({
-          serviceYear: i,
-          type,
-        });
       }
+
+      eligibilityMap.push({
+        serviceYear: i,
+        year: joiningYear + i, // 🔥 IMPORTANT
+        type,
+      });
     }
 
     return {
       phase,
-      serviceYear,
+      serviceYears,
+      joiningYear,
       isSameState,
       eligibilityMap,
     };
   }
 
-  // =========================
-  // PHASE 2: BLOCK PERIOD
-  // =========================
-  phase = "BLOCK_PERIOD";
+  // =====================================================
+  // 🔴 PHASE 2 — BLOCK PERIOD
+  // =====================================================
+  const phase = "BLOCK_PERIOD";
 
-  // Block calculation
-  const blocks = [
-    { start: 2018, end: 2021 },
-    { start: 2022, end: 2025 },
-    { start: 2026, end: 2029 },
-    { start: 2030, end: 2033 },
-  ];
+  // dynamic block calculation
+  const base =
+    Math.floor((currentYear - 2018) / 4) * 4 + 2018;
 
-  let currentBlock = null;
+  const currentBlock = {
+    start: base,
+    end: base + 3,
+  };
 
-  for (let block of blocks) {
-    if (currentYear >= block.start && currentYear <= block.end) {
-      currentBlock = block;
-      break;
-    }
-  }
+  // sub-block split
+  const subBlock1 = {
+    start: currentBlock.start,
+    end: currentBlock.start + 1,
+  };
 
-  // Fallback (future-safe)
-  if (!currentBlock) {
-    const base = Math.floor((currentYear - 2018) / 4) * 4 + 2018;
-    currentBlock = { start: base, end: base + 3 };
-  }
+  const subBlock2 = {
+    start: currentBlock.start + 2,
+    end: currentBlock.end,
+  };
 
-  // Sub-block logic
-  let subBlock = "";
-  if (currentYear <= currentBlock.start + 1) {
-    subBlock = "FIRST_SUB_BLOCK"; // e.g. 2022-23
-  } else {
-    subBlock = "SECOND_SUB_BLOCK"; // e.g. 2024-25
-  }
+  const subBlock =
+    currentYear <= subBlock1.end
+      ? "FIRST_SUB_BLOCK"
+      : "SECOND_SUB_BLOCK";
 
-  // Eligibility rules
-  let blockEligibility = {};
-
-  if (isSameState) {
-    blockEligibility = {
-      HT: 0,
-      AI: 1,
-    };
-  } else {
-    blockEligibility = {
-      HT: 1, // per sub-block
-      AI: 1,
-      flexible: true,
-    };
-  }
+  // eligibility rules
+  const blockEligibility = isSameState
+    ? {
+        HT: 0,
+        AI: 1,
+        rule: "Only 1 AI allowed in block",
+      }
+    : {
+        HT: 1, // per sub-block
+        AI: 1,
+        rule: "1 HT per sub-block + 1 AI per block",
+      };
 
   return {
     phase,
-    serviceYear,
+    serviceYears,
+    joiningYear,
     isSameState,
+
     currentBlock,
     subBlock,
+
+    subBlocks: {
+      SB1: subBlock1,
+      SB2: subBlock2,
+    },
+
     blockEligibility,
   };
 }

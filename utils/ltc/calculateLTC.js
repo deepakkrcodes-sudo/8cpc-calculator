@@ -4,13 +4,17 @@ import { applyConversion } from "./conversionEngine";
 import { applyCarryForward } from "./carryForwardEngine";
 import { generatePlanner } from "./plannerEngine";
 import { getEligibility } from "./eligibilityEngine";
+import { generateSuggestion } from "./suggestionEngine";
+import { generateTimelineData } from "./timelineEngine"; // 👈 ADD THIS
 
 export function calculateLTC(data) {
   const { basicInfo, history } = data;
 
   if (!basicInfo) return null;
 
-    const eligibility = getEligibility(basicInfo);
+  const eligibility = getEligibility(basicInfo);
+
+  if (!eligibility) return null;
 
   // =========================
   // CLEAN PAY LEVEL
@@ -23,54 +27,92 @@ export function calculateLTC(data) {
       : Number(rawLevel);
 
   // =========================
+  // CURRENT WINDOW
+  // =========================
+  const joiningYear = Number(basicInfo.doj);
+  const currentYear = new Date().getFullYear();
+
+  let currentWindow;
+
+  if (eligibility.phase === "FIRST_8_YEARS") {
+    currentWindow = {
+      start: Math.max(joiningYear + 1, currentYear - 3),
+      end: currentYear,
+    };
+  } else {
+    currentWindow = eligibility.currentBlock;
+  }
+
+  // =========================
   // CONVERSION
   // =========================
-  const conversion =
-    applyConversion(
-      {
-        history,
-        hometown: basicInfo.hometown,
-        office: basicInfo.office,
-      },
-      eligibility
-    ) || {
-      remaining: { homeTown: 0, allIndia: 0 },
-    };
+  const conversion = applyConversion(
+    {
+      history,
+      hometown: basicInfo.hometown,
+      office: basicInfo.office,
+      currentWindow,
+    },
+    eligibility
+  );
 
   // =========================
   // CARRY FORWARD
   // =========================
-  const carryForward =
-    applyCarryForward(
-      { history },
-      conversion,
-      eligibility
-    ) || null;
+  const carryForward = applyCarryForward(
+    {
+      history,
+    },
+    conversion,
+    eligibility
+  );
 
-    
+  // =========================
+  // SUGGESTION
+  // =========================
+  const suggestionData = generateSuggestion({
+    eligibility,
+    conversion,
+    carryForward,
+  });
 
   // =========================
   // FINAL RESULT
   // =========================
   return {
+    currentWindow,
+
+    rawEligibility: eligibility, 
+
     eligibility: buildSummary(
       eligibility,
       conversion,
-      carryForward
+      carryForward,
+      currentWindow
     ),
+
+    suggestion: {
+      ...suggestionData,
+      remaining: conversion?.remaining,
+      carryForward,
+    },
 
     travel: {
       payLevel: cleanPayLevel,
     },
 
-    suggestion: {
-      remaining: conversion.remaining,
+    timeline: generateTimelineData({
+      eligibility,
+      conversion,
       carryForward,
-    },
+      history,
+    }),
 
-    timeline: buildTimeline(eligibility),
-
-    planner: generatePlanner(eligibility),
+    planner: generatePlanner(
+      eligibility,
+      conversion,
+      carryForward
+    ),
   };
 }
 
@@ -79,7 +121,7 @@ function buildSummary(eligibility, conversion, carryForward) {
 
   let summary = {
     phase: eligibility.phase,
-    serviceYear: eligibility.serviceYear,
+    serviceYears: eligibility.serviceYears,
     isSameState: eligibility.isSameState,
   };
 
@@ -88,44 +130,15 @@ function buildSummary(eligibility, conversion, carryForward) {
     summary.subBlock = eligibility.subBlock;
   }
 
-  summary.homeTownRemaining =
-    conversion?.remaining?.homeTown ?? 0;
-
-  summary.allIndiaRemaining =
-    conversion?.remaining?.allIndia ?? 0;
+  if (conversion) {
+    summary.homeTownRemaining = conversion.remaining.homeTown;
+    summary.allIndiaRemaining = conversion.remaining.allIndia;
+  }
 
   if (carryForward?.carryForwardAvailable) {
     summary.carryForward = true;
     summary.carryForwardYear =
-      carryForward.usageRules?.expiryYear;
+      carryForward?.usageRules?.expiryYear ?? null;
   }
-
   return summary;
 }
-
-function buildTimeline(eligibility) {
-  if (!eligibility) return [];
-
-  // FIRST 8 YEARS
-  if (eligibility.phase === "FIRST_8_YEARS") {
-    return eligibility.eligibilityMap.map((item) => ({
-      yearLabel: `Year ${item.serviceYear}`,
-      type: item.type,
-      label:
-        item.type === "HT"
-          ? "Home Town"
-          : item.type === "AI"
-            ? "All India"
-            : "Not Eligible",
-    }));
-  }
-
-  // BLOCK PERIOD
-  return [
-    {
-      label: `Block ${eligibility.currentBlock.start}-${eligibility.currentBlock.end}`,
-      type: "BLOCK",
-    },
-  ];
-}
-

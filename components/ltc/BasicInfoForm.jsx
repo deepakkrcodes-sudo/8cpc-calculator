@@ -28,8 +28,10 @@ export default function BasicInfoForm({ onChange }) {
         payLevel: "",
     });
 
+    const [error, setError] = useState("");
+
     const [form, setForm] = useState({
-        doj: null,
+        doj: "",
         hometown: "",
         office: "",
         payLevel: "",
@@ -46,7 +48,7 @@ export default function BasicInfoForm({ onChange }) {
         onChange(updated);
     };
 
-    
+
 
     return (
         <div >
@@ -66,17 +68,25 @@ export default function BasicInfoForm({ onChange }) {
                 </label>
 
                 <div className="relative">
-                    <DatePicker
-                        selected={form.doj}
-                        onChange={(date) => updateField("doj", date)}
-                        dateFormat="MM/yyyy"
-                        showMonthYearPicker
-                        wrapperClassName="w-full"
-                        className="w-full border border-gray-300 rounded-md pl-4 pr-3 py-2 text-sm bg-white shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                        placeholderText="Select Month & Year"
-                    />
+                    <select
+                        value={form.doj || ""}
+                        onChange={(e) => {
+                            updateField("doj", Number(e.target.value));
+                            setError(""); // clear error
+                        }}
+                        className="w-full border border-gray-200 rounded-lg px-4 py-2 text-sm bg-white shadow-sm hover:border-blue-400 focus:ring-2 focus:ring-blue-400 transition"
+                    >
+                        <option value="">Select Year of Joining</option>
 
-
+                        {Array.from({ length: 40 }, (_, i) => {
+                            const year = new Date().getFullYear() - i;
+                            return (
+                                <option key={year} value={year}>
+                                    {year}
+                                </option>
+                            );
+                        })}
+                    </select>
                 </div>
             </div>
 

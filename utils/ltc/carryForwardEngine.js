@@ -1,113 +1,95 @@
-export function applyCarryForward(data, conversionResult, eligibility) {
-  const { history } = data;
+export function applyCarryForward(data, eligibility) {
+  const { carryForwardInput } = data; 
+  // { available: true/false, type: "HT" | "AI" }
 
-  if (!history || !conversionResult || !eligibility) return null;
+  if (!eligibility) return null;
 
-  // Only applies in BLOCK PERIOD
+  // =========================
+  // ONLY BLOCK PERIOD
+  // =========================
   if (eligibility.phase !== "BLOCK_PERIOD") {
     return {
       carryForwardAvailable: false,
+      status: "NOT_APPLICABLE",
       message: "Carry forward not applicable in first 8 years",
     };
   }
 
   const { currentBlock } = eligibility;
-
-  let usedInBlock = 0;
-
-  // =========================
-  // COUNT USAGE IN CURRENT BLOCK
-  // =========================
-  history.forEach((row) => {
-    if (
-      row.year >= currentBlock.start &&
-      row.year <= currentBlock.end &&
-      row.type !== "NONE"
-    ) {
-      usedInBlock++;
-    }
-  });
-
-  // =========================
-  // TOTAL ENTITLEMENT
-  // =========================
-  let totalAllowed = 0;
-
-  if (eligibility.isSameState) {
-    totalAllowed = 1; // only AI
-  } else {
-    totalAllowed = 2; // 2 LTC in block (HT/AI flexible)
-  }
-
-  // =========================
-  // UNUSED LTC
-  // =========================
-  let unused = totalAllowed - usedInBlock;
-
-  if (unused < 0) unused = 0;
-
-  // Only 1 can be carried
-  let carryForwardAvailable = unused > 0;
-  let carryForwardCount = carryForwardAvailable ? 1 : 0;
-
-  // =========================
-  // NEXT BLOCK CALCULATION
-  // =========================
-  const nextBlockStart = currentBlock.end + 1;
-  const nextBlockEnd = nextBlockStart + 3;
-
-  let canUseNextYear = false;
-  let expiryYear = null;
-
   const currentYear = new Date().getFullYear();
 
-  if (carryForwardAvailable) {
-    canUseNextYear = true;
-    expiryYear = nextBlockStart; // must use in first year
+  if (!currentBlock) return null;
+
+  const validYear = currentBlock.start;
+
+  // =========================
+  // USER INPUT
+  // =========================
+  const isAvailable = carryForwardInput?.available;
+  const type = carryForwardInput?.type || null;
+
+  if (!isAvailable) {
+    return {
+      carryForwardAvailable: false,
+      carryForwardType: null,
+      status: "NOT_AVAILABLE",
+      message: "✔ Carry forward LTC already utilized / not applicable.",
+    };
   }
 
   // =========================
-  // DOUBLE LTC POSSIBILITY
+  // STATUS LOGIC
   // =========================
-  let doubleLTCYear = null;
+  let status = "NONE";
 
-  if (carryForwardAvailable) {
-    doubleLTCYear = nextBlockStart;
+  if (currentYear < validYear) {
+    status = "UPCOMING";
+  } else if (currentYear === validYear) {
+    status = "ACTIVE";
+  } else {
+    status = "LAPSED";
   }
+
+  const usable = status === "ACTIVE";
 
   return {
-    carryForwardAvailable,
-    carryForwardCount,
+    carryForwardAvailable: usable,
+    carryForwardType: type, // HT / AI
+    status,
+    validYear,
 
-    unusedInBlock: unused,
-
-    nextBlock: {
-      start: nextBlockStart,
-      end: nextBlockEnd,
+    rules: {
+      validOnlyInYear: validYear,
+      note:
+        type === "HT"
+          ? "HT carry forward cannot be used as All India"
+          : "AI carry forward usable anywhere",
     },
 
-    usageRules: {
-      canUseNextYear,
-      expiryYear,
-      doubleLTCYear,
-    },
-
-    suggestion: generateSuggestion({
-      carryForwardAvailable,
-      unused,
-      currentBlock,
+    message: buildMessage({
+      status,
+      type,
+      validYear,
     }),
   };
 }
 
-function generateSuggestion({ carryForwardAvailable, unused, currentBlock }) {
-  if (!carryForwardAvailable) {
-    return "All LTC for this block already used.";
+function buildMessage({ status, type, validYear }) {
+  if (status === "NOT_AVAILABLE") {
+    return "✔ Carry forward LTC already utilized.";
   }
 
-  if (unused > 1) {
-    return `You have ${unused} LTC remaining. Only 1 can be carried forward. Use before ${currentBlock.end}.`;
+  if (status === "UPCOMING") {
+    return `Carry forward (${type}) will be available in ${validYear}.`;
   }
 
-  return `You can carry forward 1 LTC to next block. Use it in ${currentBlock.end + 1}.`;
+  if (status === "ACTIVE") {
+    return `⚠ Use your carry forward (${type}) LTC in ${validYear} or it will lapse.`;
+  }
+
+  if (status === "LAPSED") {
+    return `❌ Carry forward (${type}) LTC utilization period completed.`;
+  }
+
+  return "";
 }

@@ -105,12 +105,14 @@ export default function TravelCard({ data }) {
                 <div className="text-sm text-gray-600">💡 Travel Insight</div>
 
                 <div className="text-lg font-semibold text-green-700">
-                    {payLevel >= 10
-                        ? "You can freely plan air travel under LTC"
-                        : payLevel >= 6
-                            ? "You are entitled for Air Travel. Consider using it for long-distance trips."
-                            : "Use All India LTC to avail air travel in special regions"}
-                </div>
+  {payLevel >= 14
+    ? "You are eligible for Business Class air travel under LTC"
+    : payLevel >= 10
+    ? "You can comfortably use Air LTC for most destinations"
+    : payLevel >= 6
+    ? "Use Air LTC smartly for long-distance journeys"
+    : "Use special LTC schemes (NER/J&K) to access air travel"}
+</div>
 
             </div>
 

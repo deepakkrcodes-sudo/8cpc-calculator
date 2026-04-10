@@ -1,7 +1,7 @@
 export default function SuggestionCard({ data }) {
   if (!data) return null;
 
-  const { carryForward, remaining, warnings } = data;
+  const { carryForward, remaining, warnings, type, message, advice, next } = data;
 
   const homeTown = remaining?.homeTown ?? 0;
   const allIndia = remaining?.allIndia ?? 0;
@@ -11,25 +11,30 @@ export default function SuggestionCard({ data }) {
   const hasPending =
     homeTown > 0 || allIndia > 0 || hasCarry;
 
+  const suggestion =
+    message
+      ? { message, advice, type }
+      : buildSuggestionText(homeTown, allIndia, carryForward, eligibility);
+
   return (
-    <div className="bg-white rounded-xl shadow-sm p-5 space-y-5">
+    <div className="bg-white rounded-2xl shadow-sm border p-5 space-y-5">
 
       {/* HEADER */}
       <div className="border-b pb-3 flex items-center gap-2">
-        💡
+        <span className="text-lg">💡</span>
         <div>
           <h2 className="text-lg font-semibold">
             Recommendation
           </h2>
           <p className="text-xs text-gray-500">
-            Smart advice based on your LTC usage
+            Smart advice based on your current LTC window
           </p>
         </div>
       </div>
 
       {/* WARNINGS */}
       {warnings?.length > 0 && (
-        <div className="bg-red-50/60 rounded-lg p-4 space-y-1">
+        <div className="bg-red-50 border border-red-100 rounded-xl p-4 space-y-1">
           <div className="text-sm font-semibold text-red-700">
             ⚠ Important
           </div>
@@ -42,9 +47,14 @@ export default function SuggestionCard({ data }) {
         </div>
       )}
 
-      {/* MAIN MESSAGE */}
-      <div className="bg-green-50/60 rounded-lg p-5 text-center">
-
+      {/* MAIN DECISION CARD */}
+      <div
+        className={`rounded-xl p-5 text-center transition-all
+        ${hasPending
+            ? "bg-green-50 border border-green-100"
+            : "bg-gray-50 border border-gray-200"
+          }`}
+      >
         {hasPending ? (
           <>
             <div className="text-sm text-gray-600 flex justify-center gap-1">
@@ -52,8 +62,16 @@ export default function SuggestionCard({ data }) {
             </div>
 
             <div className="text-lg font-semibold text-green-700 mt-1">
-              {buildSuggestionText(homeTown, allIndia, carryForward)}
+              {suggestion.message}
             </div>
+
+            {suggestion.advice && (
+              <div className="text-sm text-gray-600 mt-2">
+                {suggestion.advice}
+              </div>
+            )}
+
+            
           </>
         ) : (
           <>
@@ -65,10 +83,9 @@ export default function SuggestionCard({ data }) {
               You have successfully utilized all your LTC benefits.
             </div>
 
-            {carryForward?.nextBlock?.start && (
+            {next && (
               <div className="text-xs text-gray-500 mt-2">
-                You will be eligible again in next block (
-                {carryForward.nextBlock.start}–{carryForward.nextBlock.end})
+                {next}
               </div>
             )}
           </>
@@ -76,19 +93,18 @@ export default function SuggestionCard({ data }) {
       </div>
 
       {/* SUMMARY */}
-      <div className="bg-blue-50/50 rounded-lg p-4">
+      <div className="bg-blue-50/60 rounded-xl p-4 border border-blue-100">
         <div className="flex items-center gap-2 text-sm font-semibold text-blue-700 mb-2">
-          📊 Quick Summary
+          📊 Current Status
         </div>
 
         <div className="divide-y">
           <Row
-            label="Home Town LTC Remaining"
+            label="Home Town LTC"
             value={formatRemaining(homeTown, "HT")}
           />
-
           <Row
-            label="All India LTC Remaining"
+            label="All India LTC"
             value={formatRemaining(allIndia, "AI")}
           />
         </div>
@@ -96,7 +112,8 @@ export default function SuggestionCard({ data }) {
 
       {/* CARRY FORWARD */}
       {hasCarry && (
-        <div className="bg-yellow-50/60 rounded-lg p-4">
+        <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
+
           <div className="text-sm font-semibold text-yellow-700 mb-1">
             ⏳ Action Required
           </div>
@@ -104,16 +121,21 @@ export default function SuggestionCard({ data }) {
           <p className="text-sm text-gray-700">
             You can carry forward 1 LTC. Use it before{" "}
             <span className="font-medium">
-              {carryForward?.usageRules?.expiryYear}
+              {carryForward?.usageRules?.mustUseBy ||
+                carryForward?.usageRules?.expiryYear}
             </span>{" "}
             or it will lapse.
           </p>
+
         </div>
       )}
     </div>
   );
 }
 
+/* =========================
+   ROW COMPONENT
+========================= */
 function Row({ label, value }) {
   return (
     <div className="flex justify-between py-2 text-sm">
@@ -125,42 +147,95 @@ function Row({ label, value }) {
   );
 }
 
+/* =========================
+   FORMAT REMAINING
+========================= */
 function formatRemaining(value, type) {
   if (value === 0) {
     return type === "HT"
-      ? "No Home Town LTC remaining"
-      : "No All India LTC remaining";
+      ? "Not Available"
+      : "Not Available";
   }
 
   return `${value} remaining`;
 }
 
-function buildSuggestionText(homeTown, allIndia, carryForward) {
+/* =========================
+   FALLBACK SUGGESTION
+========================= */
+function buildSuggestionText(homeTown, allIndia, carryForward, eligibility) {
 
-  // BOTH AVAILABLE
-  if (homeTown > 0 && allIndia > 0) {
-    return `You have ${homeTown} Home Town and ${allIndia} All India LTC remaining. Plan usage before block ends.`;
-  }
-
-  // ONLY HT
-  if (homeTown > 0) {
-    return `You still have ${homeTown} Home Town LTC remaining. Use before expiry year.`;
-  }
-
-  // ONLY AI
-  if (allIndia > 0) {
-    return `You still have ${allIndia} All India LTC remaining. Consider planning long-distance travel.`;
-  }
-
-  // CONVERSION CASE
-  if (allIndia > 0 && homeTown === 0) {
-    return `You can convert eligible LTC to All India LTC for better utilization.`;
-  }
-
-  // CARRY FORWARD
+  // =========================
+  // PRIORITY 1: CARRY FORWARD (URGENT)
+  // =========================
   if (carryForward?.carryForwardAvailable) {
-    return `You can carry forward 1 LTC. Use it in ${carryForward.usageRules.expiryYear}.`;
+  const expiryYear = carryForward?.usageRules?.expiryYear;
+  const currentYear = new Date().getFullYear();
+
+  if (expiryYear && currentYear > expiryYear) {
+    return {
+      type: "CARRY_EXPIRED",
+      message: "❌ Your carry forward LTC has expired.",
+      advice: "Plan properly in future blocks to avoid loss.",
+    };
   }
 
-  return "";
+  return {
+    type: "CARRY_FORWARD",
+    message: "⚠ You have a carry forward LTC pending.",
+    advice: `Use it before ${expiryYear} (first year of new block) or it will lapse.`,
+    urgent: true,
+  };
+}
+
+  // =========================
+  // PRIORITY 2: BOTH AVAILABLE
+  // =========================
+  if (homeTown > 0 && allIndia > 0) {
+    return {
+      type: "PLAN_BOTH",
+      message: `You have ${homeTown} Home Town and ${allIndia} All India LTC remaining.`,
+      advice: "Plan one short trip and one long-distance trip within current block.",
+    };
+  }
+
+  // =========================
+  // PRIORITY 3: ONLY HT
+  // =========================
+  if (homeTown > 0) {
+    return {
+      type: "PLAN_HT",
+      message: `You have ${homeTown} Home Town LTC remaining.`,
+      advice: "Use it before the end of current block/sub-block.",
+    };
+  }
+
+  // =========================
+  // PRIORITY 4: ONLY AI
+  // =========================
+  if (allIndia > 0) {
+    return {
+      type: "PLAN_AI",
+      message: `You have ${allIndia} All India LTC remaining.`,
+      advice: "Plan a long-distance journey for maximum benefit.",
+    };
+  }
+
+  if (lapsedCount > 0) {
+    return `⚠ ${lapsedCount} LTC has lapsed. Plan timely usage.`;
+  }
+
+  // =========================
+  // PRIORITY 5: COMPLETED
+  // =========================
+  return {
+    type: "COMPLETED",
+    message: "✔ You have successfully utilized all LTC benefits.",
+    next:
+      eligibility.phase === "BLOCK_PERIOD"
+        ? `Next block starts ${eligibility.currentBlock.end + 1}`
+        : "Next eligibility will arise in upcoming years",
+  };
+
+
 }

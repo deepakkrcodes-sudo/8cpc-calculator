@@ -12,14 +12,13 @@ export default function PlannerCard({ data }) {
             LTC Planner
           </h2>
           <p className="text-xs text-gray-500">
-            Plan your LTC usage for upcoming years
+            Smart yearly planning based on rules
           </p>
         </div>
       </div>
 
-      {/* PLAN LIST */}
+      {/* LIST */}
       <div className="space-y-3">
-
         {data.map((item, i) => (
           <div
             key={i}
@@ -30,13 +29,10 @@ export default function PlannerCard({ data }) {
                   : "bg-gray-50"
               }`}
           >
-
-            {/* YEAR */}
             <div className="text-sm font-medium text-gray-700">
               {item.year}
             </div>
 
-            {/* TYPE */}
             <div
               className={`text-xs px-3 py-1 rounded-full font-medium
                 ${
@@ -49,17 +45,14 @@ export default function PlannerCard({ data }) {
             >
               {item.label}
             </div>
-
           </div>
         ))}
-
       </div>
 
-      {/* FOOTER TIP */}
+      {/* INSIGHT */}
       <div className="bg-yellow-50 text-xs p-3 rounded-lg text-gray-700">
-        💡 Tip: Use All India LTC for long-distance trips like North East or Andaman.
+        💡 Best Strategy: Use HT early and reserve AI for long-distance travel.
       </div>
-
     </div>
   );
 }

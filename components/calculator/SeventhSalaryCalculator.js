@@ -55,18 +55,6 @@ export default function SeventhSalaryCalculator() {
 
     <div className="space-y-4">
 
-      <div>
-
-        <h1 className="text-xl font-semibold text-center">
-          7th CPC Salary Calculator
-        </h1>
-
-        <p className="text-gray-600 text-sm mt-2 text-center">
-          Calculate your Salary as per 7th Central Pay Commission
-          including DA, HRA, TA, deductions and net salary.
-        </p>
-
-      </div>
 
       <div className="bg-white p-4 rounded-xl shadow-sm space-y-3">
 

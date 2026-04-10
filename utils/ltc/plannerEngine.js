@@ -1,64 +1,94 @@
 "use client";
 
-export function generatePlanner(eligibility) {
+export function generatePlanner(eligibility, conversion, carryForward) {
   if (!eligibility) return [];
 
   const plan = [];
   const currentYear = new Date().getFullYear();
 
   // =========================
-  // FIRST 8 YEARS
+  // 🔵 FIRST 8 YEARS
   // =========================
   if (eligibility.phase === "FIRST_8_YEARS") {
-    eligibility.eligibilityMap.forEach((item, index) => {
+    const joiningYear = eligibility.joiningYear;
+
+    for (let i = 1; i <= 4; i++) {
+      const year = joiningYear + i;
+
+      let type = "NONE";
+
+      if (eligibility.isSameState) {
+        if (i === 4) type = "AI";
+      } else {
+        if (i < 4) type = "HT";
+        if (i === 4) type = "AI";
+      }
+
       plan.push({
-        year: currentYear - (eligibility.serviceYear - (index + 1)),
-        type: item.type,
+        year,
+        type,
         label:
-          item.type === "HT"
+          type === "HT"
             ? "Home Town LTC"
-            : item.type === "AI"
+            : type === "AI"
             ? "All India LTC"
             : "Not Eligible",
       });
+    }
+
+    return plan;
+  }
+
+  // =========================
+  // 🔴 BLOCK PERIOD
+  // =========================
+  const { currentBlock, isSameState } = eligibility;
+
+  const subBlock1 = [currentBlock.start, currentBlock.start + 1];
+  const subBlock2 = [currentBlock.start + 2, currentBlock.end];
+
+  // =========================
+  // SAME STATE → ONLY AI
+  // =========================
+  if (isSameState) {
+    plan.push({
+      year: subBlock1[0],
+      type: "AI",
+      label: "All India LTC (Best Year)",
     });
 
     return plan;
   }
 
   // =========================
-  // BLOCK PERIOD
+  // DIFFERENT STATE → OPTIMAL PLAN
   // =========================
-  const { currentBlock } = eligibility;
 
-  for (let y = currentBlock.start; y <= currentBlock.end; y++) {
-    let type = "HT";
+  // 🔥 Sub-block 1 → HT
+  plan.push({
+    year: subBlock1[0],
+    type: "HT",
+    label: "Home Town LTC (Sub-block 1)",
+  });
 
-    if (eligibility.isSameState) {
-      type = "AI";
-    } else if (y === currentBlock.end) {
-      type = "AI";
-    }
+  // 🔥 Sub-block 2 → AI
+  plan.push({
+    year: subBlock2[0],
+    type: "AI",
+    label: "All India LTC (Sub-block 2)",
+  });
 
-    plan.push({
-      year: y,
-      type,
-      label:
-        type === "HT"
-          ? "Home Town LTC"
-          : "All India LTC",
+  // =========================
+  // 🔥 CARRY FORWARD (TOP PRIORITY)
+  // =========================
+  if (carryForward?.status === "ACTIVE") {
+    plan.unshift({
+      year: currentBlock.start,
+      type: carryForward.carryForwardType,
+      label: "Carry Forward LTC (Use Immediately)",
+      urgent: true,
     });
   }
-
-  // NEXT BLOCK PREVIEW
-  const nextStart = currentBlock.end + 1;
-
-  plan.push({
-    year: nextStart,
-    type: "AI",
-    label: "Next Block Starts",
-    highlight: true,
-  });
 
   return plan;
 }
