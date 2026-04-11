@@ -144,7 +144,7 @@ export default function LTCHistoryTable({ basicInfo, eligibility, onChange }) {
           if (r.type === "AI") AI_used++;
           if (r.type === "CONVERTED") {
             conversionUsed++;
-            AI_used++; // conversion counts as AI
+            HT_used++; // conversion counts as AI
           }
         });
 

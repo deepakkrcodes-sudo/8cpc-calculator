@@ -39,12 +39,13 @@ export function applyConversion(data, eligibility) {
 
       if (row.type === "CONVERTED") {
         conversionUsed++;
-        AI_used++; // conversion counts as AI
+
+        // ✅ ONLY consume HT
+        HT_used++;
       }
     });
 
-    // 🔥 IMPORTANT: conversion consumes HT slot
-    HT_used = Math.max(HT_used - conversionUsed, 0);
+   
 
     const maxHT = isSameState ? 0 : 3;
     const maxAI = 1;
@@ -101,7 +102,7 @@ export function applyConversion(data, eligibility) {
 
     if (row.type === "CONVERTED") {
       conversionUsed++;
-      AI_used++; // conversion behaves like AI
+      HT_used++; // conversion behaves like AI
 
       // consume HT from same sub-block
       if (isSB1) HT_SB1 = Math.max(HT_SB1 - 1, 0);

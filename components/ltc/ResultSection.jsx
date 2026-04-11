@@ -7,9 +7,12 @@ export default function ResultSection({ result }) {
     <>
       {result && (
         <div className="grid md:grid-cols-2 gap-4 mt-4">
-          <EligibilityCard data={result.eligibility} />          
+          <EligibilityCard data={result.eligibility} />
           <SuggestionCard data={result.suggestion} />
-          <PlannerCard data={result.planner} />
+          <PlannerCard
+            data={result.planner}
+            eligibility={result.rawEligibility} // ✅ MUST be this
+          />
         </div>
       )}
     </>

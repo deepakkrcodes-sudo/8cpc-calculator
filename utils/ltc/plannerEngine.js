@@ -9,35 +9,24 @@ export function generatePlanner(eligibility, conversion, carryForward) {
   // =========================
   // 🔵 FIRST 8 YEARS
   // =========================
-  if (eligibility.phase === "FIRST_8_YEARS") {
-    const joiningYear = eligibility.joiningYear;
+  // =========================
+// 🔵 FIRST 8 YEARS (FIXED)
+// =========================
+if (eligibility.phase === "FIRST_8_YEARS") {
+  const map = eligibility.eligibilityMap;
 
-    for (let i = 1; i <= 4; i++) {
-      const year = joiningYear + i;
-
-      let type = "NONE";
-
-      if (eligibility.isSameState) {
-        if (i === 4) type = "AI";
-      } else {
-        if (i < 4) type = "HT";
-        if (i === 4) type = "AI";
-      }
-
-      plan.push({
-        year,
-        type,
-        label:
-          type === "HT"
-            ? "Home Town LTC"
-            : type === "AI"
-            ? "All India LTC"
-            : "Not Eligible",
-      });
-    }
-
-    return plan;
-  }
+  return map.map((item) => ({
+    year: item.year, // ✅ ACTUAL YEAR
+    type: item.type,
+    label:
+      item.type === "HT"
+        ? "Home Town LTC"
+        : item.type === "AI"
+        ? "All India LTC"
+        : "Not Eligible",
+    priority: item.type !== "NONE" ? "RECOMMENDED" : "NONE",
+  }));
+}
 
   // =========================
   // 🔴 BLOCK PERIOD
@@ -52,9 +41,9 @@ export function generatePlanner(eligibility, conversion, carryForward) {
   // =========================
   if (isSameState) {
     plan.push({
-      year: subBlock1[0],
+      year: `${subBlock1[0]}-${subBlock2[1]}`,
       type: "AI",
-      label: "All India LTC (Best Year)",
+      label: "All India LTC (1 per 4 yr. block)",
     });
 
     return plan;

@@ -73,7 +73,7 @@ export default function OtherToolsSection() {
             title: "LTC Calculator & Guide",
             desc: "Calculate LTC benefits and plan",
             icon: "📋",
-            link: "/ltc-calculator"
+            link: "/ltc-planner"
         }
 
     ];
