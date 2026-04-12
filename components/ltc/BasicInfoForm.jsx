@@ -2,6 +2,13 @@
 
 import { useState } from "react";
 import { payMatrix } from "@/data/payMatrix";
+import {
+    CalendarDays,
+    MapPin,
+    Building2,
+    Layers,
+    History
+} from "lucide-react";
 
 const states = [
     "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar",
@@ -56,7 +63,8 @@ export default function BasicInfoForm({ onChange }) {
             {/* DOJ */}
 
             <div className="flex flex-col">
-                <label className="text-sm text-gray-600 flex items-center gap-1 mb-1">
+                <label className="text-sm text-gray-600 flex items-center gap-2 mb-1">
+                    <CalendarDays size={16} className="text-blue-500" />
                     Date of Joining
 
                     <span
@@ -65,6 +73,7 @@ export default function BasicInfoForm({ onChange }) {
                     >
                         i
                     </span>
+
                 </label>
 
                 <div className="relative">
@@ -94,9 +103,11 @@ export default function BasicInfoForm({ onChange }) {
 
             {/* HOME STATE */}
             <div>
-                <label className="text-sm text-gray-600">
+                <label className="text-sm text-gray-600 flex items-center gap-2 mb-1 mt-2">
+                    <MapPin size={16} className="text-green-500" />
                     Home Town State
                 </label>
+
 
                 <select
                     className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -111,8 +122,9 @@ export default function BasicInfoForm({ onChange }) {
             </div>
 
             <div>
-                <label className="text-sm text-gray-600">
-                    HQ State/ Office State
+                <label className="text-sm text-gray-600 flex items-center gap-2 mb-1 mt-2">
+                    <Building2 size={16} className="text-purple-500" />
+                    HQ State / Office State
                 </label>
 
                 <select
@@ -129,7 +141,8 @@ export default function BasicInfoForm({ onChange }) {
 
             {/* PAY LEVEL */}
             <div>
-                <label className="text-sm text-gray-600">
+                <label className="text-sm text-gray-600 flex items-center gap-2 mb-1 mt-2">
+                    <Layers size={16} className="text-orange-500" />
                     Pay Level
                 </label>
 

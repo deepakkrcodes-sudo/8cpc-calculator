@@ -1,6 +1,13 @@
 import { useEffect, useState } from "react";
 import { getAllowedOptions } from "@/utils/ltc/historyRules";
 import { getCarryForwardStatus } from "@/utils/ltc/carryForwardRules";
+import {
+  CalendarDays,
+  MapPin,
+  Building2,
+  Layers,
+  History
+} from "lucide-react";
 
 
 export default function LTCHistoryTable({ basicInfo, eligibility, onChange }) {
@@ -347,7 +354,8 @@ export default function LTCHistoryTable({ basicInfo, eligibility, onChange }) {
       {/* HEADER */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-sm font-semibold text-gray-800">
+          <h2 className="text-md font-semibold text-gray-800 flex items-center gap-2 mt-4">
+            <History size={18} className="text-indigo-500" />
             LTC History
           </h2>
           <p className="text-xs text-gray-500">{info}</p>
