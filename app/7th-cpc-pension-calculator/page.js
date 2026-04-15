@@ -17,18 +17,27 @@ export const metadata = {
 export default function Page() {
 
     return (
-        <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
+        <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+            
+            <div className="inline-flex items-left gap-1 text-[11px] bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full font-medium">
+                Pension Calculator
+            </div>
 
-            <div className="p-6 text-center">
-
-                <h1 className="text-2xl font-bold">
-                    7th CPC Pension Calculator
+            <div className="p-6 text-center space-y-4">              
+                {/* Title */}
+                <h1 className="text-xl md:text-2xl font-semibold tracking-tight md:whitespace-nowrap md:overflow-hidden md:text-ellipsis">
+                    <span className="bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
+                        7th CPC Pension Calculator
+                    </span>
                 </h1>
 
-                <p className="text-gray-600 text-sm mt-2">
-                    Calculate your pension under 7th Central Pay Commission
-                    including commutation, DR and total monthly pension.
+                {/* Subtitle */}
+                <p className="text-xs md:text-sm text-gray-600 mx-auto md:whitespace-nowrap md:overflow-hidden md:text-ellipsis">
+                    Calculate your pension under 7th Central Pay Commission including commutation, DR and total monthly pension.
                 </p>
+
+                {/* Premium gradient line */}
+                <div className="mx-auto h-[2px] w-40 md:w-56 lg:w-72 bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 rounded-full opacity-80"></div>
 
             </div>
 

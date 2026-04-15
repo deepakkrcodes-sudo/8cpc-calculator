@@ -157,7 +157,7 @@ export default function ArrearCalculatorPage() {
 
                 });
 
-            console.log("Arrear result:", arrear);
+            
 
             setResult(arrear);
 

@@ -2,6 +2,13 @@
 
 import FitmentFactorControl from "./FitmentFactorControl";
 
+import {
+  IndianRupee,
+  User,
+  Repeat,
+  TrendingUp
+} from "lucide-react";
+
 export default function PensionInputs({
   inputs,
   setInputs,
@@ -10,7 +17,7 @@ export default function PensionInputs({
 }) {
 
   function update(field, value) {
-    console.log("INPUT UPDATE:", field, value);
+    
     setInputs(prev => ({ ...prev, [field]: value }));
   }
 
@@ -26,7 +33,8 @@ export default function PensionInputs({
 
         <div>
 
-          <label className="text-sm text-gray-600">
+          <label className="text-sm text-gray-600 flex items-center gap-2 mb-1">
+            <IndianRupee size={16} className="text-green-600" />
             Basic Pay at Retirement
           </label>
 
@@ -42,8 +50,8 @@ export default function PensionInputs({
 
 
         <div>
-
-          <label className="text-sm text-gray-600">
+          <label className="text-sm text-gray-600 flex items-center gap-2 mb-1">
+            <User size={16} className="text-blue-500" />
             Age at Retirement
           </label>
 
@@ -59,7 +67,8 @@ export default function PensionInputs({
 
         <div>
 
-          <label className="text-sm text-gray-600">
+          <label className="text-sm text-gray-600 flex items-center gap-2 mb-1">
+            <Repeat size={16} className="text-purple-500" />
             Commutation %
           </label>
 
@@ -80,14 +89,25 @@ export default function PensionInputs({
 
         <div>
 
-          <label className="text-sm text-gray-600">
+          <label className="text-sm text-gray-600 flex items-center gap-2 mb-1">
+            <TrendingUp size={16} className="text-orange-500" />
             Dearness Relief %
+            
           </label>
 
           <input
             type="number"
-            value={inputs.dr}
-            onChange={(e) => update("dr", e.target.value)}
+            value={
+              mode === "7cpc"
+                ? inputs.dr7 ?? 58
+                : inputs.dr8 ?? 0
+            }
+            onChange={(e) =>
+              update(
+                mode === "7cpc" ? "dr7" : "dr8",
+                Number(e.target.value)
+              )
+            }
             className="w-full border rounded-lg p-2"
           />
 

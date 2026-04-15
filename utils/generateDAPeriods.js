@@ -1,28 +1,41 @@
-export function generateDAPeriods(implementationPeriod){
+export function generateDAPeriods(implementationPeriod) {
 
- const periods=[];
+  const periods = [];
 
- const startYear=2026;
- let month="Jan";
- let year=startYear;
+  let month = "Jan";
+  let year = 2026;
 
- while(true){
+  while (true) {
 
-  periods.push({
-   label:`${month} ${year}`
-  });
+    // ✅ STOP BEFORE adding implementation period
+    if (`${month}-${year}` === implementationPeriod) break;
 
-  if(`${month}-${year}`===implementationPeriod) break;
+    let start, end, label;
 
-  if(month==="Jan"){
-   month="Jul";
-  }else{
-   month="Jan";
-   year++;
+    if (month === "Jan") {
+      start = `${year}-01-01`;
+      end = `${year}-06-30`;
+      label = `Jan–Jun ${year}`;
+    } else {
+      start = `${year}-07-01`;
+      end = `${year}-12-31`;
+      label = `Jul–Dec ${year}`;
+    }
+
+    periods.push({
+      label,
+      start,
+      end
+    });
+
+    // move forward
+    if (month === "Jan") {
+      month = "Jul";
+    } else {
+      month = "Jan";
+      year++;
+    }
   }
 
- }
-
- return periods;
-
+  return periods;
 }

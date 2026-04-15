@@ -65,7 +65,7 @@ export default function BasicInfoForm({ onChange }) {
             <div className="flex flex-col">
                 <label className="text-sm text-gray-600 flex items-center gap-2 mb-1">
                     <CalendarDays size={16} className="text-blue-500" />
-                    Date of Joining
+                    Joining Year
 
                     <span
                         className="text-gray-400 cursor-pointer text-xs border rounded-full w-4 h-4 flex items-center justify-center"

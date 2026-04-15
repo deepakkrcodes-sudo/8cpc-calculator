@@ -95,7 +95,7 @@ export function calculate7CPCSalary({
 function calculateIncomeTaxAnnual(taxableIncome) {
 
   // Rebate rule (new regime FY 2025-26)
-  console.log(taxableIncome);
+  
   if (taxableIncome <= 1200000) {
     return 0;
   }

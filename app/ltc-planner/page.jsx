@@ -15,7 +15,7 @@ export default function LTCPage() {
     const [formData, setFormData] = useState(null);
     const [result, setResult] = useState(null);
 
-    console.log("FINAL RESULT:", result);
+    
 
     const handleCalculate = (data) => {
         const output = calculateLTC(data);
@@ -42,7 +42,7 @@ export default function LTCPage() {
         <div className="max-w-[1400px] mx-auto p-4">
             <div className="text-center mb-6">
 
-                <h1 className="text-2xl md:text-3xl font-bold mb-3">
+                <h1 id="ltc-planner" className="text-2xl md:text-3xl font-bold mb-3">
                     LTC Planner 2026 for Central Government Employees
                 </h1>
 

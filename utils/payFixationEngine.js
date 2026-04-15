@@ -115,7 +115,7 @@ cumulativeB
 
 });
 
-console.log("optionA:", data.optionA, typeof data.optionA);
+
 
 }
 

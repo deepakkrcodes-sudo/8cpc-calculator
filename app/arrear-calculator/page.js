@@ -99,7 +99,7 @@ export default function ArrearCalculatorPage() {
 
         try {
 
-            console.log("Calculate clicked");
+           
 
             if (!level || !basic || !fitmentFactor) {
 
@@ -157,7 +157,7 @@ export default function ArrearCalculatorPage() {
 
                 });
 
-            console.log("Arrear result:", arrear);
+            
 
             setResult(arrear);
 

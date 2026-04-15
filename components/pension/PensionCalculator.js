@@ -10,31 +10,33 @@ export default function PensionCalculator({ mode = "8cpc" }) {
 
   const [inputs, setInputs] = useState({
     basic: "",
-    fitment: 2.86,
+    fitment: 2.28,
     age: 60,
     commutation: 40,
-    dr: 60
+    dr7: 58,
+    dr8: 0
   });
 
   const [result, setResult] = useState(null);
 
   function handleCalculate() {
 
-    console.log("RAW INPUTS:", inputs);
+    
 
     const basic = Number(inputs.basic);
 
-    console.log("Parsed Basic:", basic);
+    
 
     const data = calculatePension({
       basic,
       fitment: mode === "8cpc" ? Number(inputs.fitment) : 1,
       age: Number(inputs.age),
       commutation: Number(inputs.commutation),
-      dr: Number(inputs.dr),
+      dr7: Number(inputs.dr7),
+      dr8: Number(inputs.dr8),
       mode
     });
-    console.log("CALC RESULT:", data);
+    
 
     setResult(data);
 

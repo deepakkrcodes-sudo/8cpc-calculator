@@ -12,7 +12,7 @@ export default function TravelCard({ data }) {
         console.warn("Invalid payLevel:", raw);
     }
 
-    
+
 
     // =========================
     // AIR ELIGIBILITY (FIXED)
@@ -95,7 +95,7 @@ export default function TravelCard({ data }) {
                         <li>Andaman & Nicobar</li>
                     </ul>
 
-                    
+
                 </div>
             )}
 
@@ -105,14 +105,14 @@ export default function TravelCard({ data }) {
                 <div className="text-sm text-gray-600">💡 Travel Insight</div>
 
                 <div className="text-lg font-semibold text-green-700">
-  {payLevel >= 14
-    ? "You are eligible for Business Class air travel under LTC"
-    : payLevel >= 10
-    ? "You can comfortably use Air LTC for most destinations"
-    : payLevel >= 6
-    ? "Use Air LTC smartly for long-distance journeys"
-    : "Use special LTC schemes (NER/J&K) to access air travel"}
-</div>
+                    {payLevel >= 14
+                        ? "You are eligible for Business Class air travel under LTC"
+                        : payLevel >= 10
+                            ? "You can comfortably use Air LTC for most destinations"
+                            : payLevel >= 6
+                                ? "Use Air LTC smartly for long-distance journeys"
+                                : "Use special LTC schemes (NER/J&K) to access air travel"}
+                </div>
 
             </div>
 

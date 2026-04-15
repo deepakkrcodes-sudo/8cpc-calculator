@@ -21,18 +21,31 @@ export default function Page() {
 
   return (
 
-    <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
+
+    <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
       {/* HERO CARD */}
-      <div>
+      <div className="space-y-4">
 
-        <h1 className="text-2xl font-bold">
-          8th CPC Pension Calculator
+        {/* Small Tag (adds premium feel) */}
+        <div className="inline-block text-[11px] bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full font-medium">
+          Pension Calculator
+        </div>
+
+        {/* Title */}
+        <h1 className="text-xl md:text-2xl font-semibold text-center text-gray-900 tracking-tight md:whitespace-nowrap md:overflow-hidden md:text-ellipsis">
+          <span className="bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
+            8th CPC Pension Calculator
+          </span>
         </h1>
 
-        <p className="text-gray-600 text-sm mt-2 max-w-2xl mx-auto text-center">
-          Estimate your pension under the projected 8th CPC and compare it with the 7th CPC based on fitment, commutation, and DA.
+        {/* Subtitle */}
+        <p className="text-xs md:text-sm text-gray-500 text-center mt-2 mx-auto md:whitespace-nowrap md:overflow-hidden md:text-ellipsis">
+          Estimate your pension under the projected 8th Pay Commission and compare it with the 7th CPC based on fitment, commutation, and DA.
         </p>
+        {/* Full-width premium gradient line */}
+        {/* Gradient line */}
+        <div className="mx-auto h-[2px] w-32 sm:w-40 md:w-56 lg:w-96 bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 rounded-full opacity-80"></div>
 
       </div>
 

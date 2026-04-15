@@ -16,9 +16,7 @@ export default function EligibilityCard({ data }) {
     carryForwardType,
   } = data;
 
-  console.log("SErvice year", serviceYears);
-  console.log("carryforwarYear", carryForwardType);
-  console.log("carryforwardtype", carryForwardType);
+  
 
   // =========================
   // SMART INSIGHT

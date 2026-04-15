@@ -176,8 +176,7 @@ export default function LTCHistoryTable({ basicInfo, eligibility, onChange }) {
         // DIFFERENT STATE
         else {
           let blockPeriod = serviceYear % 4;
-          console.log(serviceYear);
-          console.log(blockPeriod);
+         
           if (blockPeriod < 4 && blockPeriod > 0 && value === "AI") {
             setError("All India allowed only in 4th year");
             return prevRows;

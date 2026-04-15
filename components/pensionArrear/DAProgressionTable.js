@@ -1,73 +1,73 @@
 "use client";
 
+import { TrendingUp } from "lucide-react";
+
 export default function DAProgressionTable({ periods, daRates, updateDARate }) {
 
   return (
 
-    <div >
+    <div className="space-y-4">
 
       {/* HEADER */}
-      <div className="mb-4">
-
-        <h3 className="font-semibold text-lg">
-          Expected DA Progression
+      <div>
+        <h3 className="font-semibold text-md text-gray-800 flex items-center gap-2">
+          <TrendingUp size={16} className="text-blue-600 shrink-0" />
+          <span>Expected DA Progression</span>
         </h3>
 
         <p className="text-xs text-gray-500">
           Adjust expected DA increases until implementation
         </p>
-
       </div>
 
 
       {/* TIMELINE */}
-      <div className="relative border-l-2 border-gray-200 ml-3 space-y-6">
+      <div className="border border-gray-500 rounded-xl p-4 bg-white shadow-sm">
 
-        {periods.map((p, i) => (
+        <div className="relative border-l border-gray-900 ml-3 pl-4 space-y-5">
 
-          <div key={i} className="flex items-center gap-4 relative">
+          {daRates.map((p, i) => (
 
-            {/* TIMELINE DOT */}
-            <span className="absolute -left-[9px] w-4 h-4 bg-blue-500 rounded-full "></span>
+            <div key={i} className="relative flex items-center justify-between">
 
-            {/* PERIOD */}
-            <div className="w-28 text-sm text-gray-700 font-medium ml-4">
-              {p.label}
-            </div>
+              {/* DOT */}
+              <span className="absolute -left-[23px] w-4 h-4 bg-blue-500 rounded-full border-2 border-white shadow"></span>
 
-            {/* VALUE */}
-            {i === 0 ? (
-
-              <div className="flex justify-center">
-                <div className="text-md font-semibold text-blue-600 text-center">
-                  2%
-                </div>
+              {/* LEFT: PERIOD */}
+              <div className="text-sm text-gray-700 font-medium ml-4">
+                {p.period}
               </div>
 
+              {/* RIGHT: VALUE */}
+              <div className="flex items-center">
 
-            ) : (
+                {i === 0 ? (
+                  <div className="text-sm font-semibold text-blue-600 bg-blue-50 px-3 py-1 rounded-md">
+                    2%
+                  </div>
+                ) : (
+                  <select
+                    className="text-sm border border-gray-300 rounded-md px-2 py-1 bg-white focus:ring-2 focus:ring-blue-400 outline-none"
+                    value={daRates[i]?.da ?? 2}
+                    onChange={(e) =>
+                      updateDARate(i, Number(e.target.value))
+                    }
+                  >
+                    {[2, 3, 4, 5].map(v => (
+                      <option key={v} value={v}>
+                        {v}%
+                      </option>
+                    ))}
+                  </select>
+                )}
 
-              <select
-                className="border rounded px-2 py-1 text-sm"
-                value={daRates[i]?.da ?? 2}
-                onChange={(e) =>
-                  updateDARate(i, Number(e.target.value))
-                }
-              >
+              </div>
 
-                {[2, 3, 4, 5].map(v => (
-                  <option key={v} value={v}>
-                    {v}%
-                  </option>
-                ))}
+            </div>
 
-              </select>
+          ))}
 
-            )}
-
-          </div>
-
-        ))}
+        </div>
 
       </div>
 

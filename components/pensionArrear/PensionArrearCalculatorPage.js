@@ -17,16 +17,25 @@ export default function PensionArrearCalculatorPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-6 space-y-6">
+    <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
-      <h1 className="text-2xl font-bold">
-        8th CPC Pension Arrear Calculator
+      <div className="inline-block text-[11px] bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full font-medium">
+        Pension Arrear Calculator
+      </div>
+      {/* Title */}
+      <h1 className="text-xl md:text-2xl font-semibold text-center tracking-tight md:whitespace-nowrap md:overflow-hidden md:text-ellipsis">
+        <span className="bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
+          8th CPC Pension Arrear Calculator
+        </span>
       </h1>
 
-      <p className="text-gray-600 text-sm mt-2 max-w-2xl mx-auto text-center">
-        Estimate pension increase and arrears from January 2026
-        based on expected fitment factor and DA progression.
+      {/* Subtitle */}
+      <p className="text-xs md:text-sm text-gray-600 text-center mt-2 mx-auto md:whitespace-nowrap md:overflow-hidden md:text-ellipsis">
+        Estimate pension increase and arrears from January 2026 based on expected fitment factor and DA progression.
       </p>
+
+      {/* Premium gradient line */}
+      <div className="mx-auto mt-3 h-[2px] w-40 md:w-56 lg:w-72 bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 rounded-full opacity-80"></div>
 
       <PensionInputForm onCalculate={handleCalculate} />
 

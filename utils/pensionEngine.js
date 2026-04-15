@@ -1,53 +1,49 @@
 export function calculatePension({
+
   basic = 0,
-  fitment = 1.92,
+  fitment = 2.28,
   age = 60,
   commutation = 40,
-  dr = 60,
+  dr7 = 58,
+  dr8 = 0,
   mode = "8cpc"
+
 }) {
 
-  console.log("ENGINE INPUT:", { basic, fitment, age, commutation, dr });
 
   const basicPay = Number(basic) || 0;
   if (!basicPay) return null;
 
-  // Basic values
+  // ===== BASIC =====
   const basic7 = basicPay;
   const basic8 = mode === "8cpc"
     ? Math.round(basic7 * fitment)
     : basic7;
 
-  // Pension
+  // ===== PENSION =====
   const pension7 = Math.round(basic7 * 0.5);
   const pension8 = Math.round(basic8 * 0.5);
 
-  // Commutation
+  // ===== COMMUTATION =====
   const commuted7 = Math.round(pension7 * (commutation / 100));
   const commuted8 = Math.round(pension8 * (commutation / 100));
 
   const remaining7 = pension7 - commuted7;
   const remaining8 = pension8 - commuted8;
 
-  // DR Logic
-  const drRate7 = dr;   // e.g. 60%
-  const drRate8 = 0;    // Reset in 8th CPC
+  // ===== DR =====
+  const drRate7 = dr7;
+  const drRate8 = dr8;
 
-  const dr7 = Math.round(remaining7 * (drRate7 / 100));
-  const dr8 = Math.round(remaining8 * (drRate8 / 100));
+  // ✅ FIX: rename variables
+  const drAmount7 = Math.round(pension7 * (drRate7 / 100));
+  const drAmount8 = Math.round(pension8 * (drRate8 / 100));
 
-  // Totals
-  const total7 = remaining7 + dr7;
-  const total8 = remaining8 + dr8;
+  // ===== TOTAL =====
+  const total7 = remaining7 + drAmount7;
+  const total8 = remaining8 + drAmount8;
 
-  console.log("ENGINE OUTPUT:", {
-    basic7,
-    pension7,
-    total7,
-    basic8,
-    pension8,
-    total8
-  });
+
 
   return {
 
@@ -56,8 +52,8 @@ export function calculatePension({
       pension: pension7,
       commuted: commuted7,
       remaining: remaining7,
-      dr: dr7,
-      drRate: drRate7, 
+      dr: drAmount7,        // ✅ fixed
+      drRate: drRate7,
       total: total7,
       family: Math.round(pension7 * 0.3),
       lumpSum: Math.round(commuted7 * 12 * 8.194)
@@ -68,8 +64,8 @@ export function calculatePension({
       pension: pension8,
       commuted: commuted8,
       remaining: remaining8,
-      dr: dr8,
-      drRate: drRate8, 
+      dr: drAmount8,        // ✅ fixed
+      drRate: drRate8,
       total: total8,
       family: Math.round(pension8 * 0.3),
       lumpSum: Math.round(commuted8 * 12 * 8.194)
