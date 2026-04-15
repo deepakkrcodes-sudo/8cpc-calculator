@@ -7,6 +7,7 @@
 // ===============================
 // CGHS CONTRIBUTION
 // ===============================
+
 export function getCGHS(level) {
 
   const levelNum = parseInt(level.replace("L", ""));
@@ -155,7 +156,10 @@ export function calculateSalary({
   );
 
   const otherAllow7 =
-    otherAllowances.reduce((sum, a) => sum + (a.amount || 0), 0);
+    otherAllowances.reduce((sum, a) => sum + (a.amount7 || 0), 0);
+
+  const otherAllow8 =
+    otherAllowances.reduce((sum, a) => sum + (a.amount8 || 0), 0);
 
   const gross7 =
     basic7 +
@@ -177,10 +181,8 @@ export function calculateSalary({
 
   const tax7 = Math.round(taxAnnual7 / 12);
 
-
-
   const otherDed7 =
-    otherDeductions.reduce((sum, d) => sum + (d.amount || 0), 0);
+    otherDeductions.reduce((sum, d) => sum + (d.amount7 || 0), 0);
 
   const net7 =
     gross7 -
@@ -191,7 +193,7 @@ export function calculateSalary({
 
 
   // ==========================
-  // 8TH CPC CALCULATION
+  // 8TH CPC gross
   // ==========================
 
   const revisedBasic =
@@ -215,8 +217,7 @@ export function calculateSalary({
       taBase8 * (1 + daPercent / 100)
     );
 
-  const otherAllow8 =
-    otherAllowances.reduce((sum, a) => sum + (a.amount || 0), 0);
+
 
   const gross8 =
     revisedBasic +
@@ -243,9 +244,10 @@ export function calculateSalary({
   const tax8 = Math.round(taxAnnual8 / 12);
 
 
-  const otherDed8 =
-    otherDeductions.reduce((sum, d) => sum + (d.amount || 0), 0);
 
+
+  const otherDed8 =
+    otherDeductions.reduce((sum, d) => sum + (d.amount8 || 0), 0);
   const net8 =
     gross8 -
     nps8 -

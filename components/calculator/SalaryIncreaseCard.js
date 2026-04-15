@@ -1,5 +1,7 @@
 "use client";
 
+import { TrendingUp } from "lucide-react";
+
 function IncreaseCard({
   title,
   before,
@@ -19,73 +21,76 @@ function IncreaseCard({
 
   const progressWidth = Math.min(percent, 100);
 
-  // Soft theme colors
+  // 🎨 PREMIUM THEMES
   const theme =
     color === "green"
       ? {
-          bg: "bg-green-50/60",
+          gradient: "from-green-500 to-emerald-600",
+          soft: "bg-green-50",
           text: "text-green-700",
-          sub: "text-green-600",
-          bar: "bg-green-500",
-          track: "bg-green-200"
+          glow: "shadow-green-200"
         }
       : {
-          bg: "bg-blue-50/60",
-          text: "text-blue-700",
-          sub: "text-blue-600",
-          bar: "bg-blue-500",
-          track: "bg-blue-200"
+          gradient: "from-indigo-500 to-blue-600",
+          soft: "bg-indigo-50",
+          text: "text-indigo-700",
+          glow: "shadow-indigo-200"
         };
 
   return (
 
-    <div className={`rounded-xl p-4 shadow-sm ${theme.bg}`}>
+    <div className={`rounded-2xl p-5 border border-gray-200 ${theme.soft} shadow-sm`}>
 
-      {/* Title */}
-      <div className="text-sm text-gray-600">
+      {/* TITLE */}
+      <div className="text-center text-sm text-gray-600 font-medium">
         {title}
       </div>
 
-      {/* Before → After */}
-      <div className={`mt-1 text-lg font-semibold flex items-center justify-between`}>
+      {/* 🔥 MAIN FLOW (LOW → HIGH) */}
+      <div className="mt-3 flex flex-col items-center">
 
-        <span>
+        {/* BEFORE */}
+        <div className="text-gray-500 text-sm">
           ₹ {valBefore.toLocaleString("en-IN")}
-        </span>
+        </div>
 
-        <span className="text-gray-400 text-base">→</span>
+        {/* ARROW + ICON */}
+        <div className={`my-1 flex items-center gap-1 ${theme.text}`}>
+          <TrendingUp size={18}/>
+          <span className="text-xs font-semibold">Increase</span>
+        </div>
 
-        <span className={theme.text}>
+        {/* AFTER (FOCUS) */}
+        <div className={`text-2xl font-bold ${theme.text}`}>
           ₹ {valAfter.toLocaleString("en-IN")}
+        </div>
+
+      </div>
+
+      {/* 🔥 GAIN HIGHLIGHT */}
+      <div className="mt-3 text-center">
+
+        <span className={`inline-block px-3 py-1 rounded-full text-sm font-semibold 
+          bg-gradient-to-r ${theme.gradient} text-white shadow-md`}>
+
+          +₹ {increase.toLocaleString("en-IN")}  ({percent}%)
+
         </span>
 
       </div>
 
-      {/* Increase */}
-      <div className={`mt-1 text-sm ${theme.sub}`}>
-
-        +₹ {increase.toLocaleString("en-IN")} / month
-
-        <span className="ml-2 font-semibold">
-          (+{percent}%)
-        </span>
-
-      </div>
-
-      {/* Progress Bar */}
-      <div className={`mt-3 ${theme.track} rounded-full h-2`}>
+      {/* 🔥 PROGRESS (SMOOTH + PREMIUM) */}
+      <div className="mt-4 h-2 bg-gray-200 rounded-full overflow-hidden">
 
         <div
-          className={`${theme.bar} h-2 rounded-full transition-all duration-700`}
+          className={`h-2 rounded-full bg-gradient-to-r ${theme.gradient} transition-all duration-700`}
           style={{ width: `${progressWidth}%` }}
         />
 
       </div>
 
     </div>
-
   );
-
 }
 
 export default function SalaryIncreaseCard({ result }) {
@@ -94,17 +99,17 @@ export default function SalaryIncreaseCard({ result }) {
 
   return (
 
-    <div className="space-y-4">
+    <div className="grid md:grid-cols-2 gap-4">
 
       <IncreaseCard
-        title="Gross Salary Increase"
+        title="Gross Salary Growth"
         before={result.seventh.gross}
         after={result.eighth.gross}
         color="blue"
       />
 
       <IncreaseCard
-        title="Net Salary Increase"
+        title="Net Salary Growth"
         before={result.seventh.net}
         after={result.eighth.net}
         color="green"
@@ -113,5 +118,4 @@ export default function SalaryIncreaseCard({ result }) {
     </div>
 
   );
-
 }

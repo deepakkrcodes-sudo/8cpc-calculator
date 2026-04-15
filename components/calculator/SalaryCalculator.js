@@ -1,20 +1,29 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { payMatrix } from "@/data/payMatrix";
 import { calculateSalary } from "@/utils/salaryEngine";
 import SalaryCharts from "./SalaryCharts";
 import SalaryIncreaseCard from "./SalaryIncreaseCard";
+import FitmentFactorControl from "./FitmentFactorControl";
+import SalaryBreakdown from "./SalaryBreakdown";
+
+import {
+    Layers,
+    IndianRupee,
+    MapPin,
+    Home,
+    Bus,
+    PlusCircle,
+    MinusCircle
+} from "lucide-react";
 
 export default function SalaryCalculator() {
 
-    // ============================
-    // STATE
-    // ============================
-
     const [level, setLevel] = useState("");
     const [basic, setBasic] = useState("");
-    const [fitment, setFitment] = useState("");
+    const [fitment, setFitment] = useState(2.28);
+
     const [city, setCity] = useState("X");
     const [hraPercent, setHraPercent] = useState(24);
     const [tptaType, setTptaType] = useState("HIGHER");
@@ -22,19 +31,49 @@ export default function SalaryCalculator() {
     const [otherAllowances, setOtherAllowances] = useState([]);
     const [otherDeductions, setOtherDeductions] = useState([]);
 
+    const [result, setResult] = useState(null);
+
+    const daPercent8 = 0;
+
     function addAllowance() {
-        setOtherAllowances([...otherAllowances, { label: "", amount: 0 }]);
+        setOtherAllowances([
+            ...otherAllowances,
+            { label: "", amount7: 0, amount8: 0 }
+        ]);
     }
 
-    function updateAllowance(index, field, value) {
+    function updateAllowance(i, field, value) {
         const copy = [...otherAllowances];
-        copy[index][field] =
-            field === "amount"
-                ? Number(value)
-                : value;
+        copy[i][field] =
+            field === "label" ? value : Number(value);
         setOtherAllowances(copy);
     }
 
+    function removeAllowance(i) {
+        const copy = [...otherAllowances];
+        copy.splice(i, 1);
+        setOtherAllowances(copy);
+    }
+
+    function addDeduction() {
+        setOtherDeductions([
+            ...otherDeductions,
+            { label: "", amount7: 0, amount8: 0 }
+        ]);
+    }
+
+    function updateDeduction(i, field, value) {
+        const copy = [...otherDeductions];
+        copy[i][field] =
+            field === "label" ? value : Number(value);
+        setOtherDeductions(copy);
+    }
+
+    function removeDeduction(i) {
+        const copy = [...otherDeductions];
+        copy.splice(i, 1);
+        setOtherDeductions(copy);
+    }
     const [editableDeductions, setEditableDeductions] = useState({
         nps7: 0,
         nps8: 0,
@@ -44,14 +83,6 @@ export default function SalaryCalculator() {
         tax8: 0
     });
 
-    const [result, setResult] = useState(null);
-
-    const daPercent8 = 0;
-
-
-    // ============================
-    // HRA OPTIONS
-    // ============================
 
     const hraOptions = {
         X: [30, 27, 24, 0],
@@ -59,36 +90,14 @@ export default function SalaryCalculator() {
         Z: [10, 9, 8, 0]
     };
 
-
-    // ============================
-    // FITMENT OPTIONS
-    // ============================
-
-    const fitmentOptions = [
-        1.92,
-        2.08,
-        2.86,
-        3.05,
-        3.10,
-        3.15,
-        3.20,
-        3.25
-    ];
-
-
-    // ============================
-    // CALCULATE
-    // ============================
-
     function handleCalculate() {
 
         if (!level || !basic || !fitment) {
-            alert("Please select required fields");
+            alert("Please fill required fields");
             return;
         }
 
         const salary = calculateSalary({
-
             level,
             basic: Number(basic),
             fitmentFactor: Number(fitment),
@@ -97,13 +106,13 @@ export default function SalaryCalculator() {
             daPercent: daPercent8,
             tptaType,
             otherAllowances,
-            otherDeductions,
-
-
+            otherDeductions: [
+                ...otherDeductions,
+                { label: "NPS", amount: editableDeductions.nps8 },
+                { label: "CGHS", amount: editableDeductions.cghs8 },
+                { label: "Tax", amount: editableDeductions.tax8 }
+            ]
         });
-
-        setResult(salary);
-
         setEditableDeductions({
             nps7: salary.seventh.nps,
             nps8: salary.eighth.nps,
@@ -113,484 +122,278 @@ export default function SalaryCalculator() {
             tax8: salary.eighth.tax
         });
 
-    }
-
-
-    // ============================
-    // ADD ALLOWANCE
-    // ============================
-
-    function addAllowance() {
-        setOtherAllowances([...otherAllowances, 0]);
-    }
-
-    function updateAllowance(index, value) {
-
-        const copy = [...otherAllowances];
-        copy[index] = Number(value);
-        setOtherAllowances(copy);
+        setResult(salary);
 
     }
 
-    function removeAllowance(index) {
+    useEffect(() => {
 
-        const copy = [...otherAllowances];
-        copy.splice(index, 1);
-        setOtherAllowances(copy);
+        if (!level || !basic || !fitment) return;
 
-    }
+        const salary = calculateSalary({
+            level,
+            basic: Number(basic),
+            fitmentFactor: Number(fitment),
+            hraPercent8: hraPercent,
+            city,
+            daPercent: daPercent8,
+            tptaType,
+            otherAllowances,
+            otherDeductions: [
+                ...otherDeductions,
+                { amount7: editableDeductions.nps7, amount8: editableDeductions.nps8 },
+                { amount7: editableDeductions.cghs7, amount8: editableDeductions.cghs8 },
+                { amount7: editableDeductions.tax7, amount8: editableDeductions.tax8 }
+            ]
+        });
 
+        setResult(salary);
 
-    // ============================
-    // ADD DEDUCTION
-    // ============================
-
-    function addDeduction() {
-        setOtherDeductions([...otherDeductions, 0]);
-    }
-
-    function updateDeduction(index, value) {
-
-        const copy = [...otherDeductions];
-        copy[index] = Number(value);
-        setOtherDeductions(copy);
-
-    }
-
-    function removeDeduction(index) {
-
-        const copy = [...otherDeductions];
-        copy.splice(index, 1);
-        setOtherDeductions(copy);
-
-    }
-
-
-    // ============================
-    // ROW COMPONENT
-    // ============================
-
-    function Row(label, v7, v8, highlight = false) {
-
-        const val7 = Number(v7) || 0;
-        const val8 = Number(v8) || 0;
-
-        return (
-
-            <div className={`grid grid-cols-3 items-center py-2 text-sm 
-      ${highlight ? "bg-blue-50/50 font-semibold" : "border-b"}
-    `}>
-
-                {/* LABEL */}
-                <div className="text-gray-700">
-                    {label}
-                </div>
-
-                {/* 7th CPC */}
-                <div className="text-center text-gray-800">
-                    ₹ {val7.toLocaleString("en-IN")}
-                </div>
-
-                {/* 8th CPC */}
-                <div className="text-center text-blue-600 font-medium">
-                    ₹ {val8.toLocaleString("en-IN")}
-                </div>
-
-            </div>
-
-        );
-
-    }
-
-
-
-
-    // ============================
-    // UI
-    // ============================
+    }, [
+        level,
+        basic,
+        fitment,
+        city,
+        hraPercent,
+        tptaType,
+        otherAllowances,
+        otherDeductions,
+        editableDeductions
+    ]);
 
     return (
 
-        <div className="space-y-4">
+        <div className="space-y-6">
 
-            {/* TITLE */}
-            <div >
+            {/* Tag */}
+            <div className="inline-flex items-center gap-1 text-[11px] bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full font-medium">
+                8th CPC Salary Calculator
+            </div>
+            <div className="p-6 text-center space-y-4">
 
-                <h1 className="text-lg font-semibold text-center">
-                    8th CPC Salary Calculator
+                {/* Title */}
+                <h1 className="text-xl md:text-2xl font-semibold tracking-tight md:whitespace-nowrap md:overflow-hidden md:text-ellipsis">
+                    <span className="bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
+                        8th CPC Salary Calculator
+                    </span>
                 </h1>
 
-                <p className="text-sm text-gray-600 max-w-md mx-auto text-center">
+                {/* Subtitle */}
+                <p className="text-xs md:text-sm text-gray-600 mx-auto md:whitespace-nowrap md:overflow-hidden md:text-ellipsis">
                     Estimate your expected salary under the 8th Pay Commission based on projected fitment factors and assumptions.
                 </p>
 
+                {/* Premium gradient line */}
+                <div className="mx-auto h-[2px] w-40 md:w-56 lg:w-72 bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 rounded-full opacity-80"></div>
+
             </div>
+            {/* CARD */}
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-5">
 
+                {/* PAY */}
+                <div className="space-y-4">
 
-            {/* INPUT CARD */}
-            <div className="bg-white p-4 rounded-xl shadow-sm space-y-3">
+                    <div className="text-md font-semibold text-gray-500 uppercase">
+                        Pay Details
+                    </div>
 
-
-                {/* LEVEL */}
-                <div>
-
-                    <label className="text-sm text-gray-600">
-                        Pay Level
-                    </label>
-
-                    <select
-                        className="w-full border rounded p-2"
-                        value={level}
-                        onChange={(e) => {
-                            setLevel(e.target.value);
-                            setBasic("");
-                        }}
-                    >
-
-                        <option value="">
-                            Select Level
-                        </option>
-
-                        {Object.keys(payMatrix).map(l => {
-                            const values = payMatrix[l];
-                            const first = values[0];
-                            const last = values[values.length - 1];
-
-                            const label =
-                                values.length === 1
-                                    ? `${l} (₹${first})`
-                                    : `${l} (₹${first} - ₹${last})`;
-
-                            return (
-                                <option key={l} value={l}>
-                                    {label}
-                                </option>
-                            );
-                        })}
-
-                    </select>
-
-                </div>
-
-
-                {/* BASIC */}
-                {level && (
-
+                    {/* LEVEL */}
                     <div>
-
-                        <label className="text-sm text-gray-600">
-                            Basic Pay
+                        <label className="flex items-center gap-2 text-sm text-gray-700">
+                            <Layers size={15} className="text-indigo-500" /> Pay Level
                         </label>
 
                         <select
-                            className="w-full border rounded p-2"
+                            className="w-full mt-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-400"
+                            value={level}
+                            onChange={(e) => {
+                                setLevel(e.target.value);
+                                setBasic("");
+                            }}
+                        >
+                            <option value="">Select Level</option>
+                            {Object.keys(payMatrix).map(l => {
+                                const values = payMatrix[l];
+                                return (
+                                    <option key={l} value={l}>
+                                        {l} (₹{values[0]} - ₹{values.at(-1)})
+                                    </option>
+                                );
+                            })}
+                        </select>
+                    </div>
+
+                    {/* BASIC */}
+                    <div>
+                        <label className="flex items-center gap-2 text-sm text-gray-700">
+                            <IndianRupee size={15} className="text-emerald-500" /> Current Basic Pay
+                        </label>
+
+                        <select
+                            disabled={!level}
+                            className="w-full mt-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-400"
                             value={basic}
                             onChange={(e) => setBasic(e.target.value)}
                         >
-
-                            <option value="">
-                                Select Basic
-                            </option>
-
-                            {payMatrix[level].map(b => (
-                                <option key={b}>
-                                    {b}
-                                </option>
+                            <option value="">Select Basic</option>
+                            {level && payMatrix[level].map(b => (
+                                <option key={b}>{b}</option>
                             ))}
-
                         </select>
-
                     </div>
 
-                )}
+                </div>
 
+                {/* LOCATION */}
+                <div className="space-y-4">
+
+                    {/* CITY */}
+                    <div>
+                        <label className="flex items-center gap-2 text-sm text-gray-700">
+                            <MapPin size={15} className="text-blue-500" /> City Class
+                        </label>
+
+                        <select
+                            className="w-full mt-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-400"
+                            value={city}
+                            onChange={(e) => {
+                                const c = e.target.value;
+                                setCity(c);
+                                setHraPercent(hraOptions[c][0]);
+                                setTptaType(c === "X" ? "HIGHER" : "OTHER");
+                            }}
+                        >
+                            <option value="X">X</option>
+                            <option value="Y">Y</option>
+                            <option value="Z">Z</option>
+                        </select>
+                    </div>
+
+                    {/* HRA */}
+                    <div>
+                        <label className="flex items-center gap-2 text-sm text-gray-700">
+                            <Home size={15} className="text-pink-500" /> HRA % (8 CPC)
+                        </label>
+
+                        <select
+                            className="w-full mt-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-400"
+                            value={hraPercent}
+                            onChange={(e) => setHraPercent(Number(e.target.value))}
+                        >
+                            {hraOptions[city].map(h => (
+                                <option key={h} value={h}>
+                                    {h}% {h === 0 && "(Govt. Accommodation)"}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    {/* TA */}
+                    <div>
+                        <label className="flex items-center gap-2 text-sm text-gray-700">
+                            <Bus size={15} className="text-amber-500" /> Transport Allowance
+                        </label>
+
+                        <select
+                            className="w-full mt-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-400"
+                            value={tptaType}
+                            onChange={(e) => setTptaType(e.target.value)}
+                        >
+                            <option value="HIGHER">Higher TPTA</option>
+                            <option value="OTHER">Other City</option>
+                            <option value="PWD_HIGHER">2× Higher TPTA (for PwD)</option>
+                            <option value="PWD_OTHER">2× Other City (for PwD)</option>
+                            <option value="NONE">None</option>
+                        </select>
+                    </div>
+
+                </div>
 
                 {/* FITMENT */}
-                <div>
+                <FitmentFactorControl
+                    fitmentFactor={fitment}
+                    setFitmentFactor={setFitment}
+                />
 
-                    <label className="text-sm text-gray-600">
-                        Fitment Factor (Tentative)
-                    </label>
+                {/* ALLOWANCES */}
+                <div className="space-y-3">
 
-                    <select
-                        className="w-full border rounded p-2"
-                        value={fitment}
-                        onChange={(e) => setFitment(e.target.value)}
+                    <div className="text-xs font-semibold text-gray-500 uppercase">
+                        Other Allowances
+                    </div>
+
+                    {otherAllowances.map((a, i) => (
+                        <div key={i} className="flex gap-2">
+
+                            <input
+                                placeholder="Allowance"
+                                value={a.label}
+                                onChange={(e) => updateAllowance(i, "label", e.target.value)}
+                                className="flex-1 rounded-lg border border-gray-300 px-2 py-1 text-sm"
+                            />
+
+                            <input
+                                type="number"
+                                value={a.amount}
+                                onChange={(e) => updateAllowance(i, "amount", e.target.value)}
+                                className="w-24 rounded-lg border border-gray-300 px-2 py-1 text-sm"
+                            />
+
+                            <button onClick={() => removeAllowance(i)}>
+                                <MinusCircle size={16} className="text-gray-500" />
+                            </button>
+
+                        </div>
+                    ))}
+
+                    <button
+                        onClick={addAllowance}
+                        className="flex items-center gap-1 text-sm text-indigo-600"
                     >
-
-                        <option value="">
-                            Select Fitment
-                        </option>
-
-                        {fitmentOptions.map(f => (
-                            <option key={f}>
-                                {f}
-                            </option>
-                        ))}
-
-                    </select>
+                        <PlusCircle size={16} /> Add Allowance
+                    </button>
 
                 </div>
 
-
-                {/* CITY */}
-                <div>
-
-                    <label className="text-sm text-gray-600">
-                        City Class
-                    </label>
-
-                    <select
-                        className="w-full border rounded p-2"
-                        value={city}
-                        onChange={(e) => {
-                            setCity(e.target.value);
-                            setHraPercent(hraOptions[e.target.value][0]);
-                        }}
-                    >
-
-                        <option value="X">
-                            X
-                        </option>
-
-                        <option value="Y">
-                            Y
-                        </option>
-
-                        <option value="Z">
-                            Z
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                {/* HRA */}
-                <div>
-
-                    <label className="text-sm text-gray-600">
-                        HRA %
-                    </label>
-
-                    <select
-                        className="w-full border rounded p-2"
-                        value={hraPercent}
-                        onChange={(e) => setHraPercent(Number(e.target.value))}
-                    >
-
-                        {hraOptions[city].map(h => (
-                            <option key={h}>
-                                {h}
-                            </option>
-                        ))}
-
-                    </select>
-
-                </div>
-
-
-                {/* TPTA */}
-                <div>
-
-                    <label className="text-sm text-gray-600">
-                        Transport Allowance
-                    </label>
-
-                    <select
-                        className="w-full border rounded p-2"
-                        value={tptaType}
-                        onChange={(e) => setTptaType(e.target.value)}
-                    >
-
-                        <option value="HIGHER">
-                            Higher TPTA
-                        </option>
-
-                        <option value="OTHER">
-                            Other City
-                        </option>
-
-                        <option value="NONE">
-                            None
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                {/* CALCULATE */}
+                {/* CTA */}
                 <button
                     onClick={handleCalculate}
-                    className="w-full bg-blue-600 text-white py-2 rounded font-medium"
+                    className="w-full py-2.5 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition"
                 >
-                    Calculate
+                    Calculate Salary
                 </button>
 
             </div>
 
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-5">
 
-            {/* RESULT */}
-            {/* RESULT */}
-            {result && (
+                {/* RESULTS */}
+                {result && (
 
-                <div className="bg-white rounded-xl shadow-sm p-5 space-y-5">
+                    <div className="space-y-5">
 
-                    {/* HEADER */}
-                    <div className="border-b pb-3 flex items-center gap-2">
-                        <span className="text-lg">📊</span>
-                        <div>
-                            <h2 className="text-lg font-semibold">
-                                Salary Comparison
-                            </h2>
-                            <p className="text-xs text-gray-500">
-                                7th CPC vs 8th CPC detailed breakdown
-                            </p>
-                        </div>
-                    </div>
+                        <SalaryBreakdown
+                            result={result}
+                            editableDeductions={editableDeductions}
+                            setEditableDeductions={setEditableDeductions}
+                            otherAllowances={otherAllowances}
+                            otherDeductions={otherDeductions}
+                            addAllowance={addAllowance}
+                            updateAllowance={updateAllowance}
+                            removeAllowance={removeAllowance}
+                            addDeduction={addDeduction}
+                            updateDeduction={updateDeduction}
+                            removeDeduction={removeDeduction}
+                        />
 
+                        <SalaryIncreaseCard result={result} />
 
-                    {/* ===== COLUMN HEADER ===== */}
-
-
-
-                    {/* ===== EARNINGS ===== */}
-                    <div className="bg-blue-50/50 rounded-lg p-4 space-y-2">
-                        <div className="text-sm font-semibold text-blue-700 flex items-center gap-2">
-                            📈 Earnings
-                        </div>
-
-                        <div className="grid grid-cols-3 border-b text-sm font-bold text-gray-500 bg-blue-50/50  p-4 space-y-2">
-                            <div>Component</div>
-                            <div className="text-center">7th CPC</div>
-                            <div className="text-center">8th CPC</div>
-                        </div>
-
-
-
-
-
-                        <div className="divide-y">
-
-                            <div className="divide-y">
-
-                                {Row("Basic", result.seventh.basic, result.eighth.basic)}
-                                {Row("DA", result.seventh.da, result.eighth.da)}
-                                {Row("HRA", result.seventh.hra, result.eighth.hra)}
-                                {Row("TA", result.seventh.ta, result.eighth.ta)}
-
-                            </div>
-
-                            {/* Custom Allowances */}
-                            {otherAllowances.map((item, i) => (
-                                <div key={i} className="grid grid-cols-3 py-2 text-sm">
-                                    <div>{item.label || "Allowance"}</div>
-                                    <div className="text-center">₹ {item.amount.toLocaleString("en-IN")}</div>
-                                    <div className="text-center">₹ {item.amount.toLocaleString("en-IN")}</div>
-                                </div>
-                            ))}
-
-                        </div>
-
-                        {/* GROSS */}
-                        <div className="grid grid-cols-3 pt-3  text-blue-800 font-medium">
-
-                            <div>Gross Salary</div>
-
-                            <div className="text-center">
-                                ₹ {result.seventh.gross.toLocaleString("en-IN")}
-                            </div>
-
-                            <div className="text-center">
-                                ₹ {result.eighth.gross.toLocaleString("en-IN")}
-                            </div>
-
-                        </div>
 
                     </div>
 
-
-                    {/* ===== DEDUCTIONS ===== */}
-                    <div className="bg-rose-50/50 rounded-lg p-4 space-y-2">
-
-                        <div className="text-sm font-semibold text-rose-700 flex items-center gap-2">
-                            📉 Deductions
-                        </div>
-
-                        {/* NPS */}
-                        <div className="grid grid-cols-3 items-center py-2 text-sm">
-                            <div>NPS</div>
-
-                            <input
-                                type="number"
-                                value={editableDeductions.nps7}
-                                onChange={(e) => setEditableDeductions({ ...editableDeductions, nps7: Number(e.target.value) })}
-                                className="mx-auto w-24 border rounded-lg p-1 text-center focus:ring-2 focus:ring-blue-400"
-                            />
-
-                            <input
-                                type="number"
-                                value={editableDeductions.nps8}
-                                onChange={(e) => setEditableDeductions({ ...editableDeductions, nps8: Number(e.target.value) })}
-                                className="mx-auto w-24 border rounded-lg p-1 text-center focus:ring-2 focus:ring-blue-400"
-                            />
-                        </div>
-
-                        {/* CGHS */}
-                        <div className="grid grid-cols-3 items-center py-2 text-sm">
-                            <div>CGHS</div>
-
-                            <input
-                                type="number"
-                                value={editableDeductions.cghs7}
-                                onChange={(e) => setEditableDeductions({ ...editableDeductions, cghs7: Number(e.target.value) })}
-                                className="mx-auto w-24 border rounded-lg p-1 text-center focus:ring-2 focus:ring-blue-400"
-                            />
-
-                            <input
-                                type="number"
-                                value={editableDeductions.cghs8}
-                                onChange={(e) => setEditableDeductions({ ...editableDeductions, cghs8: Number(e.target.value) })}
-                                className="mx-auto w-24 border rounded-lg p-1 text-center focus:ring-2 focus:ring-blue-400"
-                            />
-                        </div>
-
-                        {/* TAX */}
-                        <div className="grid grid-cols-3 items-center py-2 text-sm">
-                            <div>Income Tax</div>
-
-                            <input
-                                type="number"
-                                value={editableDeductions.tax7}
-                                onChange={(e) => setEditableDeductions({ ...editableDeductions, tax7: Number(e.target.value) })}
-                                className="mx-auto w-24 border rounded-lg p-1 text-center focus:ring-2 focus:ring-blue-400"
-                            />
-
-                            <input
-                                type="number"
-                                value={editableDeductions.tax8}
-                                onChange={(e) => setEditableDeductions({ ...editableDeductions, tax8: Number(e.target.value) })}
-                                className="mx-auto w-24 border rounded-lg p-1 text-center focus:ring-2 focus:ring-blue-400"
-                            />
-                        </div>
-
-                    </div>
-
-
-
-
-                    <SalaryIncreaseCard result={result} />
-                    <SalaryCharts result={result} />
-
-                </div>
-
-            )}
-
-
+                )}
+            </div>
 
         </div>
-
     );
-
 }

@@ -15,64 +15,86 @@ export default function SalaryCharts({ result }) {
 
   if (!result) return null;
 
-  // ==========================
-  // COMPARISON DATA
-  // ==========================
+  const net7 = result.seventh.net;
+  const net8 = result.eighth.net;
+
+  const gross7 = result.seventh.gross;
+  const gross8 = result.eighth.gross;
+
+  const percentIncrease =
+    net7 > 0
+      ? Math.round(((net8 - net7) / net7) * 100)
+      : 0;
+
   const comparisonData = [
     {
       name: "Net Salary",
-      "7th CPC": result.seventh.net,
-      "8th CPC": result.eighth.net
+      "7th CPC": net7,
+      "8th CPC": net8
     },
     {
       name: "Gross Salary",
-      "7th CPC": result.seventh.gross,
-      "8th CPC": result.eighth.gross
-    }
-  ];
-
-  // ==========================
-  // PERCENT INCREASE DATA
-  // ==========================
-  const percentData = [
-    {
-      name: "Net",
-      increase:
-        result.seventh.net > 0
-          ? Math.round(
-              ((result.eighth.net - result.seventh.net) /
-                result.seventh.net) *
-                100
-            )
-          : 0
-    },
-    {
-      name: "Gross",
-      increase:
-        result.seventh.gross > 0
-          ? Math.round(
-              ((result.eighth.gross - result.seventh.gross) /
-                result.seventh.gross) *
-                100
-            )
-          : 0
+      "7th CPC": gross7,
+      "8th CPC": gross8
     }
   ];
 
   return (
 
-    <div className="space-y-6">
+    <div className="space-y-5">
 
       {/* ===================== */}
-      {/* COMPARISON CHART */}
+      {/* 🔥 HERO SUMMARY */}
       {/* ===================== */}
-      <div className="bg-white rounded-xl shadow-sm p-5">
+      <div className="rounded-xl border border-indigo-100 bg-indigo-50 p-4">
 
-        <div className="flex items-center gap-2 mb-3">
-          <span>📊</span>
-          <div className="text-sm font-semibold">
-            7th vs 8th CPC Comparison
+        <div className="text-xs text-indigo-600 font-semibold mb-2">
+          7th CPC → 8th CPC
+        </div>
+
+        <div className="flex items-center justify-between">
+
+          {/* OLD */}
+          <div>
+            <div className="text-xs text-gray-500">7th CPC</div>
+            <div className="text-lg font-semibold text-gray-800">
+              ₹ {net7.toLocaleString("en-IN")}
+            </div>
           </div>
+
+          {/* ARROW */}
+          <div className="text-indigo-500 text-lg font-bold">
+            →
+          </div>
+
+          {/* NEW */}
+          <div className="text-right">
+            <div className="text-xs text-gray-500">8th CPC</div>
+            <div className="text-lg font-semibold text-indigo-700">
+              ₹ {net8.toLocaleString("en-IN")}
+            </div>
+          </div>
+
+        </div>
+
+        {/* INCREASE */}
+        <div className="mt-2 text-sm text-indigo-700 font-medium">
+          +₹ {(net8 - net7).toLocaleString("en-IN")} / month
+          <span className="ml-2 text-xs font-semibold">
+            (+{percentIncrease}%)
+          </span>
+        </div>
+
+      </div>
+
+
+      {/* ===================== */}
+      {/* CHART */}
+      {/* ===================== */}
+      <div className="bg-white rounded-xl border border-gray-200 p-4">
+
+        <div className="text-sm font-semibold text-gray-700 mb-3">
+          Salary Comparison
         </div>
 
         <ResponsiveContainer width="100%" height={260}>
@@ -91,13 +113,13 @@ export default function SalaryCharts({ result }) {
 
             <Bar
               dataKey="7th CPC"
-              fill="#94a3b8"   // gray
+              fill="#94a3b8"
               radius={[6, 6, 0, 0]}
             />
 
             <Bar
               dataKey="8th CPC"
-              fill="#2563eb"   // blue
+              fill="#4f46e5" // indigo (match UI)
               radius={[6, 6, 0, 0]}
             />
 
@@ -107,14 +129,7 @@ export default function SalaryCharts({ result }) {
 
       </div>
 
-
-      {/* ===================== */}
-      {/* PERCENT INCREASE */}
-      {/* ===================== */}
-      
-
     </div>
 
   );
-
 }
