@@ -97,33 +97,6 @@ export default function SalaryCalculator() {
             return;
         }
 
-        const salary = calculateSalary({
-            level,
-            basic: Number(basic),
-            fitmentFactor: Number(fitment),
-            hraPercent8: hraPercent,
-            city,
-            daPercent: daPercent8,
-            tptaType,
-            otherAllowances,
-            otherDeductions: [
-                ...otherDeductions,
-                { label: "NPS", amount: editableDeductions.nps8 },
-                { label: "CGHS", amount: editableDeductions.cghs8 },
-                { label: "Tax", amount: editableDeductions.tax8 }
-            ]
-        });
-        setEditableDeductions({
-            nps7: salary.seventh.nps,
-            nps8: salary.eighth.nps,
-            cghs7: salary.seventh.cghs,
-            cghs8: salary.eighth.cghs,
-            tax7: salary.seventh.tax,
-            tax8: salary.eighth.tax
-        });
-
-        setResult(salary);
-
     }
 
     useEffect(() => {
@@ -139,12 +112,7 @@ export default function SalaryCalculator() {
             daPercent: daPercent8,
             tptaType,
             otherAllowances,
-            otherDeductions: [
-                ...otherDeductions,
-                { amount7: editableDeductions.nps7, amount8: editableDeductions.nps8 },
-                { amount7: editableDeductions.cghs7, amount8: editableDeductions.cghs8 },
-                { amount7: editableDeductions.tax7, amount8: editableDeductions.tax8 }
-            ]
+            otherDeductions
         });
 
         setResult(salary);
@@ -157,8 +125,7 @@ export default function SalaryCalculator() {
         hraPercent,
         tptaType,
         otherAllowances,
-        otherDeductions,
-        editableDeductions
+        otherDeductions
     ]);
 
     return (
@@ -315,45 +282,7 @@ export default function SalaryCalculator() {
                     setFitmentFactor={setFitment}
                 />
 
-                {/* ALLOWANCES */}
-                <div className="space-y-3">
 
-                    <div className="text-xs font-semibold text-gray-500 uppercase">
-                        Other Allowances
-                    </div>
-
-                    {otherAllowances.map((a, i) => (
-                        <div key={i} className="flex gap-2">
-
-                            <input
-                                placeholder="Allowance"
-                                value={a.label}
-                                onChange={(e) => updateAllowance(i, "label", e.target.value)}
-                                className="flex-1 rounded-lg border border-gray-300 px-2 py-1 text-sm"
-                            />
-
-                            <input
-                                type="number"
-                                value={a.amount}
-                                onChange={(e) => updateAllowance(i, "amount", e.target.value)}
-                                className="w-24 rounded-lg border border-gray-300 px-2 py-1 text-sm"
-                            />
-
-                            <button onClick={() => removeAllowance(i)}>
-                                <MinusCircle size={16} className="text-gray-500" />
-                            </button>
-
-                        </div>
-                    ))}
-
-                    <button
-                        onClick={addAllowance}
-                        className="flex items-center gap-1 text-sm text-indigo-600"
-                    >
-                        <PlusCircle size={16} /> Add Allowance
-                    </button>
-
-                </div>
 
                 {/* CTA */}
                 <button

@@ -35,14 +35,10 @@ export function getTABase(level, basic, tptaType) {
   if (levelNum >= 9) {
     higher = 7200;
     lower = 3600;
-  }
-
-  else if (levelNum >= 3) {
+  } else if (levelNum >= 3) {
     higher = 3600;
     lower = 1800;
-  }
-
-  else {
+  } else {
     // Level 1–2 special condition
     if (basic >= 24200) {
       higher = 3600;
@@ -53,8 +49,21 @@ export function getTABase(level, basic, tptaType) {
     }
   }
 
-  return tptaType === "HIGHER" ? higher : lower;
+  // 🔹 Step 1: Get base TA
+  let ta = 0;
 
+  if (tptaType === "HIGHER" || tptaType === "PWD_HIGHER") {
+    ta = higher;
+  } else if (tptaType === "OTHER" || tptaType === "PWD_OTHER") {
+    ta = lower;
+  }
+
+  // 🔹 Step 2: Apply 2× for PwD
+  if (tptaType === "PWD_HIGHER" || tptaType === "PWD_OTHER") {
+    ta = ta * 2;
+  }
+
+  return ta;
 }
 
 
@@ -182,7 +191,15 @@ export function calculateSalary({
   const tax7 = Math.round(taxAnnual7 / 12);
 
   const otherDed7 =
-    otherDeductions.reduce((sum, d) => sum + (d.amount7 || 0), 0);
+    (otherDeductions || []).reduce((sum, d) => sum + (d.amount7 || 0), 0);
+
+  console.log({
+    gross7,
+    nps7,
+    cghs7,
+    tax7,
+    otherDed7
+  });
 
   const net7 =
     gross7 -

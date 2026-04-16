@@ -42,7 +42,7 @@ function IncreaseCard({
     <div className={`rounded-2xl p-5 border border-gray-200 ${theme.soft} shadow-sm`}>
 
       {/* TITLE */}
-      <div className="text-center text-sm text-gray-600 font-medium">
+      <div className="text-center text-md text-gray-600 font-medium">
         {title}
       </div>
 
@@ -50,7 +50,7 @@ function IncreaseCard({
       <div className="mt-3 flex flex-col items-center">
 
         {/* BEFORE */}
-        <div className="text-gray-500 text-sm">
+        <div className="text-black-500 font-bold text-md">
           ₹ {valBefore.toLocaleString("en-IN")}
         </div>
 

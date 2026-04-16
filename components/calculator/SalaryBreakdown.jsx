@@ -74,8 +74,20 @@ export default function SalaryBreakdown({
                 <div className="mt-3 space-y-2">
 
                     {otherAllowances.map((a, i) => (
-                        <div className="grid grid-cols-3 gap-2 items-center">
+                        <div
+                            key={a.label || i}
+                            className="relative grid grid-cols-3 gap-2 items-center"
+                        >
 
+                            {/* REMOVE BUTTON (top-right overlay) */}
+                            <button
+                                onClick={() => removeAllowance(i)}
+                                className="absolute -top-2 -right-2 bg-white border rounded-full p-[2px] shadow-sm"
+                            >
+                                <MinusCircle size={12} className="text-red-500" />
+                            </button>
+
+                            {/* LABEL */}
                             <input
                                 placeholder="Allowance"
                                 value={a.label}
@@ -83,16 +95,18 @@ export default function SalaryBreakdown({
                                 className="border rounded px-2 py-1 text-sm"
                             />
 
+                            {/* 7th CPC */}
                             <input
                                 type="number"
-                                value={a.amount7}
+                                value={a.amount7 === 0 ? "" : a.amount7}
                                 onChange={(e) => updateAllowance(i, "amount7", e.target.value)}
                                 className="border rounded px-2 py-1 text-sm text-center"
                             />
 
+                            {/* 8th CPC */}
                             <input
                                 type="number"
-                                value={a.amount8}
+                                value={a.amount8 === 0 ? "" : a.amount8}
                                 onChange={(e) => updateAllowance(i, "amount8", e.target.value)}
                                 className="border rounded px-2 py-1 text-sm text-center"
                             />
@@ -104,8 +118,9 @@ export default function SalaryBreakdown({
                         onClick={addAllowance}
                         className="flex items-center gap-1 text-indigo-600 text-sm"
                     >
-                        <PlusCircle size={16} /> Add
+                        <PlusCircle size={16} /> Add Allowance
                     </button>
+
                 </div>
 
                 {/* TOTAL */}
@@ -137,89 +152,128 @@ export default function SalaryBreakdown({
                 </div>
 
                 {/* 🔥 FIXED DEDUCTIONS */}
-
                 {[
                     { key7: "nps7", key8: "nps8", label: "NPS" },
                     { key7: "cghs7", key8: "cghs8", label: "CGHS" },
                     { key7: "tax7", key8: "tax8", label: "Income Tax" }
                 ].map((item, i) => (
 
-                    <div key={i} className="grid grid-cols-3 items-center py-2 text-sm">
+                    <div
+                        key={item.label}
+                        className="grid grid-cols-3 gap-2 items-center py-2 text-sm"
+                    >
 
+                        {/* LABEL */}
                         <div>{item.label}</div>
 
+                        {/* 7th */}
                         <input
-                            value={editableDeductions[item.key7]}
+                            type="number"
+                            value={editableDeductions[item.key7] === 0 ? "" : editableDeductions[item.key7]}
                             onChange={(e) => setEditableDeductions({
                                 ...editableDeductions,
-                                [item.key7]: Number(e.target.value)
+                                [item.key7]: e.target.value === "" ? 0 : Number(e.target.value)
                             })}
-                            className="mx-auto w-24 rounded-lg border border-gray-300 px-2 py-1 text-center"
+                            className="w-full rounded-lg border border-gray-300 px-2 py-1 text-center text-sm"
+                            placeholder="0"
                         />
 
+                        {/* 8th */}
                         <input
-                            value={editableDeductions[item.key8]}
+                            type="number"
+                            value={editableDeductions[item.key8] === 0 ? "" : editableDeductions[item.key8]}
                             onChange={(e) => setEditableDeductions({
                                 ...editableDeductions,
-                                [item.key8]: Number(e.target.value)
+                                [item.key8]: e.target.value === "" ? 0 : Number(e.target.value)
                             })}
-                            className="mx-auto w-24 rounded-lg border border-gray-300 px-2 py-1 text-center"
+                            className="w-full rounded-lg border border-gray-300 px-2 py-1 text-center text-sm"
+                            placeholder="0"
                         />
 
                     </div>
 
                 ))}
 
-                {/* 🔥 CUSTOM DEDUCTIONS (NOW MATCH ALLOWANCES) */}
-                {otherDeductions.map((d, i) => (
+                {/* 🔥 CUSTOM DEDUCTIONS (MATCH ALLOWANCES UI) */}
+                <div className="mt-3 space-y-2">
 
-                    <div className="grid grid-cols-3 items-center py-2 text-sm">
+                    {otherDeductions.map((d, i) => (
+                        <div
+                            key={d.label || i}
+                            className="relative grid grid-cols-3 gap-2 items-center"
+                        >
 
-                        {/* LABEL */}
-                        <div className="items-left">
+                            {/* REMOVE BUTTON (overlay) */}
+                            <button
+                                onClick={() => removeDeduction(i)}
+                                className="absolute -top-2 -right-2 bg-white border rounded-full p-[2px] shadow-sm"
+                            >
+                                <MinusCircle size={12} className="text-red-500" />
+                            </button>
+
+                            {/* LABEL */}
                             <input
                                 placeholder="Deduction"
                                 value={d.label}
                                 onChange={(e) => updateDeduction(i, "label", e.target.value)}
-                                className="mx-auto w-28 rounded-lg border border-gray-300 px-2 py-1 text-center"
+                                className="border rounded px-2 py-1 text-sm"
                             />
-                        </div>
 
-                        {/* 7th CPC */}
-                        <input
-                            type="number"
-                            value={d.amount7}
-                            onChange={(e) => updateDeduction(i, "amount7", e.target.value)}
-                            className="mx-auto w-24 rounded-lg border border-gray-300 px-2 py-1 text-center"
-                        />
-
-                        {/* 8th CPC + REMOVE */}
-                        <div className="flex items-center justify-center gap-10">
-
+                            {/* 7th */}
                             <input
                                 type="number"
-                                value={d.amount8}
-                                onChange={(e) => updateDeduction(i, "amount8", e.target.value)}
-                                className="w-24 rounded-lg border border-gray-300 px-2 py-1 text-center"
+                                value={d.amount7 === 0 ? "" : d.amount7}
+                                onChange={(e) => updateDeduction(i, "amount7", e.target.value)}
+                                className="border rounded px-2 py-1 text-sm text-center"
+                                placeholder="0"
                             />
 
-                            <button onClick={() => removeDeduction(i)}>
-                                <MinusCircle size={16} className="text-red-500" />
-                            </button>
+                            {/* 8th */}
+                            <input
+                                type="number"
+                                value={d.amount8 === 0 ? "" : d.amount8}
+                                onChange={(e) => updateDeduction(i, "amount8", e.target.value)}
+                                className="border rounded px-2 py-1 text-sm text-center"
+                                placeholder="0"
+                            />
 
                         </div>
+                    ))}
 
+                    {/* ADD BUTTON */}
+                    <button
+                        onClick={addDeduction}
+                        className="flex items-center gap-1 text-sm text-indigo-600"
+                    >
+                        <PlusCircle size={16} /> Add Deduction
+                    </button>
+
+                </div>
+
+                {/* 🔥 TOTAL DEDUCTIONS */}
+                <div className="grid grid-cols-3 pt-3 font-semibold text-rose-700 border-t mt-3">
+
+                    <div>Total Deductions</div>
+
+                    <div className="text-center">
+                        ₹ {(
+                            editableDeductions.nps7 +
+                            editableDeductions.cghs7 +
+                            editableDeductions.tax7 +
+                            otherDeductions.reduce((sum, d) => sum + (d.amount7 || 0), 0)
+                        ).toLocaleString("en-IN")}
                     </div>
 
-                ))}
+                    <div className="text-center">
+                        ₹ {(
+                            editableDeductions.nps8 +
+                            editableDeductions.cghs8 +
+                            editableDeductions.tax8 +
+                            otherDeductions.reduce((sum, d) => sum + (d.amount8 || 0), 0)
+                        ).toLocaleString("en-IN")}
+                    </div>
 
-                {/* ADD BUTTON */}
-                <button
-                    onClick={addDeduction}
-                    className="flex items-center gap-1 text-sm text-indigo-600 mt-2"
-                >
-                    <PlusCircle size={16} /> Add Deduction
-                </button>
+                </div>
 
             </div>
 
