@@ -1,44 +1,41 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { payMatrix } from "@/data/payMatrix";
-import { calculateSalary } from "@/utils/salaryEngine";
-import SalaryCharts from "./SalaryCharts";
-import SalaryIncreaseCard from "./SalaryIncreaseCard";
-import FitmentFactorControl from "./FitmentFactorControl";
-import SalaryBreakdown from "./SalaryBreakdown";
+import { calculate7CPCSalary } from "@/utils/seventhSalaryEngine";
+import SalaryBreakdown7 from "./SalaryBreakdown7";
 
 import {
     Layers,
     IndianRupee,
     MapPin,
     Home,
-    Bus,
-    PlusCircle,
-    MinusCircle
+    Bus
 } from "lucide-react";
 
 export default function SalaryCalculator() {
 
     const [level, setLevel] = useState("");
     const [basic, setBasic] = useState("");
-    const [fitment, setFitment] = useState(2.28);
 
     const [city, setCity] = useState("X");
-    const [hraPercent, setHraPercent] = useState(24);
+    const [hraPercent, setHraPercent] = useState(30);
     const [tptaType, setTptaType] = useState("HIGHER");
 
     const [otherAllowances, setOtherAllowances] = useState([]);
     const [otherDeductions, setOtherDeductions] = useState([]);
 
     const [result, setResult] = useState(null);
-
-    const daPercent8 = 0;
+    const [editableDeductions, setEditableDeductions] = useState({
+        nps: 0,
+        cghs: 0,
+        tax: 0
+    });
 
     function addAllowance() {
         setOtherAllowances([
             ...otherAllowances,
-            { label: "", amount7: 0, amount8: 0 }
+            { label: "", amount: 0 }
         ]);
     }
 
@@ -58,7 +55,7 @@ export default function SalaryCalculator() {
     function addDeduction() {
         setOtherDeductions([
             ...otherDeductions,
-            { label: "", amount7: 0, amount8: 0 }
+            { label: "", amount: 0 }
         ]);
     }
 
@@ -74,14 +71,6 @@ export default function SalaryCalculator() {
         copy.splice(i, 1);
         setOtherDeductions(copy);
     }
-    const [editableDeductions, setEditableDeductions] = useState({
-        nps7: 0,
-        nps8: 0,
-        cghs7: 0,
-        cghs8: 0,
-        tax7: 0,
-        tax8: 0
-    });
 
     const hraOptions = {
         X: [30, 27, 24, 0],
@@ -91,93 +80,63 @@ export default function SalaryCalculator() {
 
     function handleCalculate() {
 
-        if (!level || !basic || !fitment) {
+        if (!level || !basic) {
             alert("Please fill required fields");
             return;
         }
 
-    }
-
-    useEffect(() => {
-        if (!result) return;
-
-        setEditableDeductions({
-            nps7: result.seventh.nps,
-            nps8: result.eighth.nps,
-            cghs7: result.seventh.cghs,
-            cghs8: result.eighth.cghs,
-            tax7: result.seventh.tax,
-            tax8: result.eighth.tax
-        });
-
-    }, [result]);
-
-    useEffect(() => {
-
-        if (!level || !basic || !fitment) return;
-
-        const salary = calculateSalary({
+        const salary = calculate7CPCSalary({
             level,
             basic: Number(basic),
-            fitmentFactor: Number(fitment),
-            hraPercent8: hraPercent,
+            daPercent: 58,
+            hraPercent,
             city,
-            daPercent: daPercent8,
-            tptaType,
-            otherAllowances,
-            otherDeductions
+            tptaType
         });
 
-        setResult(salary);
+        if (!salary) return;
 
-    }, [
-        level,
-        basic,
-        fitment,
-        city,
-        hraPercent,
-        tptaType,
-        otherAllowances,
-        otherDeductions
-    ]);
+        setResult(salary);
+        setEditableDeductions({
+            nps: salary.nps,
+            cghs: salary.cghs,
+            tax: salary.tax
+        });
+    }
 
     return (
 
         <div className="space-y-6">
 
-            {/* Tag */}
-            <div className="inline-flex items-center gap-1 text-[11px] bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full font-medium">
-                8th CPC Salary Calculator
+            {/* TAG → LEFT */}
+            <div className="flex justify-start">
+                <div className="inline-flex gap-1 text-[11px] bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full font-medium">
+                    7th CPC Salary Calculator
+                </div>
             </div>
             <div className="p-6 text-center space-y-4">
 
-                {/* Title */}
                 <h1 className="text-xl md:text-2xl font-semibold tracking-tight md:whitespace-nowrap md:overflow-hidden md:text-ellipsis">
                     <span className="bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
-                        8th CPC Salary Calculator
+                        7th CPC Salary Calculator
                     </span>
                 </h1>
 
-                {/* Subtitle */}
                 <p className="text-xs md:text-sm text-gray-600 mx-auto md:whitespace-nowrap md:overflow-hidden md:text-ellipsis">
-                    Estimate your expected salary under the 8th Pay Commission based on projected fitment factors and assumptions.
+                    Estimate your expected salary under the 7th Pay Commission.
                 </p>
 
-                {/* Premium gradient line */}
                 <div className="mx-auto h-[2px] w-40 md:w-56 lg:w-72 bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 rounded-full opacity-80"></div>
 
             </div>
-            {/* CARD */}
             <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-5">
 
-                {/* PAY */}
                 <div className="space-y-4">
 
                     <div className="text-md font-semibold text-gray-500 uppercase">
                         Pay Details
                     </div>
 
-                    {/* LEVEL */}
                     <div>
                         <label className="flex items-center gap-2 text-sm text-gray-700">
                             <Layers size={15} className="text-indigo-500" /> Pay Level
@@ -192,18 +151,17 @@ export default function SalaryCalculator() {
                             }}
                         >
                             <option value="">Select Level</option>
-                            {Object.keys(payMatrix).map(l => {
+                            {Object.keys(payMatrix).map((l) => {
                                 const values = payMatrix[l];
                                 return (
                                     <option key={l} value={l}>
-                                        {l} (₹{values[0]} - ₹{values.at(-1)})
+                                        {l} (Rs {values[0]} - Rs {values.at(-1)})
                                     </option>
                                 );
                             })}
                         </select>
                     </div>
 
-                    {/* BASIC */}
                     <div>
                         <label className="flex items-center gap-2 text-sm text-gray-700">
                             <IndianRupee size={15} className="text-emerald-500" /> Current Basic Pay
@@ -216,7 +174,7 @@ export default function SalaryCalculator() {
                             onChange={(e) => setBasic(e.target.value)}
                         >
                             <option value="">Select Basic</option>
-                            {level && payMatrix[level].map(b => (
+                            {level && payMatrix[level].map((b) => (
                                 <option key={b}>{b}</option>
                             ))}
                         </select>
@@ -224,10 +182,8 @@ export default function SalaryCalculator() {
 
                 </div>
 
-                {/* LOCATION */}
                 <div className="space-y-4">
 
-                    {/* CITY */}
                     <div>
                         <label className="flex items-center gap-2 text-sm text-gray-700">
                             <MapPin size={15} className="text-blue-500" /> City Class
@@ -249,10 +205,9 @@ export default function SalaryCalculator() {
                         </select>
                     </div>
 
-                    {/* HRA */}
                     <div>
                         <label className="flex items-center gap-2 text-sm text-gray-700">
-                            <Home size={15} className="text-pink-500" /> HRA % (8 CPC)
+                            <Home size={15} className="text-pink-500" /> HRA %
                         </label>
 
                         <select
@@ -260,7 +215,7 @@ export default function SalaryCalculator() {
                             value={hraPercent}
                             onChange={(e) => setHraPercent(Number(e.target.value))}
                         >
-                            {hraOptions[city].map(h => (
+                            {hraOptions[city].map((h) => (
                                 <option key={h} value={h}>
                                     {h}% {h === 0 && "(Govt. Accommodation)"}
                                 </option>
@@ -268,7 +223,6 @@ export default function SalaryCalculator() {
                         </select>
                     </div>
 
-                    {/* TA */}
                     <div>
                         <label className="flex items-center gap-2 text-sm text-gray-700">
                             <Bus size={15} className="text-amber-500" /> Transport Allowance
@@ -281,23 +235,14 @@ export default function SalaryCalculator() {
                         >
                             <option value="HIGHER">Higher TPTA</option>
                             <option value="OTHER">Other City</option>
-                            <option value="PWD_HIGHER">2× Higher TPTA (for PwD)</option>
-                            <option value="PWD_OTHER">2× Other City (for PwD)</option>
+                            <option value="PWD_HIGHER">2x Higher TPTA (for PwD)</option>
+                            <option value="PWD_OTHER">2x Other City (for PwD)</option>
                             <option value="NONE">None</option>
                         </select>
                     </div>
 
                 </div>
 
-                {/* FITMENT */}
-                <FitmentFactorControl
-                    fitmentFactor={fitment}
-                    setFitmentFactor={setFitment}
-                />
-
-
-
-                {/* CTA */}
                 <button
                     onClick={handleCalculate}
                     className="w-full py-2.5 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition"
@@ -309,12 +254,11 @@ export default function SalaryCalculator() {
 
             <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-5">
 
-                {/* RESULTS */}
                 {result && (
 
                     <div className="space-y-5">
 
-                        <SalaryBreakdown
+                        <SalaryBreakdown7
                             result={result}
                             editableDeductions={editableDeductions}
                             setEditableDeductions={setEditableDeductions}
@@ -327,9 +271,6 @@ export default function SalaryCalculator() {
                             updateDeduction={updateDeduction}
                             removeDeduction={removeDeduction}
                         />
-
-                        <SalaryIncreaseCard result={result} />
-
 
                     </div>
 

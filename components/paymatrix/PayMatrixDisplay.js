@@ -1,5 +1,6 @@
 "use client";
 import { formatINR } from "@/utils/format";
+import { LayoutGrid } from "lucide-react";
 
 export default function PayMatrixDisplay({ level, matrix }) {
 
@@ -19,7 +20,8 @@ export default function PayMatrixDisplay({ level, matrix }) {
 
                 <div>
 
-                    <h2 className="text-lg font-semibold">
+                    <h2 className="text-lg font-semibold flex items-center gap-2">
+                       
                         {levelLabel} Pay Matrix
                     </h2>
 

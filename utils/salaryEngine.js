@@ -264,7 +264,7 @@ export function calculateSalary({
 
 
   const otherDed8 =
-    otherDeductions.reduce((sum, d) => sum + (d.amount8 || 0), 0);
+    (otherDeductions || []).reduce((sum, d) => sum + (d.amount8 || 0), 0);
   const net8 =
     gross8 -
     nps8 -

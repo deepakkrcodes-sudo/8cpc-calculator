@@ -23,7 +23,7 @@ export default function PayMatrix8Page() {
 
   return (
 
-    <div className="max-w-3xl mx-auto px-4 space-y-6">
+    <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
       {/* HERO */}
 
@@ -40,22 +40,23 @@ export default function PayMatrix8Page() {
 
       </div>
 
+      <div className="rounded-xl border border-gray-200 bg-white shadow-sm px-3 py-3">
+        {/* LEVEL SELECTOR */}
+        <PayLevelSelector
+          level={level}
+          setLevel={setLevel}
+          payMatrix={payMatrix}
+        />
 
-      {/* FITMENT CONTROL */}
 
-      <FitmentFactorControl
-        fitmentFactor={fitmentFactor}
-        setFitmentFactor={setFitmentFactor}
-      />
+        {/* FITMENT CONTROL */}
 
+        <FitmentFactorControl
+          fitmentFactor={fitmentFactor}
+          setFitmentFactor={setFitmentFactor}
+        />
 
-      {/* LEVEL SELECTOR */}
-
-      <PayLevelSelector
-        level={level}
-        setLevel={setLevel}
-        payMatrix={payMatrix}
-      />
+      </div>
 
 
       {/* MATRIX DISPLAY */}

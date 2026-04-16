@@ -2,83 +2,58 @@ import { getTABase, getCGHS } from "./salaryEngine";
 
 
 export function calculate7CPCSalary({
-
   level,
   basic,
   daPercent,
   city,
   hraPercent,
   tptaType
-
 }) {
+
+  if (!level || !basic) return null;
 
   const basicPay = Number(basic);
 
-  const da =
-    Math.round(
-      basicPay * daPercent / 100
-    );
+  const da = Math.round(basicPay * daPercent / 100);
 
   const hra =
     hraPercent === 0
       ? 0
-      : Math.round(
-          basicPay * hraPercent / 100
-        );
+      : Math.round(basicPay * hraPercent / 100);
 
-  const taBase =
-    getTABase(
-      level,
-      basicPay,
-      tptaType
-    );
+  const taBase = getTABase(level, basicPay, tptaType);
+
+  let multiplier = 1;
+  if (
+    tptaType === "DOUBLE_HIGHER" ||
+    tptaType === "DOUBLE_OTHER" ||
+    tptaType === "PWD_HIGHER" ||
+    tptaType === "PWD_OTHER"
+  ) {
+    multiplier = 2;
+  }
 
   const ta =
-    Math.round(
-      taBase * (1 + daPercent / 100)
-    );
+    tptaType === "NONE"
+      ? 0
+      : Math.round(taBase * multiplier * (1 + daPercent / 100));
 
-  const gross =
-    basicPay +
-    da +
-    hra +
-    ta;
+  const gross = basicPay + da + hra + ta;
 
-  const nps =
-    Math.round(
-      (basicPay + da) * 0.10
-    );
+  const nps = Math.round((basicPay + da) * 0.10);
 
-  const cghs =
-    getCGHS(level);
+  const cghs = getCGHS(level);
 
-  const annualGross =
-    gross * 12;
+  const annualGross = gross * 12;
 
-  const taxable =
-    Math.max(
-      annualGross      
-      - 75000,
-      0
-    );
+  const taxable = Math.max(annualGross - 75000, 0);
 
+  const tax = Math.round(calculateIncomeTaxAnnual(taxable) / 12);
 
-  const tax =
-    Math.round(
-      calculateIncomeTaxAnnual(taxable)/12
-    );
-
-    
-
-  const net =
-    gross -
-    nps -
-    cghs -
-    tax;
+  const net = gross - nps - cghs - tax;
 
   return {
-
-    basic: basicPay,
+    basic: basicPay,   // ✅ FIXED
     da,
     hra,
     ta,
@@ -87,15 +62,13 @@ export function calculate7CPCSalary({
     cghs,
     tax,
     net
-
   };
-
 }
 
 function calculateIncomeTaxAnnual(taxableIncome) {
 
   // Rebate rule (new regime FY 2025-26)
-  
+
   if (taxableIncome <= 1200000) {
     return 0;
   }

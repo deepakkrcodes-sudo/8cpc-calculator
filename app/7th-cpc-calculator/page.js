@@ -1,5 +1,4 @@
-import SeventhSalaryCalculator
-  from "@/components/calculator/SeventhSalaryCalculator";
+import SeventhSalaryCalculatorPremium from "@/components/calculator/SeventhSalaryCalculatorPremium";
 import OtherToolsSection from "@/components/tools/OtherToolsSection";
 
 
@@ -23,26 +22,11 @@ export default function Page() {
 
   return (
 
-    <div className="space-y-6">
-
-      {/* HERO / INTRO */}
-      <div className="text-center space-y-2">
-
-        <h1 className="text-xl md:text-2xl font-semibold">
-          7th CPC Salary Calculator
-        </h1>
-
-        <p className="text-sm text-gray-600 max-w-2xl mx-auto">
-          Calculate your salary under the 7th Pay Commission including Basic Pay,
-          Dearness Allowance (DA), House Rent Allowance (HRA), Transport Allowance
-          and deductions. Get an accurate estimate of your in-hand salary.
-        </p>
-
-      </div>
+    <div className="p-6 text-center space-y-4">
 
 
       {/* CALCULATOR */}
-      <SeventhSalaryCalculator />
+      <SeventhSalaryCalculatorPremium />
 
 
       {/* OTHER TOOLS */}

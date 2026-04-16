@@ -1,3 +1,5 @@
+import { Layers  } from "lucide-react";
+
 export default function PayLevelSelector({
   level,
   setLevel,
@@ -9,7 +11,8 @@ export default function PayLevelSelector({
 
     <div className="bg-white rounded-xl shadow-sm p-5 mb-6">
 
-      <label className="block text-md font-semibold mb-2">
+      <label className="flex items-center gap-2 text-md font-semibold mb-2">
+        <Layers  size={18} className="text-indigo-600" />
         Select Pay Level
       </label>
 

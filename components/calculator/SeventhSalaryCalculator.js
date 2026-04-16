@@ -28,6 +28,16 @@ export default function SeventhSalaryCalculator() {
 
   };
 
+  const [allowances, setAllowances] = useState([
+    { label: "Transport Allowance", value: 0 }
+  ]);
+
+  const [deductions, setDeductions] = useState([
+    { label: "NPS Contribution", value: 0 },
+    { label: "CGHS", value: 0 },
+    { label: "Income Tax", value: 0 }
+  ]);
+
   function handleCalculate() {
 
     if (!level || !basic) {
@@ -47,9 +57,68 @@ export default function SeventhSalaryCalculator() {
 
       });
 
+    if (!salary || typeof salary !== "object") return;
+
+
+    setAllowances([
+      { label: "Basic", value: salary.basic },
+      { label: "Dearness Allowance", value: salary.da },
+      { label: "House Rent Allowance", value: salary.hra },
+      { label: "Transport Allowance", value: salary.ta }
+    ]);
+
+    setDeductions([
+      { label: "NPS Contribution", value: salary.nps },
+      { label: "CGHS", value: salary.cghs },
+      { label: "Income Tax", value: salary.tax }
+    ]);
+
     setResult(salary);
 
   }
+
+
+  function updateAllowance(i, key, value) {
+    const updated = [...allowances];
+    updated[i][key] = key === "value" ? Number(value) : value;
+    setAllowances(updated);
+  }
+
+  function addAllowance() {
+    setAllowances([...allowances, { label: "", value: 0 }]);
+  }
+
+  function removeAllowance(i) {
+    setAllowances(allowances.filter((_, idx) => idx !== i));
+  }
+
+
+  // SAME FOR DEDUCTIONS
+  function updateDeduction(i, key, value) {
+    const updated = [...deductions];
+    updated[i][key] = key === "value" ? Number(value) : value;
+    setDeductions(updated);
+  }
+
+  function addDeduction() {
+    setDeductions([...deductions, { label: "", value: 0 }]);
+  }
+
+  function removeDeduction(i) {
+    setDeductions(deductions.filter((_, idx) => idx !== i));
+  }
+
+  const gross = allowances.reduce(
+    (sum, a) => sum + Number(a.value || 0),
+    0
+  );
+
+  const totalDeduction = deductions.reduce(
+    (sum, d) => sum + Number(d.value || 0),
+    0
+  );
+
+  const net = gross - totalDeduction;
 
   return (
 
@@ -187,23 +256,16 @@ export default function SeventhSalaryCalculator() {
           <select
             className="w-full border rounded p-2"
             value={tptaType}
-            onChange={(e) =>
-              setTpta(e.target.value)
-            }
+            onChange={(e) => setTpta(e.target.value)}
           >
+            <option value="HIGHER">Higher TPTA</option>
+            <option value="OTHER">Other City</option>
 
-            <option value="HIGHER">
-              Higher TPTA
-            </option>
+            {/* NEW */}
+            <option value="DOUBLE_HIGHER">2× Higher City</option>
+            <option value="DOUBLE_OTHER">2× Other City</option>
 
-            <option value="OTHER">
-              Other City
-            </option>
-
-            <option value="NONE">
-              No TPTA
-            </option>
-
+            <option value="NONE">No TPTA</option>
           </select>
 
         </div>
@@ -240,22 +302,48 @@ export default function SeventhSalaryCalculator() {
 
           {/* ===== EARNINGS ===== */}
           <div className="bg-blue-50/50 rounded-lg p-4">
+            <div className="flex justify-between items-center mb-2">
+              <div className="flex items-center gap-2 text-sm font-semibold text-blue-700">
+                <span>📈</span>
+                Earnings
+              </div>
 
-            <div className="flex items-center gap-2 text-sm font-semibold text-blue-700 mb-2">
-              <span>📈</span>
-              Earnings
+              <button onClick={addAllowance} className="text-xs text-blue-600">
+                + Add
+              </button>
             </div>
 
-            <div className="divide-y">
+            <div className="space-y-2">
 
-              <Row label="Basic" value={result.basic} />
-              <Row label="Dearness Allowance" value={result.da} />
-              <Row label="House Rent Allowance" value={result.hra} />
-              <Row label="Transport Allowance" value={result.ta} />
+              {allowances.map((a, i) => (
+
+                <div key={i} className="grid grid-cols-3 gap-2 items-center text-sm">
+
+                  <input
+                    value={a.label}
+                    onChange={(e) => updateAllowance(i, "label", e.target.value)}
+                    className="border rounded px-2 py-1"
+                  />
+
+                  <input
+                    type="number"
+                    value={a.value}
+                    onChange={(e) => updateAllowance(i, "value", e.target.value)}
+                    className="border rounded px-2 py-1"
+                  />
+
+                  <button
+                    onClick={() => removeAllowance(i)}
+                    className="text-red-500 text-xs"
+                  >
+                    Remove
+                  </button>
+
+                </div>
+
+              ))}
 
             </div>
-
-            {/* GROSS */}
             <div className="mt-3 flex justify-between items-center pt-3 border-t text-blue-800">
 
               <span className="font-medium">
@@ -263,30 +351,58 @@ export default function SeventhSalaryCalculator() {
               </span>
 
               <span className="font-semibold text-lg">
-                ₹ {result.gross.toLocaleString("en-IN")}
+                ₹ {gross.toLocaleString("en-IN")}
               </span>
 
             </div>
-
           </div>
 
 
           {/* ===== DEDUCTIONS ===== */}
           <div className="bg-rose-50/50 rounded-lg p-4">
 
-            <div className="flex items-center gap-2 text-sm font-semibold text-rose-700 mb-2">
-              <span>📉</span>
-              Deductions
+            <div className="flex justify-between items-center mb-2">
+              <div className="flex items-center gap-2 text-sm font-semibold text-rose-700">
+                <span>📉</span>
+                Deductions
+              </div>
+
+              <button onClick={addDeduction} className="text-xs text-rose-600">
+                + Add
+              </button>
             </div>
 
-            <div className="divide-y">
+            <div className="space-y-2">
 
-              <Row label="NPS Contribution" value={result.nps} />
-              <Row label="CGHS" value={result.cghs} />
-              <Row label="Income Tax" value={result.tax} />
+              {deductions.map((d, i) => (
+
+                <div key={i} className="grid grid-cols-3 gap-2 items-center text-sm">
+
+                  <input
+                    value={d.label}
+                    onChange={(e) => updateDeduction(i, "label", e.target.value)}
+                    className="border rounded px-2 py-1"
+                  />
+
+                  <input
+                    type="number"
+                    value={d.value}
+                    onChange={(e) => updateDeduction(i, "value", e.target.value)}
+                    className="border rounded px-2 py-1"
+                  />
+
+                  <button
+                    onClick={() => removeDeduction(i)}
+                    className="text-red-500 text-xs"
+                  >
+                    Remove
+                  </button>
+
+                </div>
+
+              ))}
 
             </div>
-
           </div>
 
 
@@ -299,21 +415,22 @@ export default function SeventhSalaryCalculator() {
             </div>
 
             <div className="text-2xl font-bold text-green-700 mt-1">
-              ₹ {result.net.toLocaleString("en-IN")}
+              ₹ {net.toLocaleString("en-IN")}
             </div>
 
             {/* subtle insight */}
             <div className="text-xs text-gray-500 mt-1">
-              {Math.round((result.net / result.gross) * 100)}% of gross salary
+              {gross > 0 ? Math.round((net / gross) * 100) : 0}% of gross salary
             </div>
 
           </div>
 
         </div>
 
-      )}
+      )
+      }
 
-    </div>
+    </div >
 
   );
 
