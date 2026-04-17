@@ -59,6 +59,10 @@ export default function ArrearBreakdownTable({ result }) {
                 </th>
 
                 <th className="p-2">
+                  Eligible
+                </th>
+
+                <th className="p-2">
                   Level
                 </th>
 
@@ -99,6 +103,10 @@ export default function ArrearBreakdownTable({ result }) {
 
                   </td>
 
+                  <td className="text-center text-gray-600">
+                    {p.eligibleMonths ?? 6} mo
+                  </td>
+
 
                   <td className="text-center">
 
@@ -135,6 +143,7 @@ export default function ArrearBreakdownTable({ result }) {
 
                 </td>
 
+                <td></td>
                 <td></td>
                 <td></td>
 
