@@ -78,6 +78,10 @@ export default function ArrearCalculatorPage() {
   const [result, setResult] = useState(null);
 
   const periods = generatePeriods(implementationPeriod);
+  const currentLevelNumber = getLevelNumber(level);
+  const promotionLevelOptions = Object.keys(payMatrix).filter(
+    (item) => getLevelNumber(item) > currentLevelNumber
+  );
   const promotionPreview = useMemo(
     () =>
       getPromotionPreview({
@@ -128,6 +132,18 @@ export default function ArrearCalculatorPage() {
       if (joiningType === "after" && !joiningDate) {
         alert("Please select joining date");
         return;
+      }
+
+      if (promotionApplicable) {
+        if (!promotionDate || !promotionLevel) {
+          alert("Please complete promotion details");
+          return;
+        }
+
+        if (getLevelNumber(promotionLevel) <= getLevelNumber(level)) {
+          alert("Promotion level must be higher than the current pay level");
+          return;
+        }
       }
 
       const arrear = calculateArrear({
@@ -543,7 +559,7 @@ export default function ArrearCalculatorPage() {
                 >
                   <option value="">Select Promotion Level</option>
 
-                  {Object.keys(payMatrix).map((item) => {
+                  {promotionLevelOptions.map((item) => {
                     const values = payMatrix[item];
 
                     return (
@@ -762,4 +778,8 @@ export default function ArrearCalculatorPage() {
       </div>
     </div>
   );
+}
+
+function getLevelNumber(level) {
+  return Number(level?.replace("L", "") || 0);
 }
