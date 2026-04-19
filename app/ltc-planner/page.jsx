@@ -1,86 +1,59 @@
-"use client";
+import LTCPageClient from "./LTCPageClient";
 
-import { useState } from "react";
-import LTCForm from "@/components/ltc/LTCForm";
-import ResultSection from "@/components/ltc/ResultSection";
-import { calculateLTC } from "@/utils/ltc/calculateLTC";
-import FAQSection from "@/components/ltc/FAQSection";
-import OtherToolsSection from "@/components/tools/OtherToolsSection";
-import { FAQ_DATA } from "@/utils/ltc/faqData";
+export const metadata = {
+  title: "LTC Planner 2026 – Leave Travel Concession Calculator for Govt Employees",
+  description:
+    "Plan your LTC with block year eligibility, home town and all India LTC rules. Calculate LTC benefits for central government employees.",
+  keywords: [
+    "LTC planner",
+    "leave travel concession calculator",
+    "LTC rules central government"
+  ],
+  alternates: {
+    canonical: "https://8cpccalculator.com/ltc-planner"
+  }
+};
 
+export default function Page() {
+  return (
+    <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
+      {/* HERO */}
+      <div className="w-full max-w-[1400px] mx-auto space-y-4 mb-6">
 
-
-export default function LTCPage() {
-    const [formData, setFormData] = useState(null);
-    const [result, setResult] = useState(null);
-
-    
-
-    const handleCalculate = (data) => {
-        const output = calculateLTC(data);
-        setResult(output);
-    };
-
-    const faqSchema = {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        mainEntity: FAQ_DATA.flatMap(section =>
-            section.faqs.map(faq => ({
-                "@type": "Question",
-                name: faq.q,
-                acceptedAnswer: {
-                    "@type": "Answer",
-                    text: faq.a,
-                },
-            }))
-        ),
-    };
-
-
-    return (
-        <div className="max-w-[1400px] mx-auto p-4">
-            <div className="text-center mb-6">
-
-                <h1 id="ltc-planner" className="text-2xl md:text-3xl font-bold mb-3">
-                    LTC Planner 2026 for Central Government Employees
-                </h1>
-
-                <div className="mt-4 text-sm text-gray-600 max-w-3xl mx-auto">
-                    <p>
-                        This LTC planner helps central government employees calculate Leave Travel Concession eligibility,
-                        block year usage, home town and all India travel benefits as per latest rules.
-                    </p>
-                </div>
-
-                <div className="mt-3 text-xs md:text-sm text-gray-500">
-                    Covers Fresh Recruits & Block System &nbsp; | &nbsp;
-                    Home Town & All India LTC &nbsp; | &nbsp;
-                    Updated as per latest LTC rules
-                </div>
-
-            </div>
-
-            <LTCForm onCalculate={handleCalculate}
-                onChange={() => setResult(null)} />
-
-            {result && <ResultSection result={result} />}
-
-            <FAQSection />
-
-            {/* OTHER TOOLS */}
-            <div className="bg-gray-100 p-4 rounded-xl shadow-sm hover:shadow-md transition">
-                <OtherToolsSection />
-            </div>
-
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{
-                    __html: JSON.stringify(faqSchema),
-                }}
-            />
-
-
+        <div className="flex justify-start">
+          <div className="inline-flex items-center gap-2 text-[11px] bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full font-medium">
+            <span>LTC Planner</span>
+            <span className="opacity-60">•</span>
+            <span>Govt Employees</span>
+            <span className="opacity-60">•</span>
+            <span>2026</span>
+          </div>
         </div>
-    );
+
+        <div className="text-center space-y-4">
+          <h1 className="text-xl md:text-2xl font-semibold tracking-tight">
+            <span className="bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
+              LTC Planner 2026 (Leave Travel Concession Calculator)
+            </span>
+          </h1>
+
+          <p className="text-xs md:text-sm text-gray-600 mx-auto max-w-3xl">
+            Plan your Leave Travel Concession (LTC) with block year tracking, home town and all India eligibility, and latest government rules.
+          </p>
+
+          <div className="mx-auto h-[2px] w-40 md:w-56 lg:w-72 bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 rounded-full opacity-80"></div>
+        </div>
+
+        <p className="text-xs md:text-sm text-gray-500 text-center max-w-2xl mx-auto">
+          Covers block year system, fresh recruits, carry forward rules and LTC eligibility calculation.
+        </p>
+
+      </div>
+
+      {/* CLIENT PART */}
+      <LTCPageClient />
+
+    </div>
+  );
 }

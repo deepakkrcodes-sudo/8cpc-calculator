@@ -1,8 +1,7 @@
 "use client";
 import { useState } from "react";
 import { payMatrix } from "@/data/payMatrix";
-import OtherToolsSection from "@/components/tools/OtherToolsSection";
-import FAQSection8CPCPayMatrix from "@/components/paymatrix/FAQSection8CPCPayMatrix";
+
 import PayLevelSelector from "@/components/paymatrix/PayLevelSelector";
 import PayMatrixDisplay from "@/components/paymatrix/PayMatrixDisplay";
 import FitmentFactorControl from "@/components/paymatrix/FitmentFactorControl";
@@ -23,22 +22,8 @@ export default function PayMatrix8Page() {
 
   return (
 
-    <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+    <div className="w-full space-y-6">
 
-      {/* HERO */}
-
-      <div className="text-center space-y-2">
-
-        <h1 className="text-2xl font-bold">
-          8th CPC Pay Matrix (Projected)
-        </h1>
-
-        <p className="text-gray-600 text-sm">
-          Estimate the projected pay matrix based on expected
-          8th Pay Commission fitment factor.
-        </p>
-
-      </div>
 
       <div className="rounded-xl border border-gray-200 bg-white shadow-sm px-3 py-3">
         {/* LEVEL SELECTOR */}
@@ -70,13 +55,7 @@ export default function PayMatrix8Page() {
 
       )}
 
-      <div className="block bg-gray-200 p-4 rounded-xl shadow-sm hover:shadow-md transition">
-        <OtherToolsSection />
-      </div>
-
-
-      <FAQSection8CPCPayMatrix />
-
+      
 
     </div>
 

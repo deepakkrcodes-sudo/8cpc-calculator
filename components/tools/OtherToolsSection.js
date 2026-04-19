@@ -5,116 +5,121 @@ import Link from "next/link";
 export default function OtherToolsSection() {
 
     const tools = [
-
-        {
-            title: "8th CPC Pension Arrear",
-            desc: "Calculate pension arrears easily",
-            icon: "💵",
-            link: "/8th-cpc-pension-arrear"
-        },
-
-        {
-            title: "8th CPC Salary Calculator",
-            desc: "Calculate revised salary instantly",
-            icon: "🧮",
-            link: "/"
-        },
-
-        {
-            title: "8th CPC Pension Calculator",
-            desc: "Calculate revised pension instantly",
-            icon: "👴",
-            link: "/8th-cpc-pension-calculator"
-        },
-
+        // 🔥 TOP PRIORITY
         {
             title: "8th CPC Arrear Calculator",
-            desc: "Calculate salary arrears easily",
+            desc: "Most accurate arrear calculator with DA, increment & promotion",
             icon: "💰",
-            link: "/8th-cpc-arrear-calculator"
+            link: "/8th-cpc-arrear-calculator",
+            highlight: true
+        },
+
+
+        // 🔥 SECONDARY
+        {
+            title: "8th CPC Salary Calculator",
+            desc: "Estimate revised salary instantly",
+            icon: "🧮",
+            link: "/",
+            highlight :true 
+        },
+        {
+            title: "8th CPC Pension Calculator",
+            desc: "Calculate pension with DR & commutation",
+            icon: "👴",
+            link: "/8th-cpc-pension-calculator",
+            highlight : true
+        },
+        {
+            title: "8th CPC Pension Arrear",
+            desc: "Estimate pension arrears accurately",
+            icon: "💵",
+            link: "/8th-cpc-pension-arrear",
+             highlight : true
         },
 
         {
+            title: "LTC Planner",
+            desc: "Plan LTC eligibility, block years & travel benefits",
+            icon: "✈️",
+            link: "/ltc-planner",
+            highlight: false
+        },
+        {
+            title: "Pay Fixation Calculator",
+            desc: "Compare promotion vs increment impact",
+            icon: "📌",
+            link: "/pay-fixation-calculator",
+            highlight: false
+        },
+
+        // 🔹 SUPPORT
+        {
             title: "8th CPC Pay Matrix",
-            desc: "View projected pay matrix levels",
+            desc: "Projected salary levels & structure",
             icon: "📈",
             link: "/8th-cpc-pay-matrix"
         },
-
         {
             title: "7th CPC Salary Calculator",
-            desc: "Calculate current salary instantly",
+            desc: "Current salary under 7th CPC",
             icon: "📊",
             link: "/7th-cpc-calculator"
         },
-
         {
             title: "7th CPC Pension Calculator",
-            desc: "Calculate current pension instantly",
+            desc: "Current pension calculation",
             icon: "📉",
             link: "/7th-cpc-pension-calculator"
         },
-
-        {
-            title: "Pay Fixation Calculator",
-            desc: "Calculate pay fixation after promotion",
-            icon: "📌",
-            link: "/pay-fixation-calculator"
-        },
-
         {
             title: "7th CPC Pay Matrix",
-            desc: "View complete pay matrix levels",
+            desc: "Complete pay level table",
             icon: "📋",
             link: "/7th-cpc-pay-matrix"
-        },
-
-        {
-            title: "LTC Planner & Guide",
-            desc: "Calculate LTC benefits and plan",
-            icon: "✈️",
-            link: "/ltc-planner"
         }
     ];
 
     return (
-
         <div className="mt-10">
 
             {/* HEADER */}
-
             <div className="text-center mb-6">
-
-                <h2 className="text-2xl font-semibold">
-                    Other Government Salary Calculators
+                <h2 className="text-xl md:text-2xl font-semibold">
+                    Explore More Salary & Pension Tools
                 </h2>
-
                 <p className="text-gray-500 text-sm">
-                    Explore related salary, pension, and allowance tools
+                    Powerful calculators for central government employees
                 </p>
-
             </div>
 
-
             {/* GRID */}
-
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
                 {tools.map((tool, index) => (
 
                     <Link key={index} href={tool.link}>
 
-                        <div className="bg-white rounded-xl shadow-sm p-5 hover:shadow-md transition cursor-pointer text-center space-y-2">
+                        <div
+                            className={`h-full rounded-xl p-5 transition cursor-pointer flex flex-col justify-between
+              ${tool.highlight
+                                    ? "bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-200 shadow-sm hover:shadow-md"
+                                    : "bg-white shadow-sm hover:shadow-md"
+                                }`}
+                        >
 
-                            <div className="text-3xl">
+                            {/* ICON */}
+                            <div className="text-3xl mb-2">
                                 {tool.icon}
                             </div>
 
-                            <div className="font-semibold">
+                            {/* TITLE */}
+                            <div className="font-semibold text-sm md:text-base">
                                 {tool.title}
                             </div>
 
-                            <div className="text-sm text-gray-500">
+                            {/* DESC */}
+                            <div className="text-xs md:text-sm text-gray-500 mt-1">
                                 {tool.desc}
                             </div>
 
@@ -127,7 +132,5 @@ export default function OtherToolsSection() {
             </div>
 
         </div>
-
     );
-
 }

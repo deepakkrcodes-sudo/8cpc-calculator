@@ -20,7 +20,7 @@ import FitmentFactorControl from "@/components/calculator/FitmentFactorControl";
 import PremiumArrearSummaryCard from "@/components/arrear/PremiumArrearSummaryCard";
 import ArrearTimelineChart from "@/components/arrear/ArrearTimelineChart";
 import ArrearBreakdownTable from "@/components/arrear/ArrearBreakdownTable";
-import OtherToolsSection from "@/components/tools/OtherToolsSection";
+
 
 const incrementMonthOptions = [
   { value: "Jan 2026", label: "January" },
@@ -198,25 +198,8 @@ export default function ArrearCalculatorPage() {
   }
 
   return (
-    <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-      <div className="inline-flex items-center gap-1 text-[11px] bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full font-medium">
-        8th CPC Arrear Calculator
-      </div>
+    <div className="w-full space-y-6">
 
-      <div className="p-2 text-center space-y-4">
-        <h1 className="text-xl md:text-2xl font-semibold tracking-tight md:whitespace-nowrap md:overflow-hidden md:text-ellipsis">
-          <span className="bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
-            8th CPC Salary Arrear Calculator
-          </span>
-        </h1>
-
-        <p className="text-xs md:text-sm text-gray-600 mx-auto max-w-3xl">
-          Estimate salary arrears from January 2026 using expected fitment factor,
-          DA progression, city class, HRA assumptions and increment month.
-        </p>
-
-        <div className="mx-auto h-[2px] w-40 md:w-56 lg:w-72 bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 rounded-full opacity-80"></div>
-      </div>
 
       <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-6">
         <div className="space-y-4">
@@ -655,127 +638,6 @@ export default function ArrearCalculatorPage() {
         </div>
       )}
 
-      <div className="block bg-gray-200 p-4 rounded-xl shadow-sm hover:shadow-md transition">
-        <OtherToolsSection />
-      </div>
-
-      <div className="bg-white rounded-xl shadow-sm p-5 space-y-4">
-        <h2 className="text-lg font-semibold">
-          Frequently Asked Questions (8th CPC Arrear Calculator)
-        </h2>
-
-        <div className="space-y-3 text-sm">
-          <p className="text-sm text-gray-600">
-            8th CPC arrears depend on multiple factors like fitment factor, DA growth,
-            annual increments and promotions. Below are common questions to help you
-            understand how arrears are calculated.
-          </p>
-
-          <div>
-            <h3 className="font-medium">
-              What is 8th CPC arrear for salaried employees?
-            </h3>
-            <p className="text-gray-600">
-              Arrear is the difference between salary under the 7th Pay Commission
-              and revised salary under the 8th Pay Commission, paid from the
-              effective date of implementation.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="font-medium">
-              How is 8th CPC arrear calculated?
-            </h3>
-            <p className="text-gray-600">
-              Arrear is calculated by applying the expected fitment factor to your
-              basic pay, recalculating allowances like DA and HRA, and summing the
-              monthly differences over the arrear period.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="font-medium">
-              What is the role of fitment factor in arrear calculation?
-            </h3>
-            <p className="text-gray-600">
-              The fitment factor determines the revised basic pay under the 8th CPC.
-              Higher fitment factor leads to higher salary and larger arrears.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="font-medium">
-              How does DA progression affect arrears?
-            </h3>
-            <p className="text-gray-600">
-              Dearness Allowance increases over time, so arrears depend on DA rates
-              applicable in each period. Higher DA growth results in higher arrears.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="font-medium">
-              Does annual increment impact arrears?
-            </h3>
-            <p className="text-gray-600">
-              Yes, annual increments increase basic pay during the arrear period,
-              which further increases total arrears.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="font-medium">
-              How does promotion affect arrear calculation?
-            </h3>
-            <p className="text-gray-600">
-              Promotion changes your pay level and basic pay, resulting in higher
-              revised salary and increased arrears from the promotion date.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="font-medium">
-              From which date will 8th CPC arrears be calculated?
-            </h3>
-            <p className="text-gray-600">
-              Arrears are typically calculated from the effective date of the Pay
-              Commission, which is expected to be January 2026 or as notified by
-              the government.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="font-medium">
-              Are allowances included in arrear calculation?
-            </h3>
-            <p className="text-gray-600">
-              Yes, allowances like DA, HRA and Transport Allowance are recalculated
-              based on revised basic pay and included in total arrears.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="font-medium">
-              Is tax applicable on arrears?
-            </h3>
-            <p className="text-gray-600">
-              Yes, arrears are taxable as per income tax rules. Relief under Section
-              89 may be applicable to reduce tax burden.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="font-medium">
-              Can this calculator give exact arrear amount?
-            </h3>
-            <p className="text-gray-600">
-              This calculator provides a close estimate based on assumptions like
-              fitment factor and DA growth. Actual arrears may vary as per official
-              government orders.
-            </p>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

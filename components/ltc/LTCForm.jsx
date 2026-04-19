@@ -1,3 +1,5 @@
+"use Client";
+
 import React, { useState } from "react";
 import BasicInfoForm from "./BasicInfoForm";
 import LTCHistoryTable from "./LTCHistoryTable";
