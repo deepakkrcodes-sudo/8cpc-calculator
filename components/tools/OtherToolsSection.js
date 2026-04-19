@@ -31,7 +31,7 @@ export default function OtherToolsSection() {
             title: "8th CPC Arrear Calculator",
             desc: "Calculate salary arrears easily",
             icon: "💰",
-            link: "/8th-cpc-arrear"
+            link: "/8th-cpc-arrear-calculator"
         },
 
         {

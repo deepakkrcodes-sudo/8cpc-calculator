@@ -95,6 +95,13 @@ export function calculateArrear({
       aggregate.isIncrement = aggregate.isIncrement || eventFlags.isIncrement;
       aggregate.isPromotion = aggregate.isPromotion || eventFlags.isPromotion;
 
+      if (eventFlags.isIncrement && !aggregate.incrementDate) {
+        aggregate.incrementDate = cursor.getTime();
+      }
+      if (eventFlags.isPromotion && !aggregate.promotionDate) {
+        aggregate.promotionDate = cursor.getTime();
+      }
+
       const nextBoundary = getNextBoundary({
         cursor,
         periodEndExclusive,
@@ -427,6 +434,8 @@ function createPeriodAggregate(period, da7Percent, da8Percent) {
     eligibleMonths: 0,
     isIncrement: false,
     isPromotion: false,
+    promotionDate: null,
+    incrementDate: null,
     levelStart: "",
     levelEnd: "",
     basicStart: 0,
@@ -471,6 +480,8 @@ function finalizePeriodAggregate(aggregate) {
     eligibleFrom: aggregate.eligibleFrom,
     eligibleTo: aggregate.eligibleTo,
     isIncrement: aggregate.isIncrement,
-    isPromotion: aggregate.isPromotion
+    isPromotion: aggregate.isPromotion,
+    promotionDate: aggregate.promotionDate,
+    incrementDate: aggregate.incrementDate
   };
 }

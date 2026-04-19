@@ -109,26 +109,7 @@ export default function SalaryCalculator() {
         <div className="space-y-6">
 
             {/* TAG → LEFT */}
-            <div className="flex justify-start">
-                <div className="inline-flex gap-1 text-[11px] bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full font-medium">
-                    7th CPC Salary Calculator
-                </div>
-            </div>
-            <div className="p-6 text-center space-y-4">
-
-                <h1 className="text-xl md:text-2xl font-semibold tracking-tight md:whitespace-nowrap md:overflow-hidden md:text-ellipsis">
-                    <span className="bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
-                        7th CPC Salary Calculator
-                    </span>
-                </h1>
-
-                <p className="text-xs md:text-sm text-gray-600 mx-auto md:whitespace-nowrap md:overflow-hidden md:text-ellipsis">
-                    Estimate your expected salary under the 7th Pay Commission.
-                </p>
-
-                <div className="mx-auto h-[2px] w-40 md:w-56 lg:w-72 bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 rounded-full opacity-80"></div>
-
-            </div>
+            
             <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-5">
 
                 <div className="space-y-4">
