@@ -6,6 +6,7 @@ export default function PensionRow7({ label, value, highlight }) {
 
   return (
 
+
     <div className={`flex justify-between items-center p-3 text-base ${highlight ? "bg-blue-50 font-semibold" : ""}`}>
 
       <div className="text-gray-700">
@@ -17,6 +18,7 @@ export default function PensionRow7({ label, value, highlight }) {
       </div>
 
     </div>
+   
 
   );
 

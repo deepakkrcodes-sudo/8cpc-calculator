@@ -17,7 +17,7 @@ export default function PremiumArrearSummaryCard({
 
   return (
     <div className="overflow-hidden rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 via-lime-50 to-teal-100 text-slate-900 shadow-sm">
-      <div className="p-5 md:p-6 space-y-5">
+      <div className="p-3 sm:p-4 large:p-5 md:p-6 space-y-5">
         <div className="flex items-start justify-between gap-4">
           <div>
             <div className="text-xs uppercase tracking-[0.18em] text-emerald-700/90">

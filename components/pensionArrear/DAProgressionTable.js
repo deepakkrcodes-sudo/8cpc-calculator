@@ -3,9 +3,7 @@
 import { TrendingUp } from "lucide-react";
 
 export default function DAProgressionTable({ periods, daRates, updateDARate }) {
-
   return (
-
     <div className="space-y-4">
 
       {/* HEADER */}
@@ -20,29 +18,26 @@ export default function DAProgressionTable({ periods, daRates, updateDARate }) {
         </p>
       </div>
 
+      {/* TIMELINE (lightweight, no heavy card) */}
+      <div className="rounded-lg p-2 sm:p-3">
 
-      {/* TIMELINE */}
-      <div className="border border-gray-500 rounded-xl p-4 bg-white shadow-sm">
-
-        <div className="relative border-l border-gray-900 ml-3 pl-4 space-y-5">
+        <div className="relative border-l border-gray-300 ml-3 pl-4 space-y-4">
 
           {daRates.map((p, i) => (
-
             <div key={i} className="relative flex items-center justify-between">
 
               {/* DOT */}
-              <span className="absolute -left-[23px] w-4 h-4 bg-blue-500 rounded-full border-2 border-white shadow"></span>
+              <span className="absolute -left-[22px] w-3.5 h-3.5 bg-blue-500 rounded-full border-2 border-white"></span>
 
-              {/* LEFT: PERIOD */}
-              <div className="text-sm text-gray-700 font-medium ml-4">
+              {/* LEFT */}
+              <div className="text-sm text-gray-700 font-medium ml-3">
                 {p.period}
               </div>
 
-              {/* RIGHT: VALUE */}
+              {/* RIGHT */}
               <div className="flex items-center">
-
                 {i === 0 ? (
-                  <div className="text-sm font-semibold text-blue-600 bg-blue-50 px-3 py-1 rounded-md">
+                  <div className="text-sm font-semibold text-blue-600 bg-blue-50 px-2 py-1 rounded-md">
                     2%
                   </div>
                 ) : (
@@ -60,11 +55,9 @@ export default function DAProgressionTable({ periods, daRates, updateDARate }) {
                     ))}
                   </select>
                 )}
-
               </div>
 
             </div>
-
           ))}
 
         </div>
@@ -72,7 +65,5 @@ export default function DAProgressionTable({ periods, daRates, updateDARate }) {
       </div>
 
     </div>
-
   );
-
 }

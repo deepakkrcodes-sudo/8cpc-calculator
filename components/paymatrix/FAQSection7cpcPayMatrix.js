@@ -2,7 +2,7 @@ export default function FAQSection7cpcPayMatrix() {
 
     return (
 
-        <div className="bg-white rounded-xl shadow-sm p-6 space-y-6 text-left">
+        <div className="bg-white rounded-xl shadow-sm p-4 sm:p-5 lg:p-6 space-y-6 text-left">
 
             <h2 className="text-xl font-semibold">
                 7th CPC Pay Matrix – Complete Guide, FAQs & Salary Insights

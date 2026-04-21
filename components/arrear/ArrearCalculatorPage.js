@@ -76,6 +76,7 @@ export default function ArrearCalculatorPage() {
     () => Array(generatePeriods(defaultImplementationPeriod).length).fill(2)
   );
   const [result, setResult] = useState(null);
+  const [selectedPreset, setSelectedPreset] = useState(null);
 
   const periods = generatePeriods(implementationPeriod);
   const currentLevelNumber = getLevelNumber(level);
@@ -190,6 +191,7 @@ export default function ArrearCalculatorPage() {
   }
 
   function applyDAPreset(presetKey) {
+    setSelectedPreset(presetKey);
     const preset = daPresets.find((item) => item.key === presetKey);
 
     if (!preset) return;
@@ -198,10 +200,10 @@ export default function ArrearCalculatorPage() {
   }
 
   return (
-    <div className="w-full space-y-6">
+    <div className="w-full space-y-6 text-left">
 
 
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-6">
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-3 sm:p-5 lg:p-6 space-y-6">
         <div className="space-y-4">
           <div className="text-md font-semibold text-gray-500 uppercase">
             Pay Details
@@ -286,7 +288,7 @@ export default function ArrearCalculatorPage() {
           <div>
             <label htmlFor="arrear-hra-percent" className="flex items-center gap-2 text-sm text-gray-700">
               <Home size={15} className="text-pink-500" />
-              HRA % (7th CPC Basis)
+              HRA % (7th CPC)
             </label>
             <select
               id="arrear-hra-percent"
@@ -382,8 +384,9 @@ export default function ArrearCalculatorPage() {
                 type="date"
                 value={joiningDate}
                 min="2026-01-02"
-                className="w-full mt-3 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-400"
                 onChange={(e) => setJoiningDate(e.target.value)}
+                onClick={(e) => e.target.showPicker && e.target.showPicker()}
+                className="w-full mt-3 cursor-pointer rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-400"
               />
             )}
           </div>
@@ -408,71 +411,74 @@ export default function ArrearCalculatorPage() {
           </select>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm p-6 space-y-5 border border-gray-200">
+        <div className="p-1 sm:p-1 lg:p-1 space-y-4 sm:space-y-5">
+
           <div className="space-y-2">
-            <h2 className="text-lg font-semibold text-gray-800 tracking-tight flex items-center gap-2">
+            <h2 className="text-base sm:text-lg font-semibold text-gray-800 tracking-tight flex items-center gap-2">
               <TrendingUp size={18} className="text-blue-600" />
               Expected DA Growth
             </h2>
+
             <div className="h-[2px] w-full bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 rounded-full"></div>
-            <p className="text-sm text-gray-500">
+
+            <p className="text-xs sm:text-sm text-left text-gray-500">
               Each row adds cumulatively to the 7th CPC base DA of 58% and the 8th CPC base DA of 0%.
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-2">
-            {daPresets.map((preset) => (
-              <button
-                key={preset.key}
-                type="button"
-                onClick={() => applyDAPreset(preset.key)}
-                className="rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1.5 text-xs font-medium text-indigo-700 transition hover:bg-indigo-100"
-              >
-                {preset.label}
-              </button>
-            ))}
-          </div>
+          {/* PRESETS */}
+          <div className="flex flex-wrap gap-1 sm:gap-2">
+            {daPresets.map((preset) => {
+              const isActive = selectedPreset === preset.key;
 
-          <div className="space-y-3">
+              return (
+                <button
+                  key={preset.key}
+                  type="button"
+                  onClick={() => applyDAPreset(preset.key)}
+                  className={`rounded-md border transition font-medium leading-none
+          px-1.5 py-[2px] text-[10px]
+          sm:px-2.5 sm:py-1 sm:text-xs
+
+          ${isActive
+                      ? "bg-indigo-600 text-white border-indigo-600 shadow-sm"
+                      : "bg-indigo-50 text-indigo-700 border-indigo-200 hover:bg-indigo-100"
+                    }
+        `}
+                >
+                  {preset.label}
+                </button>
+              );
+            })}
+          </div>
+          {/* ROWS */}
+          <div className="space-y-2 sm:space-y-3">
             {periods.map((period, index) => (
               <div
                 key={period.label}
-                className="flex items-center justify-between gap-3 rounded-xl border border-gray-200 px-4 py-3"
+                className="flex items-center justify-between gap-2 sm:gap-3 rounded-lg border border-gray-200 px-2 sm:px-4 py-2 sm:py-3"
               >
-                <div>
-                  <div className="text-sm font-medium text-gray-800">
-                    {period.label}
-                  </div>
+
+                <div className="text-sm font-medium text-gray-800">
+                  {period.label}
                 </div>
 
-                {index === 0 ? (
-                  <select
-                    className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-400"
-                    value={daRates[index] ?? 2}
-                    onChange={(e) => updateDARate(index, Number(e.target.value))}
-                  >
-                    {daIncreaseOptions.map((item) => (
-                      <option key={item} value={item}>
-                        {item}%
-                      </option>
-                    ))}
-                  </select>
-                ) : (
-                  <select
-                    className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-400"
-                    value={daRates[index] ?? 2}
-                    onChange={(e) => updateDARate(index, Number(e.target.value))}
-                  >
-                    {daIncreaseOptions.map((item) => (
-                      <option key={item} value={item}>
-                        {item}%
-                      </option>
-                    ))}
-                  </select>
-                )}
+                <select
+                  className="rounded-md border border-gray-300 px-2 sm:px-3 py-1.5 sm:py-2 text-sm focus:ring-2 focus:ring-indigo-400"
+                  value={daRates[index] ?? 2}
+                  onChange={(e) => updateDARate(index, Number(e.target.value))}
+                >
+                  {daIncreaseOptions.map((item) => (
+                    <option key={item} value={item}>
+                      {item}%
+                    </option>
+                  ))}
+                </select>
+
               </div>
             ))}
           </div>
+
         </div>
 
 
@@ -521,8 +527,9 @@ export default function ArrearCalculatorPage() {
                   id="promotion-date"
                   type="date"
                   value={promotionDate}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-400"
                   onChange={(e) => setPromotionDate(e.target.value)}
+                  onClick={(e) => e.target.showPicker && e.target.showPicker()}
+                  className="w-full cursor-pointer rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-400"
                 />
               </div>
 

@@ -42,12 +42,12 @@ export const metadata = {
     locale: "en_IN",
     type: "website",
     images: [
-    {
-      url: "/logo.png",
-      width: 512,
-      height: 512
-    }
-  ]
+      {
+        url: "/logo.png",
+        width: 512,
+        height: 512
+      }
+    ]
   },
 
   twitter: {
@@ -88,7 +88,7 @@ export default function RootLayout({ children }) {
 
         <Header />
 
-        <main className="w-full max-w-md sm:max-w-xl md:max-w-3xl lg:max-w-5xl xl:max-w-6xl mx-auto px-4 py-6">
+        <main className="w-full px-2 sm:px-4 py-4">
           {children}
         </main>
 

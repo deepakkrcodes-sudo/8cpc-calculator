@@ -36,27 +36,30 @@ export default function ArrearBreakdownTable({ result }) {
         </div>
       </button>
 
+      <div className="text-[10px] text-gray-400 px-2 pb-1 sm:hidden">
+        ← Scroll horizontally to view full table →
+      </div>
+
       {/* Table Content */}
       <div
-        className={`transition-all duration-300 ease-in-out ${
-          open ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
-        }`}
+        className={`transition-all duration-300 ease-in-out ${open ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+          }`}
       >
-        <div className="overflow-x-auto p-5 pt-2">
+        <div className="overflow-x-auto -mx-2 sm:mx-0 px-2 sm:px-5 pt-2">
           <div className="border border-gray-100 rounded-xl overflow-hidden">
-            <table className="w-full text-sm min-w-[450px]">
+            <table className="w-full text-xs sm:text-sm min-w-[600px]">
               <thead className="bg-gray-50/80 border-b border-gray-100">
                 <tr>
-                  <th className="py-3 px-4 text-left font-semibold text-gray-600 uppercase tracking-wider text-[11px]">
+                  <th className="py-2 px-2 sm:px-4 text-left font-semibold text-gray-600 uppercase tracking-wider text-[11px]">
                     Period
                   </th>
-                  <th className="py-3 px-4 text-center font-semibold text-gray-600 uppercase tracking-wider text-[11px]">
+                  <th className="py-2 px-2 sm:px-4 text-center font-semibold text-gray-600 uppercase tracking-wider text-[11px]">
                     Duration
                   </th>
-                  <th className="py-3 px-4 text-right font-semibold text-gray-600 uppercase tracking-wider text-[11px]">
+                  <th className="py-2 px-2 sm:px-4 text-right font-semibold text-gray-600 uppercase tracking-wider text-[11px]">
                     8th CPC Basic
                   </th>
-                  <th className="py-3 px-4 text-right font-semibold text-gray-600 uppercase tracking-wider text-[11px]">
+                  <th className="py-2 px-2 sm:px-4 text-right font-semibold text-gray-600 uppercase tracking-wider text-[11px]">
                     Net Arrear
                   </th>
                 </tr>
@@ -67,7 +70,7 @@ export default function ArrearBreakdownTable({ result }) {
                     key={i}
                     className="hover:bg-indigo-50/30 transition-colors group"
                   >
-                    <td className="py-3 px-4 font-medium text-gray-700 whitespace-nowrap">
+                    <td className="py-2 px-2 sm:px-4 font-medium text-gray-700 whitespace-nowrap">
                       <div className="flex items-center gap-2">
                         <span>{formatPeriodLabel(p.period)}</span>
                         <div className="flex items-center gap-1.5">
@@ -109,10 +112,10 @@ export default function ArrearBreakdownTable({ result }) {
 
                 {/* Total Row */}
                 <tr className="bg-emerald-50/50 border-t-2 border-emerald-100">
-                  <td colSpan={3} className="py-4 px-4 text-right font-bold text-gray-700">
+                  <td colSpan={3} className="py-3 px-2 sm:px-4 text-right font-bold text-gray-700">
                     Total Arrear Accumulation
                   </td>
-                  <td className="py-4 px-4 text-right whitespace-nowrap">
+                  <td className="py-3 px-2 sm:px-4 text-right whitespace-nowrap">
                     <div className="flex items-center justify-end gap-1">
                       <IndianRupee size={16} className="text-emerald-600" />
                       <span className="font-bold text-lg text-emerald-700">

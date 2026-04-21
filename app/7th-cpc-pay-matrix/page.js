@@ -104,7 +104,7 @@ export default function Page() {
       />
 
 
-      <div className="space-y-6">
+      <div className="w-full max-w-full sm:max-w-[1200px] lg:max-w-[1100px] xl:max-w-[1000px] mx-auto px-2 sm:px-6 lg:px-8 py-6">
 
         <div className="flex justify-start">
           <div className="inline-flex gap-1 text-[11px] bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full font-medium">
@@ -119,7 +119,7 @@ export default function Page() {
             </span>
           </h1>
 
-          <p className="text-xs md:text-sm text-gray-600 mx-auto md:whitespace-nowrap md:overflow-hidden md:text-ellipsis">
+          <p className="text-xs md:text-sm text-gray-600 mx-auto">
             Explore the complete 7th CPC pay matrix with level-wise basic pay, salary progression, and annual increments. This table helps central government employees understand their salary structure, pay level, and future growth under the 7th Pay Commission.
           </p>
 

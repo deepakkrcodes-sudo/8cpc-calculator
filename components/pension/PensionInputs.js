@@ -23,7 +23,7 @@ export default function PensionInputs({
 
   return (
 
-    <div className="bg-white rounded-xl shadow-sm p-6 space-y-6">
+    <div className="bg-white rounded-xl shadow-sm p-4 sm:p-5 lg:p-6 space-y-6">
 
       <h2 className="text-lg font-semibold">
         Pension Details

@@ -110,7 +110,7 @@ export default function SalaryCalculator() {
 
             {/* TAG → LEFT */}
             
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-5">
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-3 sm:p-5 lg:p-6 space-y-4 sm:space-y-5">
 
                 <div className="space-y-4">
 
