@@ -104,7 +104,8 @@ export default function Page() {
                 }}
             />
 
-            <div className="w-full max-w-full sm:max-w-[1400px] mx-auto px-2 sm:px-6 lg:px-8 py-6 space-y-4">
+
+            <div className="w-full max-w-full sm:max-w-[1200px] lg:max-w-[1100px] xl:max-w-[1000px] mx-auto px-2 sm:px-6 lg:px-8 py-6 space-y-4">
 
                 <div className="inline-flex items-left gap-1 text-[11px] bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full font-medium">
                     7th CPC Pension Calculator

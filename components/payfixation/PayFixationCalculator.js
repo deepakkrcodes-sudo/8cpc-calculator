@@ -37,27 +37,7 @@ export default function PayFixationCalculator(){
     <div className="space-y-6">
 
       {/* Hero Header */}
-      <div className="text-center space-y-4">
-        {/* Tag */}
-        <div className="inline-flex items-center gap-1 text-[11px] bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full font-medium">
-          Pay Fixation Calculator
-        </div>
-
-        {/* Title */}
-        <h1 className="text-xl md:text-2xl font-semibold tracking-tight md:whitespace-nowrap md:overflow-hidden md:text-ellipsis">
-          <span className="bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
-            Promotion Pay Fixation
-          </span>
-        </h1>
-
-        {/* Subtitle */}
-        <p className="text-xs md:text-sm text-gray-600 mx-auto max-w-lg">
-          Compare pay fixation from Date of Promotion vs Date of Next Increment (DNI). The tool calculates month-wise salary difference and interest-adjusted financial impact.
-        </p>
-
-        {/* Premium gradient line */}
-        <div className="mx-auto h-[2px] w-40 md:w-56 lg:w-72 bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 rounded-full opacity-80"></div>
-      </div>
+      
 
       <FixationInputs
         form={form}

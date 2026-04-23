@@ -16,8 +16,7 @@ export const metadata = {
 
 export default function Page() {
   return (
-    <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-
+    <div className="w-full max-w-full sm:max-w-[1200px] lg:max-w-[1100px] xl:max-w-[1000px] mx-auto px-2 sm:px-6 lg:px-8 py-6 space-y-4">
       {/* HERO */}
       <div className="w-full max-w-[1400px] mx-auto space-y-4 mb-6">
 
