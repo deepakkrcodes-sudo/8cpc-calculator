@@ -2,15 +2,19 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const closeMenu = () => setMenuOpen(false);
 
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "auto";
+  }, [menuOpen]);
+
   return (
-    <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b">
+    <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b overflow-x-hidden">
 
       <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
 
@@ -83,7 +87,7 @@ export default function Header() {
             </div>
           </div>
 
-         
+
         </nav>
 
         {/* MOBILE BUTTON */}
@@ -97,29 +101,31 @@ export default function Header() {
 
       {/* MOBILE FULLSCREEN MENU */}
       <div
-        className={`fixed inset-0 bg-white z-50 transform transition-transform duration-300 ${menuOpen ? "translate-x-0" : "translate-x-full"
+        className={`fixed top-0 right-0 h-full w-[85%] max-w-sm bg-white text-gray-900 z-50 shadow-2xl transform transition-transform duration-300 ${menuOpen ? "translate-x-0" : "translate-x-full"
           }`}
       >
-        <div className="flex justify-between items-center px-4 h-14 border-b">
+        {/* Header */}
+        <div className="flex justify-between items-center px-4 h-14 border-b bg-gray-50">
           <span className="font-semibold">Menu</span>
           <button onClick={closeMenu}>✕</button>
         </div>
 
-        <div className="px-5 py-4 space-y-4 text-base">
+        {/* Scrollable Content */}
+        <div className="px-5 py-4 space-y-4 text-base overflow-y-auto h-[calc(100vh-56px)]">
 
           {/* Main */}
           <div className="space-y-2">
             <p className="text-xs text-gray-400 uppercase">Main</p>
 
-            <Link href="/" onClick={closeMenu} className="block py-2 font-medium">
+            <Link href="/" onClick={closeMenu} className="block py-2 px-2 rounded-lg hover:bg-gray-100 font-medium">
               Salary Calculator
             </Link>
 
-            <Link href="/8th-cpc-arrear-calculator" onClick={closeMenu} className="block py-2">
+            <Link href="/8th-cpc-arrear-calculator" onClick={closeMenu} className="block py-2 px-2 rounded-lg hover:bg-gray-100">
               Arrear Calculator
             </Link>
 
-            <Link href="/8th-cpc-pension-calculator" onClick={closeMenu} className="block py-2">
+            <Link href="/8th-cpc-pension-calculator" onClick={closeMenu} className="block py-2 px-2 rounded-lg hover:bg-gray-100">
               Pension Calculator
             </Link>
           </div>
@@ -128,15 +134,15 @@ export default function Header() {
           <div className="space-y-2">
             <p className="text-xs text-gray-400 uppercase">Tools</p>
 
-            <Link href="/ltc-planner" onClick={closeMenu} className="block py-2">
+            <Link href="/ltc-planner" onClick={closeMenu} className="block py-2 px-2 rounded-lg hover:bg-gray-100">
               LTC Planner
             </Link>
 
-            <Link href="/pay-fixation-calculator" onClick={closeMenu} className="block py-2">
+            <Link href="/pay-fixation-calculator" onClick={closeMenu} className="block py-2 px-2 rounded-lg hover:bg-gray-100">
               Pay Fixation
             </Link>
 
-            <Link href="/8th-cpc-pay-matrix" onClick={closeMenu} className="block py-2">
+            <Link href="/8th-cpc-pay-matrix" onClick={closeMenu} className="block py-2 px-2 rounded-lg hover:bg-gray-100">
               Pay Matrix
             </Link>
           </div>

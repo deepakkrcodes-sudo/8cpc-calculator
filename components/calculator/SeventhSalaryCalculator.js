@@ -10,7 +10,7 @@ export default function SeventhSalaryCalculator() {
   const [level, setLevel] = useState("");
   const [basic, setBasic] = useState("");
 
-  const [daPercent, setDA] = useState(58);
+  const [daPercent, setDA] = useState(60);
 
   const [city, setCity] = useState("X");
 

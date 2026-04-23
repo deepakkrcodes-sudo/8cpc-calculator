@@ -114,6 +114,21 @@ export default function SalaryBreakdown({
                         </div>
                     ))}
 
+
+                </div>
+
+                {/* TOTAL */}
+                <div className="grid grid-cols-3 pt-3 font-semibold text-blue-800 mb -4">
+                    <div>Gross Salary</div>
+                    <div className="text-center">
+                        ₹ {r.seventh.gross.toLocaleString("en-IN")}
+                    </div>
+                    <div className="text-center">
+                        ₹ {r.eighth.gross.toLocaleString("en-IN")}
+                    </div>
+                </div>
+                <div className="mt-4">
+
                     <button
                         onClick={addAllowance}
                         className="flex items-center gap-1 text-indigo-600 text-sm"
@@ -123,16 +138,6 @@ export default function SalaryBreakdown({
 
                 </div>
 
-                {/* TOTAL */}
-                <div className="grid grid-cols-3 pt-3 font-semibold text-blue-800">
-                    <div>Gross Salary</div>
-                    <div className="text-center">
-                        ₹ {r.seventh.gross.toLocaleString("en-IN")}
-                    </div>
-                    <div className="text-center">
-                        ₹ {r.eighth.gross.toLocaleString("en-IN")}
-                    </div>
-                </div>
 
             </div>
 
@@ -240,13 +245,7 @@ export default function SalaryBreakdown({
                         </div>
                     ))}
 
-                    {/* ADD BUTTON */}
-                    <button
-                        onClick={addDeduction}
-                        className="flex items-center gap-1 text-sm text-indigo-600"
-                    >
-                        <PlusCircle size={16} /> Add Deduction
-                    </button>
+
 
                 </div>
 
@@ -272,6 +271,19 @@ export default function SalaryBreakdown({
                             otherDeductions.reduce((sum, d) => sum + (d.amount8 || 0), 0)
                         ).toLocaleString("en-IN")}
                     </div>
+
+                </div>
+
+                <div className="mt-4">
+
+                    {/* ADD BUTTON */}
+                    <button
+                        onClick={addDeduction}
+                        className="flex items-center gap-1 text-sm text-indigo-600"
+                    >
+                        <PlusCircle size={16} /> Add Deduction
+                    </button>
+
 
                 </div>
 

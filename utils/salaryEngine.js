@@ -152,7 +152,8 @@ export function calculateSalary({
     Z: 10
   };
 
-  const hra7Percent = hra7PercentMap[city];
+  // If 8th CPC HRA is 0 → force 7th CPC HRA = 0
+  const hra7Percent = hraPercent8 === 0 ? 0 : hra7PercentMap[city];
 
   const hra7 = basic7 * hra7Percent / 100;
 
@@ -161,7 +162,7 @@ export function calculateSalary({
   const taBase7 = getTABase(level, basic7, tptaType);
 
   const ta7 = Math.round(
-    taBase7 * (1 + 0.58)
+    taBase7 * (1 + 0.60)
   );
 
   const otherAllow7 =
