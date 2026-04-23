@@ -13,7 +13,7 @@ export default function PensionCalculator({ mode = "8cpc" }) {
     fitment: 2.28,
     age: 60,
     commutation: 40,
-    dr7: 58,
+    dr7: 60,
     dr8: 0
   });
 

@@ -144,7 +144,7 @@ export function calculateSalary({
 
   const basic7 = basic;
 
-  const da7 = Math.round(basic7 * 0.58); // current DA
+  const da7 = Math.round(basic7 * 0.60); // current DA
 
   const hra7PercentMap = {
     X: 30,

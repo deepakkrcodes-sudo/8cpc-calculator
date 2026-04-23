@@ -1,6 +1,7 @@
 "use client";
 
 import { PlusCircle, MinusCircle } from "lucide-react";
+import SalarySummaryCard7 from "./SalarySummaryCard7";
 
 export default function SalaryBreakdown7({
   result,
@@ -220,6 +221,11 @@ export default function SalaryBreakdown7({
 
       </div>
 
+
+      <SalarySummaryCard7
+        result={result}
+        totalDeductions={totalDeductions}
+      />
     </div>
   );
 }

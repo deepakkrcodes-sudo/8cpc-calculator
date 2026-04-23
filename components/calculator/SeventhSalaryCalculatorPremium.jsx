@@ -13,7 +13,7 @@ import {
     Bus
 } from "lucide-react";
 
-export default function SalaryCalculator() {
+export default function SeventhSalaryCalculatorPremium() {
 
     const [level, setLevel] = useState("");
     const [basic, setBasic] = useState("");
@@ -88,7 +88,7 @@ export default function SalaryCalculator() {
         const salary = calculate7CPCSalary({
             level,
             basic: Number(basic),
-            daPercent: 58,
+            daPercent: 60,
             hraPercent,
             city,
             tptaType

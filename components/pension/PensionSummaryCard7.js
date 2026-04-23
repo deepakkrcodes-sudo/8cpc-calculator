@@ -1,6 +1,4 @@
 import { formatINR } from "@/utils/format";
-import { Wallet } from "lucide-react";
-
 
 export default function PensionSummaryCard7({ result }) {
 
@@ -55,4 +53,4 @@ export default function PensionSummaryCard7({ result }) {
 
   );
 
-}
+} 

@@ -91,7 +91,7 @@ export default function PensionInputs({
 
           <label className="text-sm text-gray-600 flex items-center gap-2 mb-1">
             <TrendingUp size={16} className="text-orange-500" />
-            Dearness Relief %
+            Dearness Relief % (8 CPC)
             
           </label>
 
