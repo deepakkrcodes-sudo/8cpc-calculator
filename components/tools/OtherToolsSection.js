@@ -8,7 +8,7 @@ export default function OtherToolsSection() {
         // 🔥 TOP PRIORITY
         {
             title: "8th CPC Arrear Calculator",
-            desc: "Most accurate arrear calculator with DA, increment & promotion",
+            desc: "8th CPC arrear calculator with DA, annual increment & promotion impact (2026 onwards)",
             icon: "💰",
             link: "/8th-cpc-arrear-calculator",
             highlight: true
@@ -18,36 +18,38 @@ export default function OtherToolsSection() {
         // 🔥 SECONDARY
         {
             title: "8th CPC Salary Calculator",
-            desc: "Estimate revised salary instantly",
+            desc: "Estimate your 8th CPC salary with fitment factor impact",
             icon: "🧮",
             link: "/",
-            highlight :true 
-        },
-        {
-            title: "8th CPC Pension Calculator",
-            desc: "Calculate pension with DR & commutation",
-            icon: "👴",
-            link: "/8th-cpc-pension-calculator",
-            highlight : true
-        },
-        {
-            title: "8th CPC Pension Arrear",
-            desc: "Estimate pension arrears accurately",
-            icon: "💵",
-            link: "/8th-cpc-pension-arrear",
-             highlight : true
+            highlight: true
         },
 
         {
-            title: "LTC Planner",
-            desc: "Plan LTC eligibility, block years & travel benefits",
+            title: "8th CPC Pension Calculator",
+            desc: "8th CPC pension calculator with DR & commutation (projected)",
+            icon: "👴",
+            link: "/8th-cpc-pension-calculator",
+            highlight: true
+        },
+
+        {
+            title: "8th CPC Pension Arrear",
+            desc: "Estimate 8th CPC pension arrears with fitment factor & DR progression (Jan 2026)",
+            icon: "💵",
+            link: "/8th-cpc-pension-arrear",
+            highlight: true
+        },
+
+        {
+            title: "LTC Planner & Guide",
+            desc: "LTC planner, eligibility check, block year details & travel benefits",
             icon: "✈️",
             link: "/ltc-planner",
             highlight: false
         },
         {
             title: "Pay Fixation Calculator",
-            desc: "Compare promotion vs increment impact",
+            desc: "Pay fixation calculator: Compare Promotion vs DNI option",
             icon: "📌",
             link: "/pay-fixation-calculator",
             highlight: false
@@ -56,25 +58,25 @@ export default function OtherToolsSection() {
         // 🔹 SUPPORT
         {
             title: "8th CPC Pay Matrix",
-            desc: "Projected salary levels & structure",
+            desc: "8th CPC pay matrix with levels, salary structure & fitment factor projections",
             icon: "📈",
             link: "/8th-cpc-pay-matrix"
         },
         {
             title: "7th CPC Salary Calculator",
-            desc: "Current salary under 7th CPC",
+            desc: "7th CPC salary calculator with DA, HRA & salary breakdown",
             icon: "📊",
             link: "/7th-cpc-calculator"
         },
         {
             title: "7th CPC Pension Calculator",
-            desc: "Current pension calculation",
-            icon: "📉",
+            desc: "7th CPC pension calculator with DR & commutation",
+            icon: "💼",
             link: "/7th-cpc-pension-calculator"
         },
         {
             title: "7th CPC Pay Matrix",
-            desc: "Complete pay level table",
+            desc: "7th CPC pay matrix with levels, pay scale & salary structure",
             icon: "📋",
             link: "/7th-cpc-pay-matrix"
         }
