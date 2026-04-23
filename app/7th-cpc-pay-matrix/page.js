@@ -13,7 +13,8 @@ export const metadata = {
     "7th pay commission salary levels",
     "level 1 to 18 salary table",
     "basic pay progression 7th CPC",
-    "central government pay matrix"
+    "central government pay matrix",
+    "7th cpc pay matrix pdf"
   ],
 
   alternates: {
@@ -106,11 +107,7 @@ export default function Page() {
 
       <div className="w-full max-w-full sm:max-w-[1200px] lg:max-w-[1100px] xl:max-w-[1000px] mx-auto px-2 sm:px-6 lg:px-8 py-6">
 
-        <div className="flex justify-start">
-          <div className="inline-flex gap-1 text-[11px] bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full font-medium">
-            7th CPC Pay Matrix
-          </div>
-        </div>
+        
         <div className="p-6 text-center space-y-4">
 
           <h1 className="text-xl md:text-2xl font-semibold tracking-tight md:whitespace-nowrap md:overflow-hidden md:text-ellipsis">

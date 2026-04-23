@@ -11,6 +11,7 @@ export const metadata = {
 
   keywords: [
     "8th CPC arrear calculator",
+    "8 cpc arrear calculator",
     "salary arrear calculator 2026",
     "8th pay commission arrears calculation",
     "DA arrear calculation",
@@ -130,14 +131,7 @@ export default function Page() {
 
       <div className="w-full max-w-full sm:max-w-[1200px] lg:max-w-[1100px] xl:max-w-[1000px] mx-auto px-2 sm:px-6 lg:px-8 py-6">
 
-        <div className="inline-flex items-center gap-2 text-[11px] bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full font-medium">
-          <span>8th CPC</span>
-          <span className="opacity-60">•</span>
-          <span>Arrear Calculator</span>
-          <span className="opacity-60">•</span>
-          <span>2026</span>
-        </div>
-
+       
 
         <div className="p-2 text-center space-y-4">
           <h1 className="text-xl md:text-2xl font-semibold tracking-tight md:whitespace-nowrap md:overflow-hidden md:text-ellipsis">

@@ -144,13 +144,8 @@ export default function SalaryCalculator() {
     return (
 
         <div className="space-y-6">
-
-            {/* Tag */}
-            <div className="inline-flex items-center gap-1 text-[11px] bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full font-medium">
-                8th CPC Salary Calculator
-            </div>
+          
             <div className="p-6 text-center space-y-4">
-
                 {/* Title */}
                 <h1 className="text-xl md:text-2xl font-semibold tracking-tight md:whitespace-nowrap md:overflow-hidden md:text-ellipsis">
                     <span className="bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">

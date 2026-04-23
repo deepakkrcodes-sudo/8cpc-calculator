@@ -11,6 +11,7 @@ export const metadata = {
     "pension arrears calculation 2026",
     "DR pension arrear calculator",
     "commuted pension arrears",
+    "8 cpc arrear calculator",
     "government pension arrears India"
   ],
 
@@ -92,16 +93,7 @@ export default function Page() {
         {/* HERO SECTION */}
         <div className="max-w-4xl mx-auto space-y-4">
 
-          {/* Badge (LEFT aligned) */}
-          <div className="flex justify-start">
-            <div className="inline-flex items-center gap-2 text-[11px] bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full font-medium">
-              <span>8th CPC</span>
-              <span className="opacity-60">•</span>
-              <span>Pension Arrears</span>
-              <span className="opacity-60">•</span>
-              <span>2026</span>
-            </div>
-          </div>
+        
 
           {/* Hero Center */}
           <div className="text-center space-y-4">

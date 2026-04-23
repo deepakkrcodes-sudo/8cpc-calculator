@@ -99,15 +99,6 @@ export default function Page() {
 
           <div className="w-full space-y-6">
 
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 text-[11px] bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full font-medium">
-              <span>8th CPC</span>
-              <span className="opacity-60">•</span>
-              <span>Pay Matrix</span>
-              <span className="opacity-60">•</span>
-              <span>Projected 2026</span>
-            </div>
-
             {/* HERO CONTENT */}
             <div className="text-center space-y-4">
 

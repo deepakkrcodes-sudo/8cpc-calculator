@@ -9,7 +9,7 @@ export const metadata = {
     "Calculate your expected salary under the 8th Pay Commission with fitment factor, DA, HRA and allowances. Compare 7th vs 8th CPC salary instantly.",
 
   keywords:
-    ["8th CPC calculator", "8th pay commission salary calculator", "7th vs 8th salary", "8th CPC fitment factor", "government salary calculator"],
+    ["8th CPC calculator", "8 cpc calculator", "fitment factor", "8th pay commission salary calculator", "7th vs 8th salary", "8th CPC fitment factor", "government salary calculator", "Central goverment Salary calculator"],
 
   alternates: {
     canonical: "https://8cpccalculator.com"
