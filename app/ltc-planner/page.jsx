@@ -20,15 +20,7 @@ export default function Page() {
       {/* HERO */}
       <div className="w-full max-w-[1400px] mx-auto space-y-4 mb-6">
 
-        <div className="flex justify-start">
-          <div className="inline-flex items-center gap-2 text-[11px] bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full font-medium">
-            <span>LTC Planner</span>
-            <span className="opacity-60">•</span>
-            <span>Govt Employees</span>
-            <span className="opacity-60">•</span>
-            <span>2026</span>
-          </div>
-        </div>
+        
 
         <div className="text-center space-y-4">
           <h1 className="text-xl md:text-2xl font-semibold tracking-tight">

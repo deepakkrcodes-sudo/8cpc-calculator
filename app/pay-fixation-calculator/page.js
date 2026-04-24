@@ -88,17 +88,6 @@ export default function Page() {
 
         <div className="max-w-4xl mx-auto space-y-4">
 
-          {/* Badge */}
-          <div className="flex justify-start">
-            <div className="inline-flex items-center gap-2 text-[11px] bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full font-medium">
-              <span>Pay Fixation</span>
-              <span className="opacity-60">•</span>
-              <span>Promotion vs Increment</span>
-              <span className="opacity-60">•</span>
-              <span>7th to 8th CPC</span>
-            </div>
-          </div>
-
           {/* Hero Center */}
           <div className="text-center space-y-4">
 

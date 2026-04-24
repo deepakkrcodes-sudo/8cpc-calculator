@@ -175,11 +175,8 @@ export default function Page() {
 
         </div>
 
-
-
         {/* CALCULATOR */}
         <SeventhSalaryCalculatorPremium />
-
 
         {/* OTHER TOOLS */}
         <div className="bg-gray-100 p-4 rounded-xl shadow-sm hover:shadow-md transition">
