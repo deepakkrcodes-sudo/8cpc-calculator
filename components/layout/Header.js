@@ -83,7 +83,7 @@ export default function Header() {
 
       {/* ✅ DESKTOP TOOLS PANEL */}
       {toolsOpen && (
-        <div className="fixed top-14 left-0 w-full bg-white border-b shadow-lg z-[9999]">
+        <div className="fixed top-14 left-0 w-full bg-gray-50/95 backdrop-blur-md border-b border-gray-200 shadow-xl z-[9999]">
           <div className="max-w-7xl mx-auto p-4 grid grid-cols-2 md:grid-cols-4 gap-3">
 
             {tools.map((tool, i) => (
@@ -91,9 +91,10 @@ export default function Header() {
                 key={i}
                 href={tool.link}
                 onClick={() => setToolsOpen(false)}
-                className={`p-3 rounded-lg border hover:bg-gray-50 ${
-                  tool.highlight ? "border-blue-200 bg-blue-50" : ""
-                }`}
+                className={`p-3 rounded-lg border transition ${tool.highlight
+                  ? "bg-indigo-100 text-indigo-700 border-indigo-200 hover:bg-indigo-100"
+                  : "bg-indigo-50 text-gray-700 border-gray-200 hover:bg-gray-50"
+                  }`}
               >
                 {tool.title}
               </Link>
@@ -114,9 +115,8 @@ export default function Header() {
 
         {/* Sidebar */}
         <div
-          className={`absolute top-0 right-0 h-full w-[85%] max-w-sm bg-white shadow-2xl transform transition-transform duration-300 ${
-            menuOpen ? "translate-x-0" : "translate-x-full"
-          }`}
+          className={`absolute top-0 right-0 h-full w-[85%] max-w-sm bg-gray-50 shadow-2xl transform transition-transform duration-300 ${menuOpen ? "translate-x-0" : "translate-x-full"
+            }`}
         >
 
           {/* Header */}
@@ -133,9 +133,8 @@ export default function Header() {
                 key={i}
                 href={tool.link}
                 onClick={closeMenu}
-                className={`block p-2 rounded-lg ${
-                  tool.highlight ? "bg-blue-50 font-medium" : ""
-                }`}
+                className={`block p-2 rounded-lg ${tool.highlight ? "bg-blue-50 font-medium" : ""
+                  }`}
               >
                 {tool.title}
               </Link>

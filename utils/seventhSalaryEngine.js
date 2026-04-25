@@ -23,20 +23,14 @@ export function calculate7CPCSalary({
 
   const taBase = getTABase(level, basicPay, tptaType);
 
-  let multiplier = 1;
-  if (
-    tptaType === "DOUBLE_HIGHER" ||
-    tptaType === "DOUBLE_OTHER" ||
-    tptaType === "PWD_HIGHER" ||
-    tptaType === "PWD_OTHER"
-  ) {
-    multiplier = 2;
-  }
+ 
 
   const ta =
     tptaType === "NONE"
       ? 0
-      : Math.round(taBase * multiplier * (1 + daPercent / 100));
+      : Math.round(taBase * (1 + daPercent / 100));
+
+  console.log("TAbase:"+ taBase   + "daTA"+ (daPercent));
 
   const gross = basicPay + da + hra + ta;
 

@@ -100,7 +100,7 @@ export default function Page() {
 
             <h1 className="text-xl md:text-2xl font-semibold tracking-tight">
               <span className="bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
-                8th CPC Pension Arrear Calculator (Accurate DR & Pension Estimation)
+                8th CPC Pension Arrear Calculator
               </span>
             </h1>
 

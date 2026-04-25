@@ -108,6 +108,18 @@ export default function SalaryBreakdown7({
             </div>
 
           ))}
+          
+        </div>
+
+        {/* TOTAL */}
+        <div className="grid grid-cols-2 pt-0 font-semibold text-blue-800">
+          <div>Gross Salary</div>
+          <div className="text-center">
+            ₹ {r.gross.toLocaleString("en-IN")}
+          </div>
+        </div>
+
+        <div className="mt-4">
 
           <button
             onClick={addAllowance}
@@ -116,14 +128,6 @@ export default function SalaryBreakdown7({
             <PlusCircle size={16} /> Add Allowance
           </button>
 
-        </div>
-
-        {/* TOTAL */}
-        <div className="grid grid-cols-2 pt-3 font-semibold text-blue-800">
-          <div>Gross Salary</div>
-          <div className="text-center">
-            ₹ {r.gross.toLocaleString("en-IN")}
-          </div>
         </div>
 
       </div>
@@ -199,12 +203,7 @@ export default function SalaryBreakdown7({
 
           ))}
 
-          <button
-            onClick={addDeduction}
-            className="flex items-center gap-1 text-indigo-600 text-sm"
-          >
-            <PlusCircle size={16} /> Add Deduction
-          </button>
+
 
         </div>
 
@@ -218,6 +217,17 @@ export default function SalaryBreakdown7({
           </div>
 
         </div>
+
+        <div className="mt-4">
+          <button
+            onClick={addDeduction}
+            className="flex items-center gap-1 text-indigo-600 text-sm"
+          >
+            <PlusCircle size={16} /> Add Deduction
+          </button>
+
+        </div>
+
 
       </div>
 

@@ -156,19 +156,19 @@ export default function Page() {
         }}
       />
 
-      <div className="w-full max-w-full sm:max-w-[1200px] lg:max-w-[1100px] xl:max-w-[1000px] mx-auto px-2 sm:px-6 lg:px-8 py-6">
+      <div className="w-full max-w-full sm:max-w-[1200px] lg:max-w-[1100px] xl:max-w-[1000px] mx-auto px-2 sm:px-6 lg:px-8 py-6 space-y-4">
 
         
         <div className="p-6 text-center space-y-4">
 
           <h1 className="text-xl md:text-2xl font-semibold tracking-tight md:whitespace-nowrap md:overflow-hidden md:text-ellipsis">
             <span className="bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
-              7th CPC Salary Calculator (In-Hand Pay, DA & HRA)
+              7th CPC Salary Calculator (In-Hand Pay, DA, TA & HRA)
             </span>
           </h1>
 
-          <p className="text-xs md:text-sm text-gray-600 mx-auto md:whitespace-nowrap md:overflow-hidden md:text-ellipsis">
-            Use this 7th CPC salary calculator to estimate your in-hand salary based on basic pay, DA, HRA, and other allowances. This tool is designed for central government employees and provides accurate salary breakdown instantly.
+          <p className="bg-gradient-to-r from-indigo-600 via-blue-600 to-indigo-400 bg-clip-text text-transparent whitespace-normal">
+            Use this 7th CPC salary calculator to estimate your in-hand salary based on basic pay, DA, TA, HRA, and other allowances. This tool is designed for central government employees and provides accurate salary breakdown instantly.
           </p>
 
           <div className="mx-auto h-[2px] w-40 md:w-56 lg:w-72 bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 rounded-full opacity-80"></div>

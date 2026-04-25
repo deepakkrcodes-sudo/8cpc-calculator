@@ -136,7 +136,7 @@ export default function Page() {
         <div className="p-2 text-center space-y-4">
           <h1 className="text-xl md:text-2xl font-semibold tracking-tight md:whitespace-nowrap md:overflow-hidden md:text-ellipsis">
             <span className="bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
-              8th CPC Salary Arrear Calculator
+              8th CPC Salary Arrear Calculator (Salaried)
             </span>
           </h1>
 
