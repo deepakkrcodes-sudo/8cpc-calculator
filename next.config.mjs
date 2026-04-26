@@ -1,9 +1,16 @@
 /** @type {import('next').NextConfig} */
 
-
 const nextConfig = {
   async redirects() {
     return [
+      // ✅ 1. OLD URL → NEW URL (MOST IMPORTANT)
+      {
+        source: '/arrear-calculator',
+        destination: '/8th-cpc-arrear-calculator',
+        permanent: true,
+      },
+
+      // ✅ 2. WWW → NON-WWW
       {
         source: '/:path*',
         has: [
@@ -20,7 +27,3 @@ const nextConfig = {
 };
 
 export default nextConfig;
-
-
-
-

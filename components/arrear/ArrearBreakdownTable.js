@@ -75,10 +75,10 @@ export default function ArrearBreakdownTable({ result }) {
       : result.totalNetArrear;
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
 
       {/* HEADER */}
-      <div className="flex items-center justify-between p-5 bg-gradient-to-r from-gray-50 to-white">
+      <div className="flex items-center justify-between p-3 sm:p-5 bg-gradient-to-r from-gray-50 to-white">
 
         {/* LEFT */}
         <div className="flex items-center gap-3">
@@ -86,8 +86,8 @@ export default function ArrearBreakdownTable({ result }) {
             <CalendarRange size={20} />
           </div>
           <div>
-            <h3 className="font-semibold text-gray-800 text-lg">Detailed Breakdown</h3>
-            <p className="text-xs text-gray-500">Period-wise arrear calculation</p>
+            <h3 className="font-semibold text-gray-800 text-sm sm:text-lg">Detailed Breakdown</h3>
+            <p className="text-[10px] sm:text-xs text-gray-500">Period-wise arrear calculation</p>
           </div>
         </div>
 
@@ -95,21 +95,28 @@ export default function ArrearBreakdownTable({ result }) {
         <div className="flex items-center gap-3">
 
           {/* ✅ PREMIUM TOGGLE */}
-          <div className="flex items-center bg-gray-100/70 backdrop-blur-sm rounded-full p-[2px] shadow-inner">
+          <div className="flex items-center bg-gray-100/60 backdrop-blur-sm rounded-full p-[1px] shadow-inner">
 
             {[
-              { label: "Half-Yearly", value: "HALF_YEARLY" },
-              { label: "Monthly", value: "MONTHLY" }
+              { value: "HALF_YEARLY" },
+              { value: "MONTHLY" }
             ].map((item) => (
               <button
                 key={item.value}
                 onClick={() => setViewMode(item.value)}
-                className={`px-3 py-[3px] text-[8px] sm:text-[10px] rounded-full transition-all duration-200 ${viewMode === item.value
+                className={`px-2 py-[1px] text-[10px] leading-none rounded-full transition-all duration-200 ${viewMode === item.value
                   ? "bg-white text-indigo-600 shadow-sm font-medium"
-                  : "text-gray-500 hover:text-gray-700"
+                  : "text-gray-500"
                   }`}
               >
-                {item.label}
+                <span>
+                  <span className="sm:hidden">
+                    {item.value === "HALF_YEARLY" ? "HY" : "M"}
+                  </span>
+                  <span className="hidden sm:inline">
+                    {item.value === "HALF_YEARLY" ? "Half-Yearly" : "Monthly"}
+                  </span>
+                </span>
               </button>
             ))}
 
@@ -132,18 +139,20 @@ export default function ArrearBreakdownTable({ result }) {
 
       {/* TABLE */}
       <div className={`${open ? "max-h-none opacity-100" : "max-h-0 opacity-0"} transition-all duration-300`}>
-        <div className="overflow-x-auto -mx-1 px-1 sm:mx-0 sm:px-1 pt-1">
-          <div className="border border-gray-100 rounded-xl overflow-hidden">
+        <div className="overflow-x-auto w-full pt-1">
+          <div className="border border-gray-100 rounded-xl overflow-x-auto">
 
-            <table className="w-full text-[11px] sm:text-sm min-w-[600px] sm:min-w-[700px] tabular-nums">
+            <table className="w-full text-[10px] sm:text-sm min-w-[600px] sm:min-w-[700px] tabular-nums">
 
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
-                  <th className="px-2 sm:px-3 py-2 text-left text-gray-600 text-[11px]">Period</th>
-                  <th className="px-2 sm:px-3 py-2 text-right text-gray-600 text-[11px]">7th CPC Net</th>
-                  <th className="px-2 sm:px-3 py-2 text-right text-gray-600 text-[11px]">8th CPC Net</th>
-                  <th className="px-2 sm:px-3 py-2 text-right text-gray-600 text-[11px]">Difference</th>
-                  <th className="px-2 sm:px-3 py-2 text-right text-gray-600 text-[11px]">
+                  <th className="px-1.5 sm:px-3 py-1.5 sm:py-2 text-left text-gray-600 text-[11px] whitespace-nowrap">
+                    {viewMode === "MONTHLY" ? "Month" : "Period"}
+                  </th>
+                  <th className="px-1.5 sm:px-3 py-1.5 sm:py-2 text-right text-gray-600 text-[11px] whitespace-nowrap">7th CPC Net</th>
+                  <th className="px-1.5 sm:px-3 py-1.5 sm:py-2 text-right text-gray-600 text-[11px] whitespace-nowrap">8th CPC Net</th>
+                  <th className="px-1.5 sm:px-3 py-1.5 sm:py-2 text-right text-gray-600 text-[11px] whitespace-nowrap">Difference</th>
+                  <th className="px-1.5 sm:px-3 py-1.5 sm:py-2 text-right text-gray-600 text-[11px] whitespace-nowrap">
                     {viewMode === "HALF_YEARLY" ? "Arrear (6 months)" : "Arrear"}
                   </th>
                 </tr>
@@ -171,7 +180,7 @@ export default function ArrearBreakdownTable({ result }) {
 
                   return (
                     <tr key={i} className="hover:bg-indigo-50/30">
-                      <td className="px-2 sm:px-3 py-2 whitespace-nowrap">
+                      <td className="px-1.5 sm:px-3 py-1.5 sm:py-2 whitespace-nowrap max-w-[110px] truncate">
                         <div className="flex items-center gap-2">
                           <span>
                             {viewMode === "MONTHLY"
@@ -186,12 +195,12 @@ export default function ArrearBreakdownTable({ result }) {
                         </div>
                       </td>
 
-                      <td className="px-2 sm:px-3 py-2 text-right">₹{formatINR(net7)}</td>
-                      <td className="px-2 sm:px-3 py-2 text-right">₹{formatINR(net8)}</td>
-                      <td className="px-2 sm:px-3 py-2 text-right text-indigo-600 font-medium">
+                      <td className="px-1.5 sm:px-3 py-1.5 sm:py-2 text-right">₹{formatINR(net7)}</td>
+                      <td className="px-1.5 sm:px-3 py-1.5 sm:py-2 text-right">₹{formatINR(net8)}</td>
+                      <td className="px-1.5 sm:px-3 py-1.5 sm:py-2 text-right text-indigo-600 font-medium">
                         ₹{formatINR(diff)}
                       </td>
-                      <td className="px-2 sm:px-3 py-2 text-right font-semibold text-emerald-600">
+                      <td className="px-1.5 sm:px-3 py-1.5 sm:py-2 text-right font-semibold text-emerald-600">
                         ₹{formatINR(arrear)}
                       </td>
                     </tr>

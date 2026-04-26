@@ -4,10 +4,10 @@ import OtherToolsSection from "@/components/tools/OtherToolsSection";
 
 
 export const metadata = {
-  title: "8th CPC Arrear Calculator 2026 – Most Accurate Salary Arrear Tool",
+  title: "8th CPC Arrear Calculator 2026",
 
   description:
-    "Calculate your 8th CPC arrears with promotions, increments, DA progression and fitment factor. India's most accurate arrear calculator for central government employees.",
+    "Estimate your 8th Pay Commission arrears with dynamic DA progression, fitment factors, annual increments, and promotion adjustments for accurate salary projections of central government employees.",
 
   keywords: [
     "8th CPC arrear calculator",
@@ -131,7 +131,7 @@ export default function Page() {
 
       <div className="w-full max-w-full sm:max-w-[1200px] lg:max-w-[1100px] xl:max-w-[1000px] mx-auto px-2 sm:px-6 lg:px-8 py-6">
 
-       
+
 
         <div className="p-2 text-center space-y-4">
           <h1 className="text-xl md:text-2xl font-semibold tracking-tight md:whitespace-nowrap md:overflow-hidden md:text-ellipsis">
