@@ -10,175 +10,218 @@ function formatPeriodLabel(period) {
   return `${month} ${year} - ${end}`;
 }
 
+function expandToMonthly(periods) {
+  const monthly = [];
+
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+  periods.forEach((p, idx) => {
+    const totalMonths = 6;
+
+    const net7 = p.net7 || 0;
+    const net8 = p.net8 || 0;
+    const diff = p.diff ?? (net8 - net7);
+
+    const mNet7 = net7 / totalMonths;
+    const mNet8 = net8 / totalMonths;
+    const mDiff = diff / totalMonths;
+
+    let startIndex;
+
+    const year = Number(p.period.split(" ")[1]);
+
+    if (idx % 2 === 0) {
+      // Jan block
+      startIndex = 0;
+    } else {
+      // Jul block
+      startIndex = 6;
+    }
+
+    for (let i = 0; i < totalMonths; i++) {
+      const mIdx = (startIndex + i) % 12;
+      const y = year + Math.floor((startIndex + i) / 12);
+
+      monthly.push({
+        period: `${monthNames[mIdx]} ${y}`,
+        net7: Math.round(mNet7),
+        net8: Math.round(mNet8),
+        diff: Math.round(mDiff),
+        netArrear: Math.round(mDiff),
+
+        isPromotion: i === 0 ? p.isPromotion : false,
+        isIncrement: i === 0 ? p.isIncrement : false,
+      });
+    }
+  });
+
+  return monthly;
+}
+
 export default function ArrearBreakdownTable({ result }) {
   const [open, setOpen] = useState(true);
+  const [viewMode, setViewMode] = useState("HALF_YEARLY");
 
   if (!result) return null;
 
+  const displayPeriods =
+    viewMode === "MONTHLY"
+      ? expandToMonthly(result.periods)
+      : result.periods;
+
+  const totalArrear =
+    viewMode === "MONTHLY"
+      ? displayPeriods.reduce((sum, p) => sum + p.netArrear, 0)
+      : result.totalNetArrear;
+
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-300">
-      
-      {/* Header Toggle */}
-      <button
-        onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between p-5 bg-gradient-to-r from-gray-50 to-white hover:bg-gray-50 transition-colors"
-      >
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+
+      {/* HEADER */}
+      <div className="flex items-center justify-between p-5 bg-gradient-to-r from-gray-50 to-white">
+
+        {/* LEFT */}
         <div className="flex items-center gap-3">
           <div className="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
             <CalendarRange size={20} />
           </div>
-          <div className="text-left">
+          <div>
             <h3 className="font-semibold text-gray-800 text-lg">Detailed Breakdown</h3>
-            <p className="text-xs text-gray-500 font-medium">
-              Period-wise arrear calculation
-            </p>
+            <p className="text-xs text-gray-500">Period-wise arrear calculation</p>
           </div>
         </div>
 
-        <div className="text-gray-400 bg-white shadow-sm border border-gray-100 p-1.5 rounded-full">
-          {open ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-        </div>
-      </button>
+        {/* RIGHT */}
+        <div className="flex items-center gap-3">
 
-      <div className="text-[10px] text-gray-400 px-2 pb-1 sm:hidden">
-        ← Scroll horizontally to view full table →
+          {/* ✅ PREMIUM TOGGLE */}
+          <div className="flex items-center bg-gray-100/70 backdrop-blur-sm rounded-full p-[2px] shadow-inner">
+
+            {[
+              { label: "Half-Yearly", value: "HALF_YEARLY" },
+              { label: "Monthly", value: "MONTHLY" }
+            ].map((item) => (
+              <button
+                key={item.value}
+                onClick={() => setViewMode(item.value)}
+                className={`px-3 py-[3px] text-[8px] sm:text-[10px] rounded-full transition-all duration-200 ${viewMode === item.value
+                  ? "bg-white text-indigo-600 shadow-sm font-medium"
+                  : "text-gray-500 hover:text-gray-700"
+                  }`}
+              >
+                {item.label}
+              </button>
+            ))}
+
+          </div>
+
+          {/* COLLAPSE BUTTON */}
+          <button
+            onClick={() => setOpen(!open)}
+            className="text-gray-400 bg-white shadow-sm border border-gray-100 p-1.5 rounded-full"
+          >
+            {open ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+          </button>
+        </div>
       </div>
 
-      {/* Table Content */}
-      <div
-        className={`transition-all duration-300 ease-in-out ${
-          open ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
-        }`}
-      >
-        <div className="overflow-x-auto -mx-2 sm:mx-0 px-2 sm:px-5 pt-2">
+      {/* MOBILE HINT */}
+      <div className="text-[10px] text-gray-400 px-3 pb-1 sm:hidden text-center">
+        ← Swipe to view →
+      </div>
+
+      {/* TABLE */}
+      <div className={`${open ? "max-h-none opacity-100" : "max-h-0 opacity-0"} transition-all duration-300`}>
+        <div className="overflow-x-auto -mx-1 px-1 sm:mx-0 sm:px-1 pt-1">
           <div className="border border-gray-100 rounded-xl overflow-hidden">
 
-            <table className="w-full text-xs sm:text-sm min-w-[900px]">
-              
-              {/* HEADER */}
-              <thead className="bg-gray-50/80 border-b border-gray-100">
+            <table className="w-full text-[11px] sm:text-sm min-w-[600px] sm:min-w-[700px] tabular-nums">
+
+              <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
-                  <th className="py-2 px-2 sm:px-4 text-left font-semibold text-gray-600 uppercase text-[11px]">
-                    Period
-                  </th>
-                  <th className="py-2 px-2 sm:px-4 text-center font-semibold text-gray-600 uppercase text-[11px]">
-                    Duration
-                  </th>
-                  <th className="py-2 px-2 sm:px-4 text-right font-semibold text-gray-600 uppercase text-[11px]">
-                    7th CPC Net
-                  </th>
-                  <th className="py-2 px-2 sm:px-4 text-right font-semibold text-gray-600 uppercase text-[11px]">
-                    8th CPC Net
-                  </th>
-                  <th className="py-2 px-2 sm:px-4 text-right font-semibold text-gray-600 uppercase text-[11px]">
-                    Difference
-                  </th>
-                  <th className="py-2 px-2 sm:px-4 text-right font-semibold text-gray-600 uppercase text-[11px]">
-                    Arrear
+                  <th className="px-2 sm:px-3 py-2 text-left text-gray-600 text-[11px]">Period</th>
+                  <th className="px-2 sm:px-3 py-2 text-right text-gray-600 text-[11px]">7th CPC Net</th>
+                  <th className="px-2 sm:px-3 py-2 text-right text-gray-600 text-[11px]">8th CPC Net</th>
+                  <th className="px-2 sm:px-3 py-2 text-right text-gray-600 text-[11px]">Difference</th>
+                  <th className="px-2 sm:px-3 py-2 text-right text-gray-600 text-[11px]">
+                    {viewMode === "HALF_YEARLY" ? "Arrear (6 months)" : "Arrear"}
                   </th>
                 </tr>
               </thead>
 
-              {/* BODY */}
-              <tbody className="divide-y divide-gray-50">
-                {result.periods.map((p, i) => {
-                  const net7 = p.net7 ?? 0;
-                  const net8 = p.net8 ?? 0;
-                  const diff = p.diff ?? (net8 - net7);
-                  const months = p.eligibleMonths ?? 6;
-                  const arrear = p.netArrear ?? diff * months;
+              <tbody className="divide-y divide-gray-100">
+                {displayPeriods.map((p, i) => {
+                  let net7 = p.net7 ?? 0;
+                  let net8 = p.net8 ?? 0;
+                  let diff = p.diff ?? (net8 - net7);
+
+                  if (viewMode === "HALF_YEARLY") {
+                    const months = 6;
+
+                    // 👉 convert to monthly for display
+                    net7 = net7 / months;
+                    net8 = net8 / months;
+                    diff = diff / months;
+                  }
+
+                  const arrear =
+                    viewMode === "MONTHLY"
+                      ? p.netArrear ?? diff
+                      : (p.diff ?? (p.net8 - p.net7)); // 👉 full 6-month arrear
 
                   return (
-                    <tr
-                      key={i}
-                      className="hover:bg-indigo-50/30 transition-colors group"
-                    >
-                      {/* Period */}
-                      <td className="py-2 px-2 sm:px-4 font-medium text-gray-700 whitespace-nowrap">
+                    <tr key={i} className="hover:bg-indigo-50/30">
+                      <td className="px-2 sm:px-3 py-2 whitespace-nowrap">
                         <div className="flex items-center gap-2">
-                          <span>{formatPeriodLabel(p.period)}</span>
+                          <span>
+                            {viewMode === "MONTHLY"
+                              ? p.period
+                              : formatPeriodLabel(p.period)}
+                          </span>
 
-                          <div className="flex items-center gap-1.5">
-                            {p.isPromotion && (
-                              <div className="group/tt relative flex items-center justify-center">
-                                <div className="w-2.5 h-2.5 bg-violet-500 rounded-full" />
-                                <span className="absolute bottom-full mb-1 hidden group-hover/tt:block whitespace-nowrap bg-gray-800 text-white text-[10px] px-2 py-0.5 rounded-md">
-                                  Promotion
-                                </span>
-                              </div>
-                            )}
-
-                            {p.isIncrement && (
-                              <div className="group/tt relative flex items-center justify-center">
-                                <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full" />
-                                <span className="absolute bottom-full mb-1 hidden group-hover/tt:block whitespace-nowrap bg-gray-800 text-white text-[10px] px-2 py-0.5 rounded-md">
-                                  Increment
-                                </span>
-                              </div>
-                            )}
+                          <div className="flex gap-1">
+                            {p.isPromotion && <div className="w-2.5 h-2.5 bg-violet-500 rounded-full" />}
+                            {p.isIncrement && <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full" />}
                           </div>
                         </div>
                       </td>
 
-                      {/* Duration */}
-                      <td className="py-3 px-4 text-center text-gray-600 font-medium">
-                        {months} <span className="text-xs text-gray-400">mo</span>
+                      <td className="px-2 sm:px-3 py-2 text-right">₹{formatINR(net7)}</td>
+                      <td className="px-2 sm:px-3 py-2 text-right">₹{formatINR(net8)}</td>
+                      <td className="px-2 sm:px-3 py-2 text-right text-indigo-600 font-medium">
+                        ₹{formatINR(diff)}
                       </td>
-
-                      {/* 7th Net */}
-                      <td className="py-3 px-4 text-right whitespace-nowrap">
-                        ₹{formatINR(net7)}
-                      </td>
-
-                      {/* 8th Net */}
-                      <td className="py-3 px-4 text-right whitespace-nowrap">
-                        ₹{formatINR(net8)}
-                      </td>
-
-                      {/* Difference */}
-                      <td className="py-3 px-4 text-right whitespace-nowrap">
-                        <span className="text-indigo-600 font-medium">
-                          ₹{formatINR(diff)}
-                        </span>
-                      </td>
-
-                      {/* Arrear */}
-                      <td className="py-3 px-4 text-right whitespace-nowrap">
-                        <span className="font-semibold text-emerald-600">
-                          ₹{formatINR(arrear)}
-                        </span>
+                      <td className="px-2 sm:px-3 py-2 text-right font-semibold text-emerald-600">
+                        ₹{formatINR(arrear)}
                       </td>
                     </tr>
                   );
                 })}
 
                 {/* TOTAL */}
-                <tr className="bg-emerald-50/50 border-t-2 border-emerald-100">
-                  <td colSpan={5} className="py-3 px-2 sm:px-4 text-right font-bold text-gray-700">
-                    Total Arrear Accumulation
+                <tr className="bg-emerald-50 border-t-2 border-emerald-200">
+                  <td colSpan={4} className="px-3 py-3 text-right font-semibold text-gray-700">
+                    Total Arrear
                   </td>
-                  <td className="py-3 px-2 sm:px-4 text-right whitespace-nowrap">
-                    <div className="flex items-center justify-end gap-1">
-                      <IndianRupee size={16} className="text-emerald-600" />
-                      <span className="font-bold text-lg text-emerald-700">
-                        {formatINR(result.totalNetArrear ?? 0)}
-                      </span>
-                    </div>
+                  <td className="px-3 py-3 text-right">
+                    <span className="font-bold text-lg text-emerald-700">
+                      ₹{formatINR(totalArrear)}
+                    </span>
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
 
-          {/* Legend */}
-          <div className="flex items-center justify-end gap-4 mt-4 px-2">
+          {/* LEGEND */}
+          <div className="flex justify-end gap-4 mt-4 px-2">
             <div className="flex items-center gap-2 text-xs text-gray-500">
               <div className="w-2.5 h-2.5 bg-violet-500 rounded-full" />
               Promotion
             </div>
             <div className="flex items-center gap-2 text-xs text-gray-500">
               <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full" />
-              Annual Increment
+              Increment
             </div>
           </div>
         </div>

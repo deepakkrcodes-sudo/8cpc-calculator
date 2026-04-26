@@ -355,7 +355,7 @@ export default function ArrearCalculatorPage() {
           <div>
             <label className="flex items-center gap-2 text-sm text-gray-700">
               <CalendarClock size={15} className="text-indigo-500" />
-              Joining Timeline
+              Service Joining Date
             </label>
             <div className="mt-2 grid gap-3 sm:grid-cols-2">
               {joiningOptions.map((option) => (
@@ -395,7 +395,7 @@ export default function ArrearCalculatorPage() {
         <div>
           <label htmlFor="arrear-implementation-period" className="flex items-center gap-2 text-sm text-gray-700">
             <Clock size={15} className="text-blue-500" />
-            Tentative Implementation
+            8 CPC Tentative Implementation Timeline
           </label>
           <select
             id="arrear-implementation-period"
@@ -437,14 +437,14 @@ export default function ArrearCalculatorPage() {
                   type="button"
                   onClick={() => applyDAPreset(preset.key)}
                   className={`rounded-md border transition font-medium leading-none
-          px-1.5 py-[2px] text-[10px]
-          sm:px-2.5 sm:py-1 sm:text-xs
+                  px-1.5 py-[2px] text-[10px]
+                  sm:px-2.5 sm:py-1 sm:text-xs
 
-          ${isActive
+                  ${isActive
                       ? "bg-indigo-600 text-white border-indigo-600 shadow-sm"
                       : "bg-indigo-50 text-indigo-700 border-indigo-200 hover:bg-indigo-100"
                     }
-        `}
+                 `}
                 >
                   {preset.label}
                 </button>
