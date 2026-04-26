@@ -142,17 +142,17 @@ export default function ArrearBreakdownTable({ result }) {
         <div className="overflow-x-auto w-full pt-1">
           <div className="border border-gray-100 rounded-xl overflow-x-auto">
 
-            <table className="w-full text-[10px] sm:text-sm min-w-[600px] sm:min-w-[700px] tabular-nums">
+            <table className="w-full text-[10px] sm:text-sm min-w-[500px] sm:min-w-[700px] tabular-nums">
 
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
-                  <th className="px-1.5 sm:px-3 py-1.5 sm:py-2 text-left text-gray-600 text-[11px] whitespace-nowrap">
+                  <th className="px-1 sm:px-3 py-1.5 sm:py-2 text-left text-gray-600 text-[11px] whitespace-nowrap">
                     {viewMode === "MONTHLY" ? "Month" : "Period"}
                   </th>
-                  <th className="px-1.5 sm:px-3 py-1.5 sm:py-2 text-right text-gray-600 text-[11px] whitespace-nowrap">7th CPC Net</th>
-                  <th className="px-1.5 sm:px-3 py-1.5 sm:py-2 text-right text-gray-600 text-[11px] whitespace-nowrap">8th CPC Net</th>
-                  <th className="px-1.5 sm:px-3 py-1.5 sm:py-2 text-right text-gray-600 text-[11px] whitespace-nowrap">Difference</th>
-                  <th className="px-1.5 sm:px-3 py-1.5 sm:py-2 text-right text-gray-600 text-[11px] whitespace-nowrap">
+                  <th className="px-1 sm:px-3 py-1.5 sm:py-2 text-right text-gray-600 text-[11px] whitespace-nowrap">7th CPC Net</th>
+                  <th className="px-1 sm:px-3 py-1.5 sm:py-2 text-right text-gray-600 text-[11px] whitespace-nowrap">8th CPC Net</th>
+                  <th className="px-1 sm:px-3 py-1.5 sm:py-2 text-right text-gray-600 text-[11px] whitespace-nowrap">Difference</th>
+                  <th className="px-1 sm:px-3 py-1.5 sm:py-2 text-right text-gray-600 text-[11px] whitespace-nowrap">
                     {viewMode === "HALF_YEARLY" ? "Arrear (6 months)" : "Arrear"}
                   </th>
                 </tr>
@@ -180,7 +180,13 @@ export default function ArrearBreakdownTable({ result }) {
 
                   return (
                     <tr key={i} className="hover:bg-indigo-50/30">
-                      <td className="px-1.5 sm:px-3 py-1.5 sm:py-2 whitespace-nowrap max-w-[110px] truncate">
+                      <td
+                        title={viewMode === "MONTHLY" ? p.period : formatPeriodLabel(p.period)}
+                        className={`px-1 sm:px-3 py-1.5 sm:py-2 whitespace-nowrap text-[11px] sm:text-sm truncate ${viewMode === "HALF_YEARLY"
+                            ? "max-w-[95px] sm:max-w-none"
+                            : "max-w-[45px] sm:max-w-none"
+                          }`}
+                      >
                         <div className="flex items-center gap-2">
                           <span>
                             {viewMode === "MONTHLY"
@@ -195,12 +201,12 @@ export default function ArrearBreakdownTable({ result }) {
                         </div>
                       </td>
 
-                      <td className="px-1.5 sm:px-3 py-1.5 sm:py-2 text-right">₹{formatINR(net7)}</td>
-                      <td className="px-1.5 sm:px-3 py-1.5 sm:py-2 text-right">₹{formatINR(net8)}</td>
-                      <td className="px-1.5 sm:px-3 py-1.5 sm:py-2 text-right text-indigo-600 font-medium">
+                      <td className="px-1 sm:px-3 py-1.5 sm:py-2 text-right text-[11px] sm:text-sm">₹{formatINR(net7)}</td>
+                      <td className="px-1 sm:px-3 py-1.5 sm:py-2 text-right text-[11px] sm:text-sm">₹{formatINR(net8)}</td>
+                      <td className="px-1 sm:px-3 py-1.5 sm:py-2 text-right text-[11px] sm:text-sm text-indigo-600 font-medium">
                         ₹{formatINR(diff)}
                       </td>
-                      <td className="px-1.5 sm:px-3 py-1.5 sm:py-2 text-right font-semibold text-emerald-600">
+                      <td className="px-1 sm:px-3 py-1.5 sm:py-2 text-right text-[11px] sm:text-sm font-semibold text-emerald-600">
                         ₹{formatINR(arrear)}
                       </td>
                     </tr>
@@ -209,10 +215,10 @@ export default function ArrearBreakdownTable({ result }) {
 
                 {/* TOTAL */}
                 <tr className="bg-emerald-50 border-t-2 border-emerald-200">
-                  <td colSpan={4} className="px-3 py-3 text-right font-semibold text-gray-700">
+                  <td colSpan={4} className="px-1 py-3 text-right font-semibold text-gray-700">
                     Total Arrear
                   </td>
-                  <td className="px-3 py-3 text-right">
+                  <td className="px-1 py-3 text-right">
                     <span className="font-bold text-lg text-emerald-700">
                       ₹{formatINR(totalArrear)}
                     </span>
