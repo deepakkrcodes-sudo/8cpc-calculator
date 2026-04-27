@@ -16,20 +16,7 @@ export const metadata = {
   }
 };
 
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: FAQ_DATA.flatMap(section =>
-    section.faqs.map(faq => ({
-      "@type": "Question",
-      name: faq.q,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: faq.a,
-      },
-    }))
-  ),
-};
+
 
 export default function Page() {
   return (
