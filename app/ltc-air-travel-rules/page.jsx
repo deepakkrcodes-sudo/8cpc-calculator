@@ -22,34 +22,15 @@ export const metadata = {
 const faqSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: (FAQ_DATA || []).flatMap(section => {
-
-    // CASE 1: section has faqs
-    if (section.faqs) {
-      return section.faqs.map(faq => ({
-        "@type": "Question",
-        name: faq.q,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: faq.a,
-        },
-      }));
+  mainEntity: FAQ_DATA.map(faq => ({
+    "@type": "Question",
+    name: faq.q,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.a
     }
+  }))
 
-    // CASE 2: flat array (q,a directly)
-    if (section.q && section.a) {
-      return [{
-        "@type": "Question",
-        name: section.q,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: section.a,
-        },
-      }];
-    }
-
-    return [];
-  }),
 };
 
 export default function Page() {
