@@ -1,72 +1,70 @@
 export default function TravelCard({ data }) {
     if (!data) return null;
 
-    const raw = data.payLevel;
+    const raw = data?.payLevel || data?.level;
 
-    const payLevel =
-        typeof raw === "string"
-            ? Number(raw.replace("L", ""))
-            : Number(raw);
+    let payLevel = null;
 
-    if (!payLevel) {
-        console.warn("Invalid payLevel:", raw);
+    if (typeof raw === "number") {
+        payLevel = raw;
+    } else if (typeof raw === "string") {
+        const match = raw.match(/\d+/); // extract number safely
+        payLevel = match ? Number(match[0]) : null;
     }
-
-
-
-    // =========================
-    // AIR ELIGIBILITY (FIXED)
-    // =========================
-    let airAllowed = false;
-    let airClass = "Not Eligible";
-
-    if (payLevel >= 14) {
-        airAllowed = true;
-        airClass = "Business / Club Class";
-    } else if (payLevel >= 6 && payLevel <= 13) {
-        airAllowed = true;
-        airClass = "Economy Class";
-    }
+   
 
     // =========================
-    // TRAIN (FIXED STRICT RANGE)
+    // ✈️ AIR (CORRECTED)
+    // =========================
+    const airAllowed = payLevel >= 9;
+    const airClass = airAllowed ? "Economy (LTC-80 Fare)" : "Not Eligible";
+
+    // =========================
+    // 🚆 TRAIN (CORRECTED)
     // =========================
     let trainClass = "";
 
     if (payLevel >= 12) {
         trainClass = "AC First Class";
-    } else if (payLevel >= 6 && payLevel <= 11) {
+    } else if (payLevel >= 9) {
         trainClass = "AC 2 Tier";
+    } else if (payLevel >= 6) {
+        trainClass = "AC 2 / AC 3 / Chair Car";
     } else {
-        trainClass = "AC 3 Tier / AC Chair Car";
+        trainClass = "Sleeper / AC 3 / Chair Car";
     }
 
     // =========================
-    // SHIP (FIXED STRICT RANGE)
+    // 🛳 SHIP (SIMPLIFIED CORRECT)
     // =========================
     let shipClass = "";
 
-    if (payLevel >= 9) {
-        shipClass = "Highest Class";
-    } else if (payLevel >= 6 && payLevel <= 8) {
-        shipClass = "Lower Class";
-    } else if (payLevel >= 4 && payLevel <= 5) {
-        shipClass = "Middle Class";
+    if (payLevel >= 10) {
+        shipClass = "Deluxe Class";
+    } else if (payLevel >= 6) {
+        shipClass = "First / Cabin Class";
     } else {
-        shipClass = "Lowest Class";
+        shipClass = "As per TA Rules";
     }
 
     // =========================
-    // SPECIAL AIR (ONLY ≤9)
+    // 🚌 ROAD (NEW)
     // =========================
-    const showSpecialAir = payLevel <= 9;
+    const roadClass = "Public Transport / 200 km Private Limit";
+
+    // =========================
+    // 🌍 SPECIAL AIR
+    // =========================
+    const showSpecialAir = payLevel <= 8;
 
     return (
         <div className="bg-white rounded-xl shadow-sm p-5 space-y-5">
 
             {/* HEADER */}
             <div className="border-b pb-3 flex items-center gap-2">
-                ✈️ <h2 className="text-lg font-semibold">Travel Eligibility</h2>
+                ✈️ <h2 className="text-lg font-semibold">
+                    Your LTC Travel Entitlement
+                </h2>
             </div>
 
             {/* TABLE */}
@@ -74,15 +72,16 @@ export default function TravelCard({ data }) {
                 <div className="grid grid-cols-3 text-xs font-semibold text-gray-600 mb-2">
                     <div>Mode</div>
                     <div className="text-center">Allowed</div>
-                    <div className="text-right">Class</div>
+                    <div className="text-right">Class / Limit</div>
                 </div>
 
                 <Row mode="Train" allowed={true} className={trainClass} />
                 <Row mode="Air" allowed={airAllowed} className={airClass} />
+                <Row mode="Road" allowed={true} className={roadClass} />
                 <Row mode="Ship" allowed={true} className={shipClass} />
             </div>
 
-            {/* SPECIAL AIR ONLY ≤9 */}
+            {/* SPECIAL AIR */}
             {showSpecialAir && (
                 <div className="bg-blue-50/50 rounded-lg p-4">
                     <div className="text-sm font-semibold text-blue-700 mb-2">
@@ -95,23 +94,25 @@ export default function TravelCard({ data }) {
                         <li>Andaman & Nicobar</li>
                     </ul>
 
-
+                    <div className="text-xs text-gray-500 mt-2">
+                        Air travel allowed even below Level 9 for these sectors
+                    </div>
                 </div>
             )}
 
-            {/* TRAVEL INSIGHT */}
+            {/* TRAVEL INSIGHT (SMARTER) */}
             <div className="bg-green-50/60 rounded-lg p-5 text-center">
 
-                <div className="text-sm text-gray-600">💡 Travel Insight</div>
+                <div className="text-sm text-gray-600">💡 Smart Insight</div>
 
                 <div className="text-lg font-semibold text-green-700">
-                    {payLevel >= 14
-                        ? "You are eligible for Business Class air travel under LTC"
-                        : payLevel >= 10
-                            ? "You can comfortably use Air LTC for most destinations"
+                    {payLevel >= 12
+                        ? "Maximize LTC with premium rail or air routes"
+                        : payLevel >= 9
+                            ? "Air travel available — choose shortest LTC-80 routes"
                             : payLevel >= 6
-                                ? "Use Air LTC smartly for long-distance journeys"
-                                : "Use special LTC schemes (NER/J&K) to access air travel"}
+                                ? "Rail is primary — use special air routes strategically"
+                                : "Use NER/J&K LTC schemes to unlock air travel"}
                 </div>
 
             </div>

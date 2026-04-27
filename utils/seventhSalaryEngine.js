@@ -30,7 +30,6 @@ export function calculate7CPCSalary({
       ? 0
       : Math.round(taBase * (1 + daPercent / 100));
 
-  console.log("TAbase:"+ taBase   + "daTA"+ (daPercent));
 
   const gross = basicPay + da + hra + ta;
 

@@ -4,8 +4,7 @@ import { useState } from "react";
 import LTCForm from "@/components/ltc/LTCForm";
 import ResultSection from "@/components/ltc/ResultSection";
 import { calculateLTC } from "@/utils/ltc/calculateLTC";
-import FAQSection from "@/components/ltc/FAQSection";
-import OtherToolsSection from "@/components/tools/OtherToolsSection";
+
 import { FAQ_DATA } from "@/utils/ltc/faqData";
 
 export default function LTCPageClient() {
@@ -41,6 +40,8 @@ export default function LTCPageClient() {
     description: "LTC planner for central government employees.",
   };
 
+  
+
   return (
     <>
       <script
@@ -57,11 +58,9 @@ export default function LTCPageClient() {
 
       {result && <ResultSection result={result} />}
 
-      <FAQSection />
+      
 
-      <div className="bg-gray-100 p-4 rounded-xl shadow-sm">
-        <OtherToolsSection />
-      </div>
+      
     </>
   );
 }

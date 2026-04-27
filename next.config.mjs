@@ -3,21 +3,24 @@
 const nextConfig = {
   async redirects() {
     return [
-      // ✅ 1. OLD URL → NEW URL (MOST IMPORTANT)
+      // =============================
+      // OLD URL → NEW URL (SEO SAFE)
+      // =============================
 
       {
         source: '/8th-cpc-arrear',
         destination: '/8th-cpc-arrear-calculator',
         permanent: true,
       },
-
       {
         source: '/arrear-calculator',
         destination: '/8th-cpc-arrear-calculator',
         permanent: true,
       },
 
-      // ✅ 2. WWW → NON-WWW
+      // =============================
+      // WWW → NON-WWW (IMPORTANT)
+      // =============================
       {
         source: '/:path*',
         has: [
@@ -28,6 +31,20 @@ const nextConfig = {
         ],
         destination: 'https://8cpccalculator.com/:path*',
         permanent: true,
+      },
+    ];
+  },
+
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'X-Robots-Tag',
+            value: 'index, follow',
+          },
+        ],
       },
     ];
   },

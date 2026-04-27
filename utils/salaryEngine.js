@@ -194,13 +194,7 @@ export function calculateSalary({
   const otherDed7 =
     (otherDeductions || []).reduce((sum, d) => sum + (d.amount7 || 0), 0);
 
-  console.log({
-    gross7,
-    nps7,
-    cghs7,
-    tax7,
-    otherDed7
-  });
+ 
 
   const net7 =
     gross7 -

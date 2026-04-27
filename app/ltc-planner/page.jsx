@@ -1,4 +1,6 @@
 import LTCPageClient from "./LTCPageClient";
+import FAQSection from "@/components/ltc/FAQSection";
+import OtherToolsSection from "@/components/tools/OtherToolsSection";
 
 export const metadata = {
   title: "LTC Planner 2026 – Leave Travel Concession Calculator for Govt Employees",
@@ -12,6 +14,21 @@ export const metadata = {
   alternates: {
     canonical: "https://8cpccalculator.com/ltc-planner"
   }
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: FAQ_DATA.flatMap(section =>
+    section.faqs.map(faq => ({
+      "@type": "Question",
+      name: faq.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.a,
+      },
+    }))
+  ),
 };
 
 export default function Page() {
@@ -44,6 +61,12 @@ export default function Page() {
 
       {/* CLIENT PART */}
       <LTCPageClient />
+
+      <FAQSection />
+
+      <div className="bg-gray-100 p-4 rounded-xl shadow-sm">
+        <OtherToolsSection />
+      </div>
 
     </div>
   );
