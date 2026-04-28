@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "lucide-react": "^1.11.0",
-    "next": "16.1.6",
+    "next": "16.2.4",
     "next-seo": "^7.2.0",
     "react": "19.2.3",
     "react-datepicker": "^9.1.0",
