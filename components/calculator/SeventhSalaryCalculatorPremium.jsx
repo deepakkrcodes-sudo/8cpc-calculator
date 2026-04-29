@@ -214,10 +214,10 @@ export default function SeventhSalaryCalculatorPremium() {
                             value={tptaType}
                             onChange={(e) => setTptaType(e.target.value)}
                         >
-                            <option value="HIGHER">Higher TPTA</option>
-                            <option value="OTHER">Other City</option>
-                            <option value="PWD_HIGHER">2x Higher TPTA (for PwD)</option>
-                            <option value="PWD_OTHER">2x Other City (for PwD)</option>
+                            <option value="HIGHER">City Class X</option>
+                            <option value="OTHER">City Class Y & Z</option>
+                            <option value="PWD_HIGHER">2x City Class X (for PwD)</option>
+                            <option value="PWD_OTHER">2x City Class Y & Z (for PwD)</option>
                             <option value="NONE">None</option>
                         </select>
                     </div>

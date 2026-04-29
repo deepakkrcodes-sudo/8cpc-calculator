@@ -183,8 +183,8 @@ export default function FixationInputs({ form, setForm, onCalculate }) {
                 value={form.tptaType}
                 onChange={(e) => update("tptaType", e.target.value)}
               >
-                <option value="HIGHER">Higher TPTA City</option>
-                <option value="OTHER">Other City</option>
+                <option value="HIGHER">City Class X</option>
+                <option value="OTHER">City Class Y & Z</option>
                 <option value="NONE">None</option>
               </select>
             </div>

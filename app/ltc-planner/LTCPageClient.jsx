@@ -15,44 +15,13 @@ export default function LTCPageClient() {
     setResult(output);
   };
 
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: FAQ_DATA.flatMap(section =>
-      section.faqs.map(faq => ({
-        "@type": "Question",
-        name: faq.q,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: faq.a,
-        },
-      }))
-    ),
-  };
-
-  const webAppSchema = {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    name: "LTC Planner",
-    url: "https://8cpccalculator.com/ltc-planner",
-    applicationCategory: "FinanceApplication",
-    operatingSystem: "All",
-    description: "LTC planner for central government employees.",
-  };
+  
 
   
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
-
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppSchema) }}
-      />
+      
 
       <LTCForm onCalculate={handleCalculate} onChange={() => setResult(null)} />
 
