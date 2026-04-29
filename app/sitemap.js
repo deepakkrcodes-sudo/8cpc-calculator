@@ -10,7 +10,7 @@ export default function sitemap() {
     { url: "https://8cpccalculator.com/8th-cpc-pension-arrear" },
     { url: "https://8cpccalculator.com/pay-fixation-calculator" },
     { url: "https://8cpccalculator.com/ltc-air-travel-rules" },
-    { url: "https://8cpccalculator.com/ltc-entitlement" },
+    { url: "https://8cpccalculator.com/ltc-entigittlement" },
     { url: "https://8cpccalculator.com/ltc-faq" },
     { url: "https://8cpccalculator.com/ltc-planner" },
     { url: "https://8cpccalculator.com/ltc-rules-central-government" },

@@ -316,9 +316,9 @@ export default function ArrearCalculatorPage() {
               onChange={(e) => setTptaType(e.target.value)}
             >
               <option value="HIGHER">Higher TPTA (X City)</option>
-              <option value="OTHER">Other City </option>
-              <option value="PWD_HIGHER">2x Higher TPTA (for PwD)</option>
-              <option value="PWD_OTHER">2x Other City (for PwD)</option>
+              <option value="OTHER">Other City (Y & Z City) </option>
+              <option value="PWD_HIGHER">2x Higher TPTA (X City) [for PwD]</option>
+              <option value="PWD_OTHER">2x Other City (Y & Z City) [for PwD]</option>
               <option value="NONE">None</option>
             </select>
           </div>

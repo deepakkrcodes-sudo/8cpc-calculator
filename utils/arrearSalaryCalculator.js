@@ -24,7 +24,7 @@ export function calculatePeriodSalary({
   const taBase7 = getTABase(currentLevel, basic7, tptaType);
   const taBase8 = getTABase(currentLevel, basic8, tptaType);
   const ta7 = Math.round(taBase7 * (1 + da7Percent / 100));
-  const ta8 = Math.round(taBase8 * (1 + da8Percent / 100));
+  const ta8 = Math.round(taBase7 * (1 + da7Percent / 100));
   const gross7 = basic7 + da7Amount + hra7 + ta7;
   const gross8 = basic8 + da8Amount + hra8 + ta8;
   const nps7 = Math.round((basic7 + da7Amount) * 0.10);
