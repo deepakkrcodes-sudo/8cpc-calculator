@@ -6,22 +6,22 @@ import DAProgressionTable from "./DAProgressionTable";
 import { BarChart3, CalendarClock, Wallet, Clock, Repeat } from "lucide-react";
 
 const presets = [
-    { value: 1.92, label: "Baseline Scenario", color: "bg-gray-200 text-gray-800" },
+  { value: 1.92, label: "Minimum", color: "bg-gray-200 text-gray-800" },
 
-    { value: 2.00, label: "Very Conservative", color: "bg-gray-100 text-gray-700" },
+  { value: 2.00, label: "Very Conservative", color: "bg-gray-100 text-gray-700" },
 
-    { value: 2.15, label: "Conservative", color: "bg-red-100 text-red-700" },
+  { value: 2.15, label: "Conservative", color: "bg-blue-100 text-blue-700" },
 
-    { value: 2.28, label: "Widely Discussed", color: "bg-orange-100 text-orange-700" },
+  { value: 2.28, label: "Expected", color: "bg-orange-100 text-orange-700" },
 
-    { value: 2.40, label: "Common Estimate", color: "bg-indigo-100 text-indigo-700" },
+  { value: 2.40, label: "Moderately Optimistic", color: "bg-indigo-100 text-indigo-700" },
 
-    { value: 2.57, label: "7th CPC Reference", color: "bg-yellow-100 text-yellow-700" },
+  { value: 2.57, label: "7th CPC Benchmark", color: "bg-yellow-100 text-yellow-700" },
 
-    { value: 2.70, label: "Higher Estimate", color: "bg-green-100 text-green-700" },
+  { value: 2.70, label: "High Expectation", color: "bg-green-100 text-green-700" },
 
-    { value: 3.83, label: "NC-JCM Demand", color: "bg-purple-100 text-purple-700" }
-  ];
+  { value: 3.83, label: "Union Demand", color: "bg-purple-100 text-purple-700" }
+];
 
 export default function PensionInputForm({ onCalculate }) {
 
@@ -107,7 +107,7 @@ export default function PensionInputForm({ onCalculate }) {
           Pension Details
         </h2>
 
-        
+
 
         {/* Full-width gradient line */}
         <div className="h-[2px] w-full bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 rounded-full"></div>
