@@ -28,6 +28,25 @@ export default function Home() {
         <SalaryCalculator />
       </section>
 
+      {/* Latest Update Banner */}
+      <section className="bg-yellow-50 border border-yellow-300 p-4 rounded-xl shadow-sm">
+        <h2 className="text-md font-semibold text-yellow-800">
+          🔔 Latest Update – 8th Pay Commission (May 2026)
+        </h2>
+
+        <p className="text-sm text-gray-800 mt-1">
+          The government has extended the deadline for submitting feedback and
+          representations to the 8th Pay Commission till <strong>31 May 2026</strong>.
+          The Commission is currently in the consultation phase, collecting inputs
+          from employees, pensioners and unions regarding salary structure,
+          fitment factor, allowances and pension revision.
+        </p>
+
+        <p className="text-xs text-gray-600 mt-2">
+          ⚠️ Final salary structure, fitment factor and pension changes are not yet decided.
+        </p>
+      </section>
+
 
       <div className="block bg-gray-100 p-4 rounded-xl shadow-sm hover:shadow-md transition">
         <OtherToolsSection />
@@ -64,6 +83,25 @@ export default function Home() {
 
 
         <div className="space-y-6">
+
+          {/* Timeline Item */}
+          <div className="border-l-4 border-green-600 pl-4">
+            <p className="text-xs text-gray-500">May 2026 (Latest)</p>
+            <h3 className="font-semibold text-gray-900">
+              Deadline Extended for Public Feedback
+            </h3>
+
+            <p className="text-sm text-gray-700 mt-1">
+              The deadline for submitting feedback and memoranda to the 8th Pay Commission
+              has been extended till <strong>31 May 2026</strong>. Employee unions,
+              pensioners and government departments are actively submitting proposals
+              related to salary revision, fitment factor, pension benefits and allowances.
+              This indicates that the Commission is still in the consultation stage and
+              final recommendations are yet to be prepared.
+            </p>
+          </div>
+
+          <hr className="border-gray-200" />
 
           {/* Timeline Item */}
           <div className="border-l-4 border-blue-600 pl-4">
@@ -136,6 +174,32 @@ export default function Home() {
           </div>
 
         </div>
+
+        <hr className="border-gray-400" />
+
+        <h2 className="text-lg font-semibold">
+          Current Status of 8th Pay Commission (Reality Check)
+        </h2>
+
+        <ul className="text-sm text-gray-700 space-y-2">
+          <li>✔ The 8th Pay Commission has been constituted (Nov 2025)</li>
+          <li>✔ Currently in consultation phase (2026)</li>
+          <li>✔ Deadline extended to 31 May 2026 for feedback</li>
+          <li>❗ Fitment factor is NOT finalized</li>
+          <li>❗ Salary revision is NOT approved yet</li>
+          <li>❗ Old Pension Scheme (OPS) is NOT confirmed</li>
+        </ul>
+
+        <h2 className="text-lg font-semibold">
+          Expected Timeline for 8th Pay Commission
+        </h2>
+
+        <ul className="text-sm text-gray-700 space-y-2">
+          <li>• Consultation & data collection: 2026</li>
+          <li>• Report submission: Expected by 2027</li>
+          <li>• Implementation: Likely 2027–2028</li>
+          <li>• Arrears: Expected from January 2026</li>
+        </ul>
 
         <hr className="border-gray-400" />
 

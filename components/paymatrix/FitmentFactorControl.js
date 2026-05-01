@@ -9,14 +9,21 @@ export default function FitmentFactorControl({
 }) {
 
   const presets = [
-    { value: 1.92, label: "Lower", color: "bg-gray-100 text-gray-700" },
-    { value: 2.00, label: "Conservative", color: "bg-red-100 text-red-700" },
-    { value: 2.15, label: "Discussed", color: "bg-orange-100 text-orange-700" },
-    { value: 2.28, label: "Expected", color: "bg-indigo-100 text-indigo-700" },
-    { value: 2.40, label: "Mid", color: "bg-blue-100 text-blue-700" },
-    { value: 2.57, label: "7th CPC Ref", color: "bg-yellow-100 text-yellow-700" },
-    { value: 2.70, label: "Optimistic", color: "bg-green-100 text-green-700" },
-    { value: 2.86, label: "Upper", color: "bg-emerald-100 text-emerald-700" }
+    { value: 1.92, label: "Baseline Scenario", color: "bg-gray-200 text-gray-800" },
+
+    { value: 2.00, label: "Very Conservative", color: "bg-gray-100 text-gray-700" },
+
+    { value: 2.15, label: "Conservative", color: "bg-red-100 text-red-700" },
+
+    { value: 2.28, label: "Widely Discussed", color: "bg-orange-100 text-orange-700" },
+
+    { value: 2.40, label: "Common Estimate", color: "bg-indigo-100 text-indigo-700" },
+
+    { value: 2.57, label: "7th CPC Reference", color: "bg-yellow-100 text-yellow-700" },
+
+    { value: 2.70, label: "Higher Estimate", color: "bg-green-100 text-green-700" },
+
+    { value: 3.83, label: "NC-JCM Demand", color: "bg-purple-100 text-purple-700" }
   ];
 
   return (
@@ -31,7 +38,7 @@ export default function FitmentFactorControl({
           </label>
 
           <p className="text-xs text-gray-500">
-            Expected range: <span className="font-medium">1.92 – 2.86</span> • You can explore wider scenarios
+            Expected range: <span className="font-medium">1.92 – 3.83</span> • You can explore wider scenarios
           </p>
         </div>
 
@@ -42,7 +49,7 @@ export default function FitmentFactorControl({
           <input
             type="range"
             min="1.5"
-            max="3.5"
+            max="4"
             step="0.01"
             value={fitmentFactor}
             onChange={(e) => setFitmentFactor(Number(e.target.value))}
