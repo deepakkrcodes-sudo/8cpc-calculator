@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { calculateFixation } from "@/utils/payFixationEngine";
+import { payMatrix } from "@/data/payMatrix";
 
 import FixationInputs from "./FixationInputs";
 import FixationSummary from "./FixationSummary";
@@ -15,7 +16,7 @@ export default function PayFixationCalculator(){
     currentBasic:"",
     promotionLevel:"",
     promotionDate:"",
-    dniDate:"",
+    incrementMonth:"JULY",
     daPercent:60,
     hraPercent:30,
     tptaType:"HIGHER",
@@ -28,7 +29,8 @@ export default function PayFixationCalculator(){
   function handleCalculate(){
     const r=calculateFixation({
       ...form,
-      currentBasic:Number(form.currentBasic)
+      currentBasic:Number(form.currentBasic),
+      payMatrix
     });
     setResult(r);
   }

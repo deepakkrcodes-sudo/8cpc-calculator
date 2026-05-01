@@ -2,16 +2,17 @@
 
 import { payMatrix } from "@/data/payMatrix";
 import {
-    Layers,
-    IndianRupee,
-    TrendingUp,
-    Calendar,
-    CalendarCheck,
-    Percent,
-    Home,
-    Bus,
-    Clock,
-    Banknote
+  Layers,
+  IndianRupee,
+  TrendingUp,
+  Calendar,
+  CalendarCheck,
+  Percent,
+  Home,
+  Bus,
+  Clock,
+  Banknote,
+  CalendarClock
 } from "lucide-react";
 
 export default function FixationInputs({ form, setForm, onCalculate }) {
@@ -24,7 +25,7 @@ export default function FixationInputs({ form, setForm, onCalculate }) {
     <div className="space-y-6">
 
       <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 md:p-6 space-y-6">
-        
+
         {/* PAY DETAILS */}
         <div className="space-y-4">
           <div className="text-sm font-bold text-gray-500 uppercase border-b pb-2 tracking-wider">
@@ -35,7 +36,7 @@ export default function FixationInputs({ form, setForm, onCalculate }) {
             {/* CURRENT PAY LEVEL */}
             <div>
               <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1">
-                <Layers size={16} className="text-indigo-500" /> Current Pay Level
+                <Layers size={16} className="text-indigo-500" /> Current Pay Details
               </label>
               <select
                 className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition-shadow outline-none"
@@ -81,63 +82,92 @@ export default function FixationInputs({ form, setForm, onCalculate }) {
               </select>
             </div>
 
-            {/* PROMOTION LEVEL */}
+            {/* INCREMENT MONTH */}
             <div className="md:col-span-2">
               <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1">
-                <TrendingUp size={16} className="text-purple-500" /> Promotion Pay Level
+                <CalendarClock size={16} className="text-purple-500" />
+                Increment Month
               </label>
-              <select
-                className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition-shadow outline-none"
-                value={form.promotionLevel}
-                onChange={(e) => update("promotionLevel", e.target.value)}
-              >
-                <option value="">Select Promotion Level</option>
-                {Object.keys(payMatrix).map(l => {
-                  const values = payMatrix[l];
-                  return (
-                    <option key={l} value={l}>
-                      {l} (₹{values[0].toLocaleString()} - ₹{values[values.length - 1].toLocaleString()})
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
-          </div>
-        </div>
 
-        {/* DATES */}
-        <div className="space-y-4 pt-2">
-          <div className="text-sm font-bold text-gray-500 uppercase border-b pb-2 tracking-wider">
-            Important Dates
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {/* PROMOTION DATE */}
-            <div>
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1">
-                <Calendar size={16} className="text-blue-500" /> Promotion Date
-              </label>
-              <input
-                type="date"
-                className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition-shadow outline-none"
-                value={form.promotionDate}
-                onChange={(e) => update("promotionDate", e.target.value)}
-              />
+              <div className="mt-2 grid grid-cols-2 gap-3">
+                {[
+                  { label: "January (1st Jan)", value: "JAN" },
+                  { label: "July (1st Jul)", value: "JULY" }
+                ].map((option) => (
+                  <label
+                    key={option.value}
+                    className={`flex items-center gap-2 rounded-xl border px-4 py-3 text-sm cursor-pointer transition ${form.incrementMonth === option.value
+                      ? "border-indigo-500 bg-indigo-50 text-indigo-700"
+                      : "border-gray-300 bg-white text-gray-700 hover:border-indigo-300"
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="incrementMonth"
+                      value={option.value}
+                      checked={form.incrementMonth === option.value}
+                      onChange={(e) => update("incrementMonth", e.target.value)}
+                      className="accent-indigo-600"
+                    />
+                    {option.label}
+                  </label>
+                ))}
+              </div>
             </div>
 
-            {/* DNI */}
-            <div>
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1">
-                <CalendarCheck size={16} className="text-rose-500" /> Date of Next Increment (Old Level)
-              </label>
-              <input
-                type="date"
-                className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition-shadow outline-none"
-                value={form.dniDate}
-                onChange={(e) => update("dniDate", e.target.value)}
-              />
-            </div>
           </div>
+
+
+            {/* DATES */}
+            {/* PROMOTION SECTION */}
+            <div className="space-y-4 pt-4">
+              <div className="text-sm font-bold text-gray-500 uppercase border-b pb-2 tracking-wider">
+                Promotion Details
+              </div>
+
+              {/* ✅ Proper grid here */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                {/* PROMOTION LEVEL */}
+                <div>
+                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1">
+                    <TrendingUp size={16} className="text-purple-500" /> Promotion Pay Level
+                  </label>
+                  <select
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400"
+                    value={form.promotionLevel}
+                    onChange={(e) => update("promotionLevel", e.target.value)}
+                  >
+                    <option value="">Select Promotion Level</option>
+                    {Object.keys(payMatrix).map(l => {
+                      const values = payMatrix[l];
+                      return (
+                        <option key={l} value={l}>
+                          {l} (₹{values[0].toLocaleString()} - ₹{values[values.length - 1].toLocaleString()})
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+
+                {/* PROMOTION DATE */}
+                <div>
+                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1">
+                    <Calendar size={16} className="text-blue-500" /> Promotion Date
+                  </label>
+                  <input
+                    type="date"
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400"
+                    value={form.promotionDate}
+                    onChange={(e) => update("promotionDate", e.target.value)}
+                  />
+                </div>
+
+              </div>
+            </div>
+        
+
+         
         </div>
 
         {/* ALLOWANCES & SIMULATION */}
@@ -145,7 +175,7 @@ export default function FixationInputs({ form, setForm, onCalculate }) {
           <div className="text-sm font-bold text-gray-500 uppercase border-b pb-2 tracking-wider">
             Allowances & Simulation
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {/* DA */}
             <div>
