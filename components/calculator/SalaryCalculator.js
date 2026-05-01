@@ -41,6 +41,7 @@ export default function SalaryCalculator() {
 
     const daPercent8 = 0;
 
+
     function addAllowance() {
         setOtherAllowances([
             ...otherAllowances,
@@ -97,6 +98,9 @@ export default function SalaryCalculator() {
         Z: [10, 9, 8, 0]
     };
 
+    const [animateTrigger, setAnimateTrigger] = useState(0);
+    const [pulse, setPulse] = useState(false);
+
     function handleCalculate() {
 
         if (!level || !basic || !fitment) {
@@ -104,6 +108,12 @@ export default function SalaryCalculator() {
             return;
         }
 
+        // 🔥 Trigger animation
+        setAnimateTrigger(prev => prev + 1);
+
+        // 🔥 Button feedback
+        setPulse(true);
+        setTimeout(() => setPulse(false), 300);
     }
 
     useEffect(() => {
@@ -394,42 +404,57 @@ export default function SalaryCalculator() {
                 {/* CTA */}
                 <button
                     onClick={handleCalculate}
-                    className="w-full py-2.5 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition"
+                    className="w-full py-2.5 rounded-lg bg-indigo-600 text-white font-medium 
+             hover:bg-indigo-700 active:scale-95 active:translate-y-[1px]
+             transition-all duration-150"
                 >
                     Calculate Salary
                 </button>
-
             </div>
 
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-5">
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-6">
 
-                {/* RESULTS */}
                 {result && (
+                    <>
+                        {/* 🔹 RESULT - HERO SECTION */}
+                        <div >
+                            <div className="text-center mb-3">
+                                <h2 className="text-sm md:text-base font-medium text-indigo-700 tracking-wide">
+                                    Projected Salary After 8th CPC
+                                </h2>
+                            </div>
+                            <SalaryIncreaseCard result={adjustedResult} trigger={animateTrigger} />
+                        </div>
 
-                    <div className="space-y-5">
+                        {/* 🔸 Divider */}
+                        <div className="flex items-center gap-3">
+                            <div className="h-px flex-1 bg-gray-200"></div>
+                            <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                                Detailed Breakdown
+                            </span>
+                            <div className="h-px flex-1 bg-gray-200"></div>
+                        </div>
 
-                        <SalaryBreakdown
-                            result={result}
-                            pensionType={pensionType}
-                            gpf={gpf}
-                            setGpf={setGpf}
-                            editableDeductions={editableDeductions}
-                            setEditableDeductions={setEditableDeductions}
-                            otherAllowances={otherAllowances}
-                            otherDeductions={otherDeductions}
-                            addAllowance={addAllowance}
-                            updateAllowance={updateAllowance}
-                            removeAllowance={removeAllowance}
-                            addDeduction={addDeduction}
-                            updateDeduction={updateDeduction}
-                            removeDeduction={removeDeduction}
-                        />
-
-                        <SalaryIncreaseCard result={adjustedResult} />
-
-
-                    </div>
-
+                        {/* 🔹 BREAKDOWN SECTION */}
+                        <div className="bg-gray-50 border border-gray-100 rounded-xl p-4">
+                            <SalaryBreakdown
+                                result={result}
+                                pensionType={pensionType}
+                                gpf={gpf}
+                                setGpf={setGpf}
+                                editableDeductions={editableDeductions}
+                                setEditableDeductions={setEditableDeductions}
+                                otherAllowances={otherAllowances}
+                                otherDeductions={otherDeductions}
+                                addAllowance={addAllowance}
+                                updateAllowance={updateAllowance}
+                                removeAllowance={removeAllowance}
+                                addDeduction={addDeduction}
+                                updateDeduction={updateDeduction}
+                                removeDeduction={removeDeduction}
+                            />
+                        </div>
+                    </>
                 )}
             </div>
 

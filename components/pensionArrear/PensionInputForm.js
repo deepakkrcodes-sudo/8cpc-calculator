@@ -18,7 +18,7 @@ const presets = [
 
   { value: 2.57, label: "7th CPC Benchmark", color: "bg-yellow-100 text-yellow-700" },
 
-  { value: 2.70, label: "High Expectation", color: "bg-green-100 text-green-700" },
+  { value: 2.70, label: "Optimistic", color: "bg-green-100 text-green-700" },
 
   { value: 3.83, label: "Union Demand", color: "bg-purple-100 text-purple-700" }
 ];

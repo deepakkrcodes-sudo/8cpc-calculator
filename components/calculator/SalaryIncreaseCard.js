@@ -2,12 +2,45 @@
 
 import { TrendingUp } from "lucide-react";
 
+import { useEffect, useState } from "react";
+
+function useCountUp(endValue, duration = 1200, trigger) {
+  const [value, setValue] = useState(0);
+
+  useEffect(() => {
+    let start = 0;
+
+    setValue(0); // 🔥 RESET FIRST
+
+    const increment = endValue / (duration / 16);
+
+    const timer = setInterval(() => {
+      start += increment;
+
+      if (start >= endValue) {
+        setValue(endValue);
+        clearInterval(timer);
+      } else {
+        setValue(Math.floor(start));
+      }
+    }, 16);
+
+    return () => clearInterval(timer);
+  }, [endValue, duration, trigger]); // 👈 trigger included
+
+  return value;
+}
+
 function IncreaseCard({
   title,
   before,
   after,
-  color = "blue"
+  color = "blue",
+  trigger
+ 
 }) {
+
+
 
   const valBefore = Number(before) || 0;
   const valAfter = Number(after) || 0;
@@ -25,17 +58,29 @@ function IncreaseCard({
   const theme =
     color === "green"
       ? {
-          gradient: "from-green-500 to-emerald-600",
-          soft: "bg-green-50",
-          text: "text-green-700",
-          glow: "shadow-green-200"
-        }
+        gradient: "from-green-500 to-emerald-600",
+        soft: "bg-green-50",
+        text: "text-green-700",
+        glow: "shadow-green-200"
+      }
       : {
-          gradient: "from-indigo-500 to-blue-600",
-          soft: "bg-indigo-50",
-          text: "text-indigo-700",
-          glow: "shadow-indigo-200"
-        };
+        gradient: "from-indigo-500 to-blue-600",
+        soft: "bg-indigo-50",
+        text: "text-indigo-700",
+        glow: "shadow-indigo-200"
+      };
+
+  const animatedAfter = useCountUp(valAfter, 1200, trigger);
+const animatedIncrease = useCountUp(increase, 1200, trigger);
+const animatedPercent = useCountUp(percent, 1200, trigger);
+const animatedProgress = useCountUp(progressWidth, 1200, trigger);
+
+  const [showFinal, setShowFinal] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowFinal(true), 300);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
 
@@ -56,13 +101,15 @@ function IncreaseCard({
 
         {/* ARROW + ICON */}
         <div className={`my-1 flex items-center gap-1 ${theme.text}`}>
-          <TrendingUp size={18}/>
+          <TrendingUp size={18} />
           <span className="text-xs font-semibold">Increase</span>
         </div>
 
-        {/* AFTER (FOCUS) */}
-        <div className={`text-2xl font-bold ${theme.text}`}>
-          ₹ {valAfter.toLocaleString("en-IN")}
+        <div
+          className={`text-2xl font-bold ${theme.text} transition-all duration-500 ${showFinal ? "scale-100 opacity-100" : "scale-95 opacity-0"
+            }`}
+        >
+          ₹ {animatedAfter.toLocaleString("en-IN")}
         </div>
 
       </div>
@@ -73,7 +120,7 @@ function IncreaseCard({
         <span className={`inline-block px-3 py-1 rounded-full text-sm font-semibold 
           bg-gradient-to-r ${theme.gradient} text-white shadow-md`}>
 
-          +₹ {increase.toLocaleString("en-IN")}  ({percent}%)
+          +₹ {animatedIncrease.toLocaleString("en-IN")}  ({animatedPercent}%)
 
         </span>
 
@@ -84,7 +131,7 @@ function IncreaseCard({
 
         <div
           className={`h-2 rounded-full bg-gradient-to-r ${theme.gradient} transition-all duration-700`}
-          style={{ width: `${progressWidth}%` }}
+          style={{ width: `${animatedProgress}%` }}
         />
 
       </div>
@@ -93,7 +140,7 @@ function IncreaseCard({
   );
 }
 
-export default function SalaryIncreaseCard({ result }) {
+export default function SalaryIncreaseCard({ result, trigger }) {
 
   if (!result) return null;
 
@@ -106,6 +153,7 @@ export default function SalaryIncreaseCard({ result }) {
         before={result.seventh.gross}
         after={result.eighth.gross}
         color="blue"
+        trigger={trigger}
       />
 
       <IncreaseCard
@@ -113,6 +161,7 @@ export default function SalaryIncreaseCard({ result }) {
         before={result.seventh.net}
         after={result.eighth.net}
         color="green"
+        trigger={trigger}
       />
 
     </div>
