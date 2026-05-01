@@ -1,4 +1,4 @@
-import { getTABase, getCGHS } from "./salaryEngine";
+import { getTABase, getCGHS, getCGEGIS } from "./salaryEngine";
 
 
 export function calculate7CPCSalary({
@@ -37,13 +37,15 @@ export function calculate7CPCSalary({
 
   const cghs = getCGHS(level);
 
+  const cgegis = getCGEGIS(level);
+
   const annualGross = gross * 12;
 
   const taxable = Math.max(annualGross - 75000, 0);
 
   const tax = Math.round(calculateIncomeTaxAnnual(taxable) / 12);
 
-  const net = gross - nps - cghs - tax;
+  const net = gross - nps - cgegis - cghs - tax;
 
   return {
     basic: basicPay,   // ✅ FIXED
@@ -52,6 +54,7 @@ export function calculate7CPCSalary({
     ta,
     gross,
     nps,
+    cgegis,
     cghs,
     tax,
     net

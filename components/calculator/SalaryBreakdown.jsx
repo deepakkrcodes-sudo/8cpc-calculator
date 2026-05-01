@@ -4,6 +4,9 @@ import { PlusCircle, MinusCircle } from "lucide-react";
 
 export default function SalaryBreakdown({
     result,
+    pensionType,
+    gpf,
+    setGpf,
     editableDeductions,
     setEditableDeductions,
     otherAllowances,
@@ -19,6 +22,30 @@ export default function SalaryBreakdown({
     if (!result) return null;
 
     const r = result;
+    const pensionDeduction7 =
+        pensionType === "NPS"
+            ? editableDeductions.nps7
+            : gpf.gpf7;
+    const pensionDeduction8 =
+        pensionType === "NPS"
+            ? editableDeductions.nps8
+            : gpf.gpf8;
+    const otherDeduction7 =
+        otherDeductions.reduce((sum, d) => sum + (d.amount7 || 0), 0);
+    const otherDeduction8 =
+        otherDeductions.reduce((sum, d) => sum + (d.amount8 || 0), 0);
+    const totalDeductions7 =
+        pensionDeduction7 +
+        editableDeductions.cgegis7 +
+        editableDeductions.cghs7 +
+        editableDeductions.tax7 +
+        otherDeduction7;
+    const totalDeductions8 =
+        pensionDeduction8 +
+        editableDeductions.cgegis8 +
+        editableDeductions.cghs8 +
+        editableDeductions.tax8 +
+        otherDeduction8;
 
     function Row(label, v7, v8, highlight = false) {
         return (
@@ -141,6 +168,8 @@ export default function SalaryBreakdown({
 
             </div>
 
+
+
             {/* ================= DEDUCTIONS ================= */}
             {/* ================= DEDUCTIONS ================= */}
             <div className="rounded-xl border border-gray-200 bg-rose-50/40 p-4">
@@ -157,11 +186,78 @@ export default function SalaryBreakdown({
                 </div>
 
                 {/* 🔥 FIXED DEDUCTIONS */}
+
+
+                {pensionType === "NPS" ? (
+                    <div className="grid grid-cols-3 gap-2 items-center py-2 text-sm">
+                        <div>
+                            <div>NPS Contribution</div>
+                            <p className="text-xs text-gray-500">
+                                10% employee contribution 
+                            </p>
+                        </div>
+
+                        <input
+                            type="number"
+                            value={editableDeductions.nps7 === 0 ? "" : editableDeductions.nps7}
+                            onChange={(e) => setEditableDeductions({
+                                ...editableDeductions,
+                                nps7: e.target.value === "" ? 0 : Number(e.target.value)
+                            })}
+                            className="w-full rounded-lg border border-gray-300 px-2 py-1 text-center text-sm"
+                            placeholder="0"
+                        />
+
+                        <input
+                            type="number"
+                            value={editableDeductions.nps8 === 0 ? "" : editableDeductions.nps8}
+                            onChange={(e) => setEditableDeductions({
+                                ...editableDeductions,
+                                nps8: e.target.value === "" ? 0 : Number(e.target.value)
+                            })}
+                            className="w-full rounded-lg border border-gray-300 px-2 py-1 text-center text-sm"
+                            placeholder="0"
+                        />
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-3 gap-2 items-center py-2 text-sm">
+                        <div>
+                            <div>GPF Contribution</div>
+                            <p className="text-xs text-gray-500">
+                                Minimum 6% of Basic + DA 
+                            </p>
+                            
+                        </div>
+
+                        <input
+                            type="number"
+                            value={gpf.gpf7 === 0 ? "" : gpf.gpf7}
+                            onChange={(e) => setGpf({
+                                ...gpf,
+                                gpf7: e.target.value === "" ? 0 : Number(e.target.value)
+                            })}
+                            className="w-full rounded-lg border border-gray-300 px-2 py-1 text-center text-sm"
+                            placeholder="0"
+                        />
+
+                        <input
+                            type="number"
+                            value={gpf.gpf8 === 0 ? "" : gpf.gpf8}
+                            onChange={(e) => setGpf({
+                                ...gpf,
+                                gpf8: e.target.value === "" ? 0 : Number(e.target.value)
+                            })}
+                            className="w-full rounded-lg border border-gray-300 px-2 py-1 text-center text-sm"
+                            placeholder="0"
+                        />
+                    </div>
+                )}
+
                 {[
-                    { key7: "nps7", key8: "nps8", label: "NPS" },
+                    { key7: "cgegis7", key8: "cgegis8", label: "CGEGIS" },
                     { key7: "cghs7", key8: "cghs8", label: "CGHS" },
                     { key7: "tax7", key8: "tax8", label: "Income Tax" }
-                ].map((item, i) => (
+                ].map((item) => (
 
                     <div
                         key={item.label}
@@ -256,19 +352,13 @@ export default function SalaryBreakdown({
 
                     <div className="text-center">
                         ₹ {(
-                            editableDeductions.nps7 +
-                            editableDeductions.cghs7 +
-                            editableDeductions.tax7 +
-                            otherDeductions.reduce((sum, d) => sum + (d.amount7 || 0), 0)
+                            totalDeductions7
                         ).toLocaleString("en-IN")}
                     </div>
 
                     <div className="text-center">
                         ₹ {(
-                            editableDeductions.nps8 +
-                            editableDeductions.cghs8 +
-                            editableDeductions.tax8 +
-                            otherDeductions.reduce((sum, d) => sum + (d.amount8 || 0), 0)
+                            totalDeductions8
                         ).toLocaleString("en-IN")}
                     </div>
 

@@ -15,7 +15,8 @@ import {
     Home,
     Bus,
     PlusCircle,
-    MinusCircle
+    MinusCircle,
+    ShieldCheck
 } from "lucide-react";
 
 export default function SalaryCalculator() {
@@ -32,6 +33,11 @@ export default function SalaryCalculator() {
     const [otherDeductions, setOtherDeductions] = useState([]);
 
     const [result, setResult] = useState(null);
+    const [pensionType, setPensionType] = useState("NPS");
+    const [gpf, setGpf] = useState({
+        gpf7: 0,
+        gpf8: 0
+    });
 
     const daPercent8 = 0;
 
@@ -77,6 +83,8 @@ export default function SalaryCalculator() {
     const [editableDeductions, setEditableDeductions] = useState({
         nps7: 0,
         nps8: 0,
+        cgegis7: 0,
+        cgegis8: 0,
         cghs7: 0,
         cghs8: 0,
         tax7: 0,
@@ -104,10 +112,16 @@ export default function SalaryCalculator() {
         setEditableDeductions({
             nps7: result.seventh.nps,
             nps8: result.eighth.nps,
+            cgegis7: result.seventh.cgegis,
+            cgegis8: result.eighth.cgegis,
             cghs7: result.seventh.cghs,
             cghs8: result.eighth.cghs,
             tax7: result.seventh.tax,
             tax8: result.eighth.tax
+        });
+        setGpf({
+            gpf7: Math.round((result.seventh.basic + result.seventh.da) * 0.06),
+            gpf8: Math.round((result.eighth.basic + result.eighth.da) * 0.06)
         });
 
     }, [result]);
@@ -141,10 +155,52 @@ export default function SalaryCalculator() {
         otherDeductions
     ]);
 
+    const otherDeduction7 =
+        otherDeductions.reduce((sum, d) => sum + (d.amount7 || 0), 0);
+
+    const otherDeduction8 =
+        otherDeductions.reduce((sum, d) => sum + (d.amount8 || 0), 0);
+
+    const pensionDeduction7 =
+        pensionType === "NPS"
+            ? editableDeductions.nps7
+            : gpf.gpf7;
+
+    const pensionDeduction8 =
+        pensionType === "NPS"
+            ? editableDeductions.nps8
+            : gpf.gpf8;
+
+    const adjustedResult = result
+        ? {
+            ...result,
+            seventh: {
+                ...result.seventh,
+                net:
+                    result.seventh.gross -
+                    pensionDeduction7 -
+                    editableDeductions.cgegis7 -
+                    editableDeductions.cghs7 -
+                    editableDeductions.tax7 -
+                    otherDeduction7
+            },
+            eighth: {
+                ...result.eighth,
+                net:
+                    result.eighth.gross -
+                    pensionDeduction8 -
+                    editableDeductions.cgegis8 -
+                    editableDeductions.cghs8 -
+                    editableDeductions.tax8 -
+                    otherDeduction8
+            }
+        }
+        : null;
+
     return (
 
         <div className="space-y-6">
-          
+
             <div className="p-6 text-center space-y-4">
                 {/* Title */}
                 <h1 className="text-xl md:text-2xl font-semibold tracking-tight md:whitespace-nowrap md:overflow-hidden md:text-ellipsis">
@@ -217,6 +273,8 @@ export default function SalaryCalculator() {
                         </select>
                     </div>
 
+
+
                 </div>
 
                 {/* LOCATION */}
@@ -284,6 +342,47 @@ export default function SalaryCalculator() {
 
                 </div>
 
+                <div>
+                    <label className="flex items-center gap-2 text-sm text-gray-700">
+                        <ShieldCheck size={15} className="text-indigo-500" />
+                        Pension System
+                    </label>
+
+                    <div className="mt-2 grid grid-cols-2 gap-3">
+
+                        {[
+                            { label: "NPS", value: "NPS" },
+                            { label: "OPS", value: "OPS" }
+                        ].map((option) => (
+
+                            <label
+                                key={option.value}
+                                className={`flex items-center gap-2 rounded-xl border px-4 py-3 text-sm transition cursor-pointer
+          ${pensionType === option.value
+                                        ? "border-indigo-500 bg-indigo-50 text-indigo-700"
+                                        : "border-gray-200 bg-white text-gray-700"
+                                    }
+        `}
+                            >
+
+                                <input
+                                    type="radio"
+                                    name="pensionType"
+                                    value={option.value}
+                                    checked={pensionType === option.value}
+                                    onChange={() => setPensionType(option.value)}
+                                    className="accent-indigo-600"
+                                />
+
+                                {option.label}
+
+                            </label>
+
+                        ))}
+
+                    </div>
+                </div>
+
                 {/* FITMENT */}
                 <FitmentFactorControl
                     fitmentFactor={fitment}
@@ -311,6 +410,9 @@ export default function SalaryCalculator() {
 
                         <SalaryBreakdown
                             result={result}
+                            pensionType={pensionType}
+                            gpf={gpf}
+                            setGpf={setGpf}
                             editableDeductions={editableDeductions}
                             setEditableDeductions={setEditableDeductions}
                             otherAllowances={otherAllowances}
@@ -323,7 +425,7 @@ export default function SalaryCalculator() {
                             removeDeduction={removeDeduction}
                         />
 
-                        <SalaryIncreaseCard result={result} />
+                        <SalaryIncreaseCard result={adjustedResult} />
 
 
                     </div>

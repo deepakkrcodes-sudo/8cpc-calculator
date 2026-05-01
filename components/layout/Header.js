@@ -2,11 +2,33 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [toolsOpen, setToolsOpen] = useState(false);
+
+  const toolsRef = useRef(null);
+
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        toolsRef.current &&
+        !toolsRef.current.contains(event.target)
+      ) {
+        setToolsOpen(false);
+      }
+    }
+
+    if (toolsOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [toolsOpen]);
 
   const closeMenu = () => {
     setMenuOpen(false);
@@ -19,16 +41,16 @@ export default function Header() {
 
   // ✅ YOUR TOOLS ARRAY
   const tools = [
-    { title: "8th CPC Arrear", link: "/8th-cpc-arrear-calculator", highlight: true },
-    { title: "8th CPC Salary", link: "/", highlight: true },
-    { title: "8th CPC Pension", link: "/8th-cpc-pension-calculator", highlight: true },
-    { title: "8th CPC Pension Arrear", link: "/8th-cpc-pension-arrear", highlight: true },
-    { title: "LTC Planner", link: "/ltc-planner" },
-    { title: "Pay Fixation", link: "/pay-fixation-calculator" },
-    { title: "8th CPC Matrix", link: "/8th-cpc-pay-matrix" },
-    { title: "7th CPC Salary", link: "/7th-cpc-calculator" },
-    { title: "7th CPC Pension", link: "/7th-cpc-pension-calculator" },
-    { title: "7th CPC Matrix", link: "/7th-cpc-pay-matrix" }
+    { title: "8th CPC Arrear", icon: "💰", link: "/8th-cpc-arrear-calculator", highlight: true },
+    { title: "8th CPC Salary", icon: "🧮", link: "/", highlight: true },
+    { title: "8th CPC Pension", icon: "👴", link: "/8th-cpc-pension-calculator", highlight: true },
+    { title: "8th CPC Pension Arrear", icon: "💵", link: "/8th-cpc-pension-arrear", highlight: true },
+    { title: "LTC Planner", icon: "✈️", link: "/ltc-planner" },
+    { title: "Pay Fixation", icon: "📌", link: "/pay-fixation-calculator" },
+    { title: "8th CPC Matrix", icon: "📈", link: "/8th-cpc-pay-matrix" },
+    { title: "7th CPC Salary", icon: "📊", link: "/7th-cpc-calculator" },
+    { title: "7th CPC Pension", icon: "💼", link: "/7th-cpc-pension-calculator" },
+    { title: "7th CPC Matrix", icon: "📋", link: "/7th-cpc-pay-matrix" }
   ];
 
   return (
@@ -61,13 +83,19 @@ export default function Header() {
               Pension
             </Link>
 
-            {/* TOOLS BUTTON */}
-            <button
-              onClick={() => setToolsOpen(!toolsOpen)}
-              className="text-gray-700 hover:text-black"
-            >
-              All Tools ▾
-            </button>
+            <div ref={toolsRef} className="relative">
+
+              {/* TOOLS BUTTON */}
+              <button
+                onClick={() => setToolsOpen(!toolsOpen)}
+                className="text-gray-700 hover:text-black"
+              >
+                All Tools ▾
+              </button>
+
+              
+
+            </div>
 
           </nav>
 
@@ -96,7 +124,10 @@ export default function Header() {
                   : "bg-indigo-50 text-gray-700 border-gray-200 hover:bg-gray-50"
                   }`}
               >
-                {tool.title}
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">{tool.icon}</span>
+                  <span>{tool.title}</span>
+                </div>
               </Link>
             ))}
 
@@ -136,7 +167,10 @@ export default function Header() {
                 className={`block p-2 rounded-lg ${tool.highlight ? "bg-blue-50 font-medium" : ""
                   }`}
               >
-                {tool.title}
+                <div className="flex items-center gap-2">
+                  <span>{tool.icon}</span>
+                  <span>{tool.title}</span>
+                </div>
               </Link>
             ))}
 

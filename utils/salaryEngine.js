@@ -19,6 +19,16 @@ export function getCGHS(level) {
 
 }
 
+export function getCGEGIS(level) {
+
+  const levelNum = parseInt(level.replace("L", ""));
+
+  if (levelNum >= 10) return 120;
+  if (levelNum >= 6) return 60;
+  return 30;
+
+}
+
 
 // ===============================
 // TRANSPORT ALLOWANCE BASE
@@ -184,6 +194,9 @@ export function calculateSalary({
   const cghs7 =
     getCGHS(level);
 
+  const cgegis7 =
+    getCGEGIS(level);
+
 
   const annual7 = gross7 * 12;
 
@@ -199,6 +212,7 @@ export function calculateSalary({
   const net7 =
     gross7 -
     nps7 -
+    cgegis7 -
     cghs7 -
     tax7 -
     otherDed7;
@@ -248,6 +262,9 @@ export function calculateSalary({
   const cghs8 =
     getCGHS(level);
 
+  const cgegis8 =
+    getCGEGIS(level);
+
 
   const annual8 = gross8 * 12;
 
@@ -263,6 +280,7 @@ export function calculateSalary({
   const net8 =
     gross8 -
     nps8 -
+    cgegis8 -
     cghs8 -
     tax8 -
     otherDed8;
@@ -295,6 +313,7 @@ export function calculateSalary({
       ta: ta7,
       gross: gross7,
       nps: nps7,
+      cgegis: cgegis7,
       cghs: cghs7,
       tax: tax7,
       net: net7
@@ -307,6 +326,7 @@ export function calculateSalary({
       ta: ta8,
       gross: gross8,
       nps: nps8,
+      cgegis: cgegis8,
       cghs: cghs8,
       tax: tax8,
       net: net8

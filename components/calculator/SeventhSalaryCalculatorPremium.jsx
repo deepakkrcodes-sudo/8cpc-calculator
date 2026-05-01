@@ -26,8 +26,11 @@ export default function SeventhSalaryCalculatorPremium() {
     const [otherDeductions, setOtherDeductions] = useState([]);
 
     const [result, setResult] = useState(null);
+    const [pensionType, setPensionType] = useState("NPS");
+    const [gpf, setGpf] = useState(0);
     const [editableDeductions, setEditableDeductions] = useState({
         nps: 0,
+        cgegis: 0,
         cghs: 0,
         tax: 0
     });
@@ -97,8 +100,10 @@ export default function SeventhSalaryCalculatorPremium() {
         if (!salary) return;
 
         setResult(salary);
+        setGpf(Math.round((salary.basic + salary.da) * 0.06));
         setEditableDeductions({
             nps: salary.nps,
+            cgegis: salary.cgegis,
             cghs: salary.cghs,
             tax: salary.tax
         });
@@ -241,6 +246,10 @@ export default function SeventhSalaryCalculatorPremium() {
 
                         <SalaryBreakdown7
                             result={result}
+                            pensionType={pensionType}
+                            setPensionType={setPensionType}
+                            gpf={gpf}
+                            setGpf={setGpf}
                             editableDeductions={editableDeductions}
                             setEditableDeductions={setEditableDeductions}
                             otherAllowances={otherAllowances}

@@ -5,6 +5,10 @@ import SalarySummaryCard7 from "./SalarySummaryCard7";
 
 export default function SalaryBreakdown7({
   result,
+  pensionType,
+  setPensionType,
+  gpf,
+  setGpf,
   editableDeductions,
   setEditableDeductions,
   otherAllowances,
@@ -20,9 +24,14 @@ export default function SalaryBreakdown7({
   if (!result) return null;
 
   const r = result;
+  const pensionDeduction =
+    pensionType === "NPS"
+      ? Math.round((r.basic + r.da) * 0.10)
+      : Number(gpf || 0);
 
   const totalDeductions =
-    editableDeductions.nps +
+    pensionDeduction +
+    editableDeductions.cgegis +
     editableDeductions.cghs +
     editableDeductions.tax +
     otherDeductions.reduce((sum, d) => sum + (d.amount || 0), 0);
@@ -108,7 +117,7 @@ export default function SalaryBreakdown7({
             </div>
 
           ))}
-          
+
         </div>
 
         {/* TOTAL */}
@@ -144,9 +153,94 @@ export default function SalaryBreakdown7({
           <div className="text-center">Amount</div>
         </div>
 
-        {/* FIXED EDITABLE (EXACT LIKE 8CPC) */}
+        <div className="grid grid-cols-2 gap-2 items-center py-2 text-sm">
+          <div>Pension System</div>
+
+
+          <div className="flex w-full">
+
+            {["NPS", "OPS"].map((type) => (
+
+              <label
+                key={type}
+                className="flex w-1/2 items-center justify-center gap-2 cursor-pointer text-gray-700"
+              >
+
+                <input
+                  type="radio"
+                  name="pensionType"
+                  value={type}
+                  checked={pensionType === type}
+                  onChange={() => setPensionType(type)}
+                  className="h-4 w-4 accent-indigo-600"
+                />
+
+                <span className="text-sm">{type}</span>
+
+              </label>
+
+            ))}
+
+          </div>
+
+        </div>
+
+        {pensionType === "NPS" ? (
+          <div className="grid grid-cols-2 gap-2 items-center py-2 text-sm">
+            <div>
+              <div>NPS Contribution</div>
+              <p className="text-xs text-gray-500">
+                10% employee contribution (fixed as per rules)
+              </p>
+            </div>
+
+            <input
+              type="number"
+              value={editableDeductions.nps ?? pensionDeduction}
+              onChange={(e) =>
+                setEditableDeductions({
+                  ...editableDeductions,
+                  nps: e.target.value === "" ? 0 : Number(e.target.value)
+                })
+              }
+              className="w-full rounded-lg border border-gray-300 px-2 py-1 text-center text-sm"
+            />
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-2 items-center py-2 text-sm">
+            <div>
+              <div>GPF Contribution</div>
+              <p className="text-xs text-gray-500">
+                Minimum 6% of Basic + DA
+              </p>
+            </div>
+
+            <input
+              type="number"
+              value={gpf ?? 0}
+              onChange={(e) => setGpf(e.target.value === "" ? 0 : Number(e.target.value))}
+              className="w-full rounded-lg border border-gray-300 px-2 py-1 text-center text-sm"
+            />
+          </div>
+        )}
+
+        <div className="grid grid-cols-2 gap-2 items-center py-2 text-sm">
+          <div>CGEGIS</div>
+
+          <input
+            type="number"
+            value={editableDeductions.cgegis ?? 0}
+            onChange={(e) =>
+              setEditableDeductions({
+                ...editableDeductions,
+                cgegis: e.target.value === "" ? 0 : Number(e.target.value)
+              })
+            }
+            className="w-full rounded-lg border border-gray-300 px-2 py-1 text-center text-sm"
+          />
+        </div>
+
         {[
-          { key: "nps", label: "NPS" },
           { key: "cghs", label: "CGHS" },
           { key: "tax", label: "Income Tax" }
         ].map((item) => (

@@ -108,7 +108,7 @@ export default function Page() {
 
             <div className="w-full max-w-full sm:max-w-[1200px] lg:max-w-[1100px] xl:max-w-[1000px] mx-auto px-2 sm:px-6 lg:px-8 py-6 space-y-4">
 
-              
+
 
                 <div className="p-6 text-center space-y-4">
                     {/* Title */}
@@ -119,7 +119,7 @@ export default function Page() {
                     </h1>
 
                     {/* Subtitle */}
-                    <p className="text-xs md:text-sm text-gray-600 mx-auto md:whitespace-nowrap md:overflow-hidden md:text-ellipsis">
+                    <p className="text-xs md:text-sm text-gray-600 mx-auto">
                         Use this 7th CPC pension calculator to estimate your monthly pension, Dearness Relief (DR), and commuted pension. Designed for central government employees, this tool provides accurate pension breakdown based on latest rules and helps in retirement planning.
                     </p>
 
