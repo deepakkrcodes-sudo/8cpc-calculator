@@ -79,7 +79,14 @@ export default function OtherToolsSection() {
             desc: "7th CPC pay matrix with levels, pay scale & salary structure",
             icon: "📋",
             link: "/7th-cpc-pay-matrix"
-        }
+        },
+        {
+            title: "8th CPC Insights & Analysis",
+            desc: "Explore fitment factor trends, salary expectations, and detailed analysis of what may realistically happen in 8th CPC",
+            icon: "🧩",
+            link: "/8th-cpc/insights",
+            highlight: false
+        },
     ];
 
     return (

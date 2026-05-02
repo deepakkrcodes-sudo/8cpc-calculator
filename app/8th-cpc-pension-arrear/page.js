@@ -1,7 +1,7 @@
 import PensionArrearCalculatorPage from "@/components/pensionArrear/PensionArrearCalculatorPage";
 import OtherToolsSection from "@/components/tools/OtherToolsSection";
 export const metadata = {
-  title: "8th CPC Pension Arrear Calculator 2026 – Accurate DR & Pension Arrears",
+  title: "8th CPC Pension Arrear Calculator 2026",
 
   description:
     "Calculate 8th CPC pension arrears with DR progression, fitment factor and commutation impact. Accurate pension arrear calculator for central government pensioners.",

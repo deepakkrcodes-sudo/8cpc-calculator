@@ -1,4 +1,5 @@
 import Link from "next/link";
+import OtherToolsSection from "@/components/tools/OtherToolsSection";
 
 export const metadata = {
   title: "Key Factors Affecting 8th Pay Commission Salary Decisions",
@@ -224,6 +225,10 @@ export default function FactorsAffecting8CPCPage() {
           </Link>
         </section>
       </article>
+
+      <div className="bg-gray-100 p-4 rounded-xl shadow-sm hover:shadow-md transition">
+        <OtherToolsSection />
+      </div>
 
       <section className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 sm:p-7 space-y-4">
         <h2 className="text-xl font-semibold text-gray-900">FAQs</h2>

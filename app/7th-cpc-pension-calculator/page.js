@@ -2,7 +2,7 @@ import PensionCalculator from "@/components/pension/PensionCalculator";
 import OtherToolsSection from "@/components/tools/OtherToolsSection";
 
 export const metadata = {
-    title: "7th CPC Pension Calculator 2026 – Calculate Pension, DR & Commutation",
+    title: "7th CPC Pension Calculator 2026",
 
     description:
         "Calculate your 7th CPC pension with Dearness Relief (DR), commutation and monthly pension breakdown. Accurate pension calculator for central government employees.",
@@ -13,7 +13,10 @@ export const metadata = {
         "DR pension calculator",
         "commutation pension calculation",
         "central government pension calculator India",
-        "pension calculator"
+        "pension calculator",
+        "latest pension calculator",
+        "family pension",
+        "commutation calculation"
     ],
 
     alternates: {

@@ -1,4 +1,6 @@
 import Link from "next/link";
+import FitmentProbabilityMeter from "@/components/blog/FitmentProbabilityMeter";
+import OtherToolsSection from "@/components/tools/OtherToolsSection";
 
 export const metadata = {
   title: "8th CPC Fitment Factor: Most Probable Outcome (2026 Analysis)",
@@ -136,15 +138,15 @@ export default function ExpectedFitmentFactorPage() {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent" />
           <div className="absolute bottom-0 p-5 sm:p-7 text-white space-y-3">
-            <div className="text-xs uppercase tracking-wider text-indigo-100">
-              8th CPC Fitment Factor Analysis - 2026
-            </div>
+
+
             <h1 className="text-2xl sm:text-4xl font-semibold max-w-4xl leading-tight">
-              8th CPC Fitment Factor: A Data-Driven Editorial on the Most Probable Outcome
+              8th CPC Fitment Factor: Exploring the Most Probable Range
             </h1>
+
             <p className="text-sm text-gray-100 max-w-3xl">
-              A practical reading of DA, historical fitment factors, union demands,
-              fiscal constraints and likely negotiation outcomes.
+              Analysis based on past trends, DA patterns, fiscal considerations
+              and current discussions — aimed at understanding what range may be realistically expected.
             </p>
           </div>
         </div>
@@ -319,6 +321,12 @@ export default function ExpectedFitmentFactorPage() {
           </Link>
         </section>
       </article>
+
+      <FitmentProbabilityMeter />
+
+      <div className="bg-gray-100 p-4 rounded-xl shadow-sm hover:shadow-md transition">
+        <OtherToolsSection />
+      </div>
 
       <section className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 sm:p-7 space-y-4">
         <h2 className="text-xl font-semibold text-gray-900">FAQs</h2>

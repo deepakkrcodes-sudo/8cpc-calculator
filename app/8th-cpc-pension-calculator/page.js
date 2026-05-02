@@ -2,7 +2,7 @@ import PensionCalculator from "@/components/pension/PensionCalculator";
 import OtherToolsSection from "@/components/tools/OtherToolsSection";
 
 export const metadata = {
-  title: "8th CPC Pension Calculator 2026 – DR, Commutation & Pension Estimate",
+  title: "8th CPC Pension Calculator 2026",
 
   description:
     "Calculate your 8th CPC pension with fitment factor, Dearness Relief (DR) and commutation. Compare 7th vs 8th CPC pension instantly.",
@@ -13,7 +13,9 @@ export const metadata = {
     "DR pension calculator",
     "projected pension as per 8 cpc",
     "commutation pension calculator",
-    "8th pay commission pension India"
+    "8th pay commission pension India",
+    "government employee pension",
+    "pension calculator"
   ],
 
   alternates: {
@@ -73,7 +75,6 @@ export default function Page() {
   return (
 
     <>
-
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
@@ -83,8 +84,6 @@ export default function Page() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppSchema) }}
       />
-
-
 
       <div className="w-full max-w-full sm:max-w-[1200px] lg:max-w-[1100px] xl:max-w-[1000px] mx-auto px-2 sm:px-6 lg:px-8 py-6 space-y-4">
 

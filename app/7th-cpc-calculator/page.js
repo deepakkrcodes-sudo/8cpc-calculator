@@ -4,7 +4,7 @@ import OtherToolsSection from "@/components/tools/OtherToolsSection";
 
 export const metadata = {
 
-  title: "7th CPC Salary Calculator 2026 – Accurate Gross Salary, Net Salary with DA @ 60%",
+  title: "7th CPC Salary Calculator 2026",
 
   description: "Calculate your 7th CPC salary with DA, HRA, TA and deductions. Get accurate in-hand salary for central government employees with latest DA rates.",
 
@@ -13,6 +13,12 @@ export const metadata = {
     "7 cpc calculator",    
     "7th pay commission calculator",
     "in hand salary 7th CPC",
+    "7 cpc with DA 60%",
+    "ssc cgl salary",
+    "ssc chsl salary",
+    "railway salary",
+    "ssc mts salary",
+    "delhi government salary",
     "DA HRA calculator government employees",
     "central government salary calculator"
   ],

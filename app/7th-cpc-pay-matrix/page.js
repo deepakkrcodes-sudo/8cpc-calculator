@@ -3,7 +3,7 @@ import OtherToolsSection from "@/components/tools/OtherToolsSection";
 import FAQSection7cpcPayMatrix from "@/components/paymatrix/FAQSection7cpcPayMatrix";
 
 export const metadata = {
-  title: "7th CPC Pay Matrix 2026 – Level 1 to 18 Salary Table & Structure",
+  title: "7th CPC Pay Matrix 2026",
 
   description:
     "Check complete 7th CPC pay matrix with level-wise salary, basic pay progression, and increments. Updated salary table for central government employees.",
@@ -14,7 +14,10 @@ export const metadata = {
     "level 1 to 18 salary table",
     "basic pay progression 7th CPC",
     "central government pay matrix",
-    "7th cpc pay matrix pdf"
+    "7th cpc pay matrix pdf",
+    "delhi government pay matrix",
+    "ssc salary pay matrix",
+    "ssc chsl pay matrix"
   ],
 
   alternates: {
