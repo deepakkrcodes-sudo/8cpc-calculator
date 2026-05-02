@@ -1,4 +1,5 @@
 import LTCPageClient from "./LTCPageClient";
+import { FAQ_DATA } from "@/utils/ltc/faqData";
 import FAQSection from "@/components/ltc/FAQSection";
 import OtherToolsSection from "@/components/tools/OtherToolsSection";
 
