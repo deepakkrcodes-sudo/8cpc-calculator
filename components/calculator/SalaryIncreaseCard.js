@@ -37,7 +37,7 @@ function IncreaseCard({
   after,
   color = "blue",
   trigger
- 
+
 }) {
 
 
@@ -58,30 +58,34 @@ function IncreaseCard({
   const theme =
     color === "green"
       ? {
-        gradient: "from-green-500 to-emerald-600",
-        soft: "bg-green-50",
-        text: "text-green-700",
-        glow: "shadow-green-200"
-      }
-      : {
+
         gradient: "from-indigo-500 to-blue-600",
         soft: "bg-indigo-50",
         text: "text-indigo-700",
         glow: "shadow-indigo-200"
+
+      }
+      : {
+        gradient: "from-green-500 to-emerald-600",
+        soft: "bg-green-50",
+        text: "text-green-700",
+        glow: "shadow-green-200"
+
       };
 
   const animatedAfter = useCountUp(valAfter, 1200, trigger);
-const animatedIncrease = useCountUp(increase, 1200, trigger);
-const animatedPercent = useCountUp(percent, 1200, trigger);
-const animatedProgress = useCountUp(progressWidth, 1200, trigger);
+  const animatedIncrease = useCountUp(increase, 1200, trigger);
+  const animatedPercent = useCountUp(percent, 1200, trigger);
+  const animatedProgress = useCountUp(progressWidth, 1200, trigger);
 
   const [showFinal, setShowFinal] = useState(false);
 
   useEffect(() => {
+    setShowFinal(false); // reset
+
     const timer = setTimeout(() => setShowFinal(true), 300);
     return () => clearTimeout(timer);
-  }, []);
-
+  }, [trigger]);
   return (
 
     <div className={`rounded-2xl p-5 border border-gray-200 ${theme.soft} shadow-sm`}>
@@ -146,7 +150,7 @@ export default function SalaryIncreaseCard({ result, trigger }) {
 
   return (
 
-    <div className="grid md:grid-cols-2 gap-4">
+    <div className="grid md:grid-cols-2 gap-2">
 
       <IncreaseCard
         title="Gross Salary Growth"

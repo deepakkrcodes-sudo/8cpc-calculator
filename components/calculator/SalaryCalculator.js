@@ -3,10 +3,12 @@
 import { useState, useEffect } from "react";
 import { payMatrix } from "@/data/payMatrix";
 import { calculateSalary } from "@/utils/salaryEngine";
-import SalaryCharts from "./SalaryCharts";
 import SalaryIncreaseCard from "./SalaryIncreaseCard";
+import NetSalaryPremiumCard from "./NetSalaryCard";
+
 import FitmentFactorControl from "./FitmentFactorControl";
 import SalaryBreakdown from "./SalaryBreakdown";
+
 
 import {
     Layers,
@@ -344,9 +346,9 @@ export default function SalaryCalculator() {
                         >
                             <option value="HIGHER">City Class X</option>
                             <option value="OTHER">City Class Y & Z</option>
-                            <option value="PWD_HIGHER">2× City Class X (for PwD)</option>
-                            <option value="PWD_OTHER">2× City Class Y & Z (for PwD)</option>
-                            <option value="NONE">None</option>
+                            <option value="PWD_HIGHER">2x City Class X (for PwD)</option>
+                            <option value="PWD_OTHER">2x City Class Y & Z (for PwD)</option>
+                            <option value="NONE">None (Govt. Accommodation)</option>
                         </select>
                     </div>
 
@@ -412,31 +414,20 @@ export default function SalaryCalculator() {
                 </button>
             </div>
 
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-6">
+            {/* ✅ NEW PREMIUM NET CARD */}
+            <NetSalaryPremiumCard
+                result={adjustedResult}
+                trigger={animateTrigger}
+            />
+
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-0 space-y-6">
 
                 {result && (
                     <>
-                        {/* 🔹 RESULT - HERO SECTION */}
-                        <div >
-                            <div className="text-center mb-3">
-                                <h2 className="text-sm md:text-base font-medium text-indigo-700 tracking-wide">
-                                    Projected Salary After 8th CPC
-                                </h2>
-                            </div>
-                            <SalaryIncreaseCard result={adjustedResult} trigger={animateTrigger} />
-                        </div>
 
-                        {/* 🔸 Divider */}
-                        <div className="flex items-center gap-3">
-                            <div className="h-px flex-1 bg-gray-200"></div>
-                            <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">
-                                Detailed Breakdown
-                            </span>
-                            <div className="h-px flex-1 bg-gray-200"></div>
-                        </div>
 
                         {/* 🔹 BREAKDOWN SECTION */}
-                        <div className="bg-gray-50 border border-gray-100 rounded-xl p-4">
+                        <div className="bg-gray-50 border border-gray-100 rounded-xl p-3 md:p-4">
                             <SalaryBreakdown
                                 result={result}
                                 pensionType={pensionType}
@@ -452,6 +443,22 @@ export default function SalaryCalculator() {
                                 addDeduction={addDeduction}
                                 updateDeduction={updateDeduction}
                                 removeDeduction={removeDeduction}
+                            />
+                        </div>
+
+                    </>
+                )}
+            </div>
+
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-0 space-y-6">
+
+                {result && (
+                    <>
+                        <div >
+
+                            <SalaryIncreaseCard
+                                result={adjustedResult}
+                                trigger={animateTrigger}
                             />
                         </div>
                     </>

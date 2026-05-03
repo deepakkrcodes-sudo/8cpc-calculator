@@ -78,7 +78,7 @@ export default function SalaryBreakdown({
                 <div className="mt-3 h-[2px] w-full rounded-full bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 opacity-80"></div>
             </div>
             {/* ================= EARNINGS ================= */}
-            <div className="rounded-xl border border-gray-200 bg-blue-50/40 p-4">
+            <div className="rounded-xl border border-gray-200 bg-blue-50/40 p-3 md:p-4">
 
                 <div className="text-sm font-semibold text-blue-700 mb-3">
                     📈 Earnings
@@ -171,8 +171,8 @@ export default function SalaryBreakdown({
 
 
             {/* ================= DEDUCTIONS ================= */}
-            {/* ================= DEDUCTIONS ================= */}
-            <div className="rounded-xl border border-gray-200 bg-rose-50/40 p-4">
+            
+            <div className="rounded-xl border border-gray-200 bg-rose-50/40 p-3 md:p-4">
 
                 <div className="text-sm font-semibold text-rose-700 mb-3">
                     📉 Deductions

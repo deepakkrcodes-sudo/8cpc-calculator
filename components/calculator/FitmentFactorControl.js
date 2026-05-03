@@ -27,24 +27,26 @@ export default function FitmentFactorControl({
     ];
 
     return (
-        <div className="space-y-3">
-            <div className="rounded-xl border border-gray-200 bg-white shadow-sm px-3 py-3">
+        <div className="space-y-2 md:space-y-3">
+
+            <div className="rounded-xl 
+    px-1 py-1 md:px-2 md:py-2">
 
                 {/* TITLE */}
                 <div>
-                    <label className="text-md font-semibold flex items-center gap-2 text-gray-800">
-                        <BarChart3 size={18} className="text-indigo-500" />
-                        Fitment Factor
+                    <label className="text-sm md:text-md font-semibold flex items-center gap-2 text-gray-800">
+                        <BarChart3 size={16} className="text-indigo-500 md:size-[18px]" />
+                        <span className="truncate">Fitment Factor</span>
                     </label>
 
-                    <p className="text-xs text-gray-500">
+                    {/* ❌ Hidden on mobile */}
+                    <p className="hidden md:block text-xs text-gray-500">
                         Expected range: <span className="font-medium">1.92 – 3.83</span> • You can explore wider scenarios
                     </p>
                 </div>
 
-
                 {/* SLIDER + INPUT */}
-                <div className="flex items-center gap-3 mt-2">
+                <div className="flex items-center gap-2 md:gap-3 mt-2">
 
                     <input
                         type="range"
@@ -61,14 +63,15 @@ export default function FitmentFactorControl({
                         step="0.01"
                         value={fitmentFactor}
                         onChange={(e) => setFitmentFactor(Number(e.target.value))}
-                        className="w-20 border border-gray-300 rounded-md px-2 py-1 text-center text-sm focus:ring-2 focus:ring-indigo-400 outline-none"
+                        className="w-16 md:w-20 border border-gray-300 rounded-md 
+          px-2 py-1 text-center text-xs md:text-sm 
+          focus:ring-2 focus:ring-indigo-400 outline-none"
                     />
 
                 </div>
 
-
-                {/* PRESET BUTTON GRID */}
-                <div className="grid grid-cols-4 gap-2 mt-3">
+                {/* PRESETS */}
+                <div className="grid grid-cols-4 gap-1.5 md:gap-2 mt-2 md:mt-3">
 
                     {presets.map((p) => {
                         const isActive = Number(fitmentFactor).toFixed(2) === p.value.toFixed(2);
@@ -77,14 +80,15 @@ export default function FitmentFactorControl({
                             <button
                                 key={p.value}
                                 onClick={() => setFitmentFactor(p.value)}
-                                title={p.label} // 👈 tooltip (clean UX)
+                                title={p.label}
                                 className={`
-                w-full py-2 rounded-lg text-sm font-medium transition-all duration-200
-                border
-                ${isActive
+              w-full py-1.5 md:py-2 rounded-lg 
+              text-xs md:text-sm font-medium 
+              transition-all duration-200 border
+              ${isActive
                                         ? "bg-indigo-600 text-white shadow-md scale-[1.03]"
                                         : `${p.color} border-gray-200 hover:shadow-sm`}
-              `}
+            `}
                             >
                                 {p.value.toFixed(2)}
                             </button>
@@ -93,10 +97,8 @@ export default function FitmentFactorControl({
 
                 </div>
 
-
-                {/* LEGENDS (ALL, CLEAN, RESPONSIVE) */}
-                <div className="flex flex-wrap gap-2 pt-1 mt-2">
-
+                {/* ❌ LEGENDS HIDDEN ON MOBILE */}
+                <div className="hidden md:flex flex-wrap gap-2 pt-1 mt-2">
                     {presets.map((p) => (
                         <div
                             key={p.value}
@@ -106,15 +108,13 @@ export default function FitmentFactorControl({
                             {p.label}
                         </div>
                     ))}
-
                 </div>
 
             </div>
 
-
-            {/* MICRO INSIGHT */}
-            <div className="text-[11px] text-gray-400">
-                💡 Higher fitment factor = higher salary & pension projection
+            {/* MICRO INSIGHT (lighter on mobile) */}
+            <div className="text-[10px] md:text-[11px] text-gray-400 px-1">
+                💡 Higher fitment factor = higher salary
             </div>
 
         </div>
