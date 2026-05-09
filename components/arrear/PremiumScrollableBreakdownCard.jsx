@@ -496,17 +496,19 @@ function ComparisonSection({ title, rows, tone }) {
 
             {/* 7TH */}
             <div className="text-center tabular-nums text-gray-800">
-              ₹ {Number(seventh || 0).toLocaleString("en-IN", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
+              ₹{" "}
+              {Number(seventh || 0).toLocaleString("en-IN", {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
               })}
             </div>
 
             {/* 8TH */}
             <div className="text-center tabular-nums text-gray-800">
-              ₹ {Number(eighth || 0).toLocaleString("en-IN", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
+              ₹{" "}
+              {Number(eighth || 0).toLocaleString("en-IN", {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
               })}
             </div>
 

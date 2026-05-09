@@ -134,13 +134,20 @@ export default function ArrearBreakdownTable({ result }) {
           </div>
 
           {/* COLLAPSE BUTTON */}
-          <button
-            onClick={() => setOpen(!open)}
-            className="text-gray-400 bg-white shadow-sm border border-gray-100 p-1.5 rounded-full"
-          >
-            {open ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-          </button>
+
         </div>
+
+
+      </div>
+
+      <div className="mt-1 flex items-start gap-1.5 text-[10px] leading-relaxed bg-gray-20 text-amber-700/90 sm:text-[12px]">
+
+        <span className="mt-[3px] h-1.5 w-1.5 shrink-0 rounded-full bg-amber-400" />
+
+        <span>
+          Arrear estimation considers Basic Pay and DA only; fixed deductions and regular tax are assumed unchanged during accrual.
+        </span>
+
       </div>
 
       {/* MOBILE HINT */}
