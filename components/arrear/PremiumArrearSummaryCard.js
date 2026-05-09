@@ -26,7 +26,14 @@ export default function PremiumArrearSummaryCard({
             <div className="mt-2 text-3xl md:text-4xl font-bold">
               Rs. {formatINR(result.totalNetArrear)}
             </div>
-            <div className="mt-2 text-sm text-slate-600">
+
+
+            <div className="mt-0  px-1 py-1 text-[10px] leading-relaxed text-amber-900 sm:text-xs">
+              *Arrear payment may attract additional tax in the payout year based on your applicable tax regime.
+            </div>
+
+            
+            <div className="mt-1 text-sm text-slate-600">
               Based on separate 7th CPC and 8th CPC salary calculation for each eligible period.
             </div>
           </div>
@@ -36,12 +43,7 @@ export default function PremiumArrearSummaryCard({
           </div>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-          <MetricCard
-            icon={<Wallet size={16} />}
-            label="Gross Arrear"
-            value={`Rs. ${formatINR(result.totalGrossArrear)}`}
-          />
+        <div className="grid gap-3 sm:grid-cols-3">
           <MetricCard
             icon={<Layers3 size={16} />}
             label="Fitment Factor"
@@ -73,6 +75,7 @@ export default function PremiumArrearSummaryCard({
             <div className="mt-1 font-semibold">{result.periods.length}</div>
           </div>
         </div>
+
       </div>
     </div>
   );

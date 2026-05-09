@@ -6,7 +6,7 @@ import {
   generatePeriods,
   parseISODate
 } from "./arrearPeriodGenerator";
-import { calculatePeriodSalary } from "./arrearSalaryCalculator";
+import { calculateArrearTax, calculatePeriodSalary } from "./arrearSalaryCalculator";
 
 const ARREAR_START_DATE = new Date(Date.UTC(2026, 0, 1));
 
@@ -21,7 +21,10 @@ export function calculateArrear({
   incrementDate,
   joiningType,
   joiningDate,
-  promotion
+  promotion,
+  pensionSystem = "NPS",
+  gpfMonthly = 0,
+  incomeTaxOverride = null
 }) {
   const periods = generatePeriods(implementationPeriod);
   const effectiveFrom = resolveEffectiveStartDate(joiningType, joiningDate);
@@ -65,15 +68,17 @@ export function calculateArrear({
     const eligibleStart =
       effectiveFrom > periodStart ? effectiveFrom : periodStart;
 
+    const periodDaIncrease = index === 0
+      ? 2
+      : Number(daRates?.[index] ?? 2);
+    const da8Percent = cumulativeDaIncrease;
+
+    cumulativeDaIncrease += periodDaIncrease;
+    const da7Percent = 58 + cumulativeDaIncrease;
+
     if (eligibleStart >= periodEndExclusive) {
-      cumulativeDaIncrease += Number(daRates?.[index] ?? 2);
       return;
     }
-
-    cumulativeDaIncrease += Number(daRates?.[index] ?? 2);
-
-    const da7Percent = 58 + cumulativeDaIncrease;
-    const da8Percent = cumulativeDaIncrease;
 
     let cursor = eligibleStart;
     const aggregate = createPeriodAggregate(period, da7Percent, da8Percent);
@@ -110,16 +115,15 @@ export function calculateArrear({
         promotionApplied
       });
 
-      const basic7ForHRA = payMatrix[currentLevel][currentBasicIndex];
-      const hraAmount = Math.round(basic7ForHRA * hra7Percent / 100);
       const salary = calculatePeriodSalary({
         currentLevel,
         currentBasicIndex,
         fitmentFactor,
-        hraAmount,
-        tptaType,
         da7Percent,
-        da8Percent
+        da8Percent,
+        pensionSystem,
+        gpfMonthly,
+        tax: 0
       });
 
       const segmentDays = differenceInDays(cursor, nextBoundary);
@@ -139,19 +143,31 @@ export function calculateArrear({
       aggregate.basicStart ||= salary.basic7;
       aggregate.levelEnd = currentLevel;
       aggregate.basicEnd = salary.basic7;
+      aggregate.basic8End = salary.basic8;
+      aggregate.basic7 += Math.round(salary.basic7 * segmentMonths);
+      aggregate.basic8 += Math.round(salary.basic8 * segmentMonths);
+      aggregate.da7 += Math.round(salary.da7 * segmentMonths);
+      aggregate.da8 += Math.round(salary.da8 * segmentMonths);
       aggregate.gross7 += Math.round(salary.gross7 * segmentMonths);
       aggregate.gross8 += Math.round(salary.gross8 * segmentMonths);
+      aggregate.pension7 += Math.round(salary.pension7 * segmentMonths);
+      aggregate.pension8 += Math.round(salary.pension8 * segmentMonths);
+      aggregate.cgegis7 += Math.round(salary.cgegis7 * segmentMonths);
+      aggregate.cgegis8 += Math.round(salary.cgegis8 * segmentMonths);
+      aggregate.cghs7 += Math.round(salary.cghs7 * segmentMonths);
+      aggregate.cghs8 += Math.round(salary.cghs8 * segmentMonths);
+      aggregate.totalDeduction7 += Math.round(salary.totalDeduction7 * segmentMonths);
+      aggregate.totalDeduction8 += Math.round(salary.totalDeduction8 * segmentMonths);
       aggregate.net7 += Math.round(salary.net7 * segmentMonths);
       aggregate.net8 += Math.round(salary.net8 * segmentMonths);
       aggregate.grossArrear += grossArrear;
       aggregate.netArrear += netArrear;
-      aggregate.tax7 = salary.tax7;
-      aggregate.tax8 = salary.tax8;
-      aggregate.hra7 = salary.hra7;
-      aggregate.hra8 = salary.hra8;
-      aggregate.ta7 = salary.ta7;
-      aggregate.ta8 = salary.ta8;
-      aggregate.basic8 = salary.basic8;
+      aggregate.tax7 = 0;
+      aggregate.tax8 = 0;
+      aggregate.hra7 = 0;
+      aggregate.hra8 = 0;
+      aggregate.ta7 = 0;
+      aggregate.ta8 = 0;
       aggregate.eligibleDays += segmentDays;
       aggregate.eligibleMonths += segmentMonths;
 
@@ -161,10 +177,44 @@ export function calculateArrear({
     periodResults.push(finalizePeriodAggregate(aggregate));
   });
 
+  const autoIncomeTax = calculateArrearTax(totalGrossArrear);
+  const incomeTaxAmount = incomeTaxOverride === null || incomeTaxOverride === ""
+    ? autoIncomeTax
+    : Math.max(Math.round(Number(incomeTaxOverride) || 0), 0);
+  const taxableBase = Math.max(totalGrossArrear, 1);
+  let allocatedTax = 0;
+  const taxedPeriodResults = periodResults.map((period, index) => {
+    const taxShare = index === periodResults.length - 1
+      ? incomeTaxAmount - allocatedTax
+      : Math.round((period.grossArrear / taxableBase) * incomeTaxAmount);
+
+    allocatedTax += taxShare;
+
+    return {
+      ...period,
+      tax7: taxShare,
+      tax8: taxShare,
+      totalDeduction7: period.totalDeduction7 + taxShare,
+      totalDeduction8: period.totalDeduction8 + taxShare,
+      net7: period.net7 - taxShare,
+      net8: period.net8 - taxShare,
+      netArrear: period.netArrear - taxShare,
+      periodArrear: period.netArrear - taxShare
+    };
+  });
+
+  totalNetArrear = taxedPeriodResults.reduce(
+    (sum, period) => sum + period.netArrear,
+    0
+  );
+
   return {
-    periods: periodResults,
+    periods: taxedPeriodResults,
     totalGrossArrear: Math.round(totalGrossArrear),
     totalNetArrear: Math.round(totalNetArrear),
+    autoIncomeTax,
+    incomeTaxAmount,
+    pensionSystem,
     totalEligibleMonths: Number(totalEligibleMonths.toFixed(2)),
     effectiveFrom: formatDate(effectiveFrom),
     implementationDate: formatDate(new Date(implementationDate.getTime() - 86400000))
@@ -426,6 +476,18 @@ function createPeriodAggregate(period, da7Percent, da8Percent) {
     da8Percent,
     gross7: 0,
     gross8: 0,
+    basic7: 0,
+    basic8: 0,
+    da7: 0,
+    da8: 0,
+    pension7: 0,
+    pension8: 0,
+    cgegis7: 0,
+    cgegis8: 0,
+    cghs7: 0,
+    cghs8: 0,
+    totalDeduction7: 0,
+    totalDeduction8: 0,
     net7: 0,
     net8: 0,
     grossArrear: 0,
@@ -440,7 +502,7 @@ function createPeriodAggregate(period, da7Percent, da8Percent) {
     levelEnd: "",
     basicStart: 0,
     basicEnd: 0,
-    basic8: 0,
+    basic8End: 0,
     tax7: 0,
     tax8: 0,
     hra7: 0,
@@ -455,12 +517,18 @@ function createPeriodAggregate(period, da7Percent, da8Percent) {
 function finalizePeriodAggregate(aggregate) {
   return {
     period: aggregate.period,
+    type: "period",
+    label: aggregate.period,
     level:
       aggregate.levelStart === aggregate.levelEnd
         ? aggregate.levelEnd
         : `${aggregate.levelStart} to ${aggregate.levelEnd}`,
     basic7: aggregate.basicEnd,
-    basic8: aggregate.basic8,
+    basic8: aggregate.basic8End,
+    basic7Total: aggregate.basic7,
+    basic8Total: aggregate.basic8,
+    da7: aggregate.da7,
+    da8: aggregate.da8,
     da7Percent: aggregate.da7Percent,
     da8Percent: aggregate.da8Percent,
     hra7: aggregate.hra7,
@@ -471,14 +539,27 @@ function finalizePeriodAggregate(aggregate) {
     gross8: aggregate.gross8,
     net7: aggregate.net7,
     net8: aggregate.net8,
+    nps7: aggregate.pension7,
+    nps8: aggregate.pension8,
+    pension7: aggregate.pension7,
+    pension8: aggregate.pension8,
+    cgegis7: aggregate.cgegis7,
+    cgegis8: aggregate.cgegis8,
+    cghs7: aggregate.cghs7,
+    cghs8: aggregate.cghs8,
+    totalDeduction7: aggregate.totalDeduction7,
+    totalDeduction8: aggregate.totalDeduction8,
     tax7: aggregate.tax7,
     tax8: aggregate.tax8,
     grossArrear: aggregate.grossArrear,
     netArrear: aggregate.netArrear,
+    periodArrear: aggregate.netArrear,
     eligibleDays: aggregate.eligibleDays,
     eligibleMonths: Number(aggregate.eligibleMonths.toFixed(2)),
     eligibleFrom: aggregate.eligibleFrom,
     eligibleTo: aggregate.eligibleTo,
+    startDate: aggregate.eligibleFrom,
+    endDate: aggregate.eligibleTo,
     isIncrement: aggregate.isIncrement,
     isPromotion: aggregate.isPromotion,
     promotionDate: aggregate.promotionDate,

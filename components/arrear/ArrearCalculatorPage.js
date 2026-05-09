@@ -20,16 +20,17 @@ import FitmentFactorControl from "@/components/calculator/FitmentFactorControl";
 import PremiumArrearSummaryCard from "@/components/arrear/PremiumArrearSummaryCard";
 import ArrearTimelineChart from "@/components/arrear/ArrearTimelineChart";
 import ArrearBreakdownTable from "@/components/arrear/ArrearBreakdownTable";
-
+import PremiumScrollableBreakdownCard from "./PremiumScrollableBreakdownCard";
 
 const incrementMonthOptions = [
   { value: "Jan 2026", label: "January" },
   { value: "July 2026", label: "July" }
 ];
 
+
 const joiningOptions = [
   { value: "before", label: "Before 1 Jan 2026" },
-  { value: "after", label: "Joined After 1 Jan 2026" }
+  { value: "after", label: "After 1 Jan 2026" }
 ];
 
 const daIncreaseOptions = [2, 3, 4, 5];
@@ -83,6 +84,10 @@ export default function ArrearCalculatorPage() {
   const promotionLevelOptions = Object.keys(payMatrix).filter(
     (item) => getLevelNumber(item) > currentLevelNumber
   );
+
+  const [pensionSystem, setPensionSystem] = useState("NPS");
+  const [gpfInput, setGpfInput] = useState("");
+
   const promotionPreview = useMemo(
     () =>
       getPromotionPreview({
@@ -158,6 +163,8 @@ export default function ArrearCalculatorPage() {
         incrementDate: incrementDate || null,
         joiningType,
         joiningDate,
+        pensionSystem,
+        gpfInput: Number(gpfInput || 0),
         promotion: promotionApplicable
           ? {
             applicable: true,
@@ -262,7 +269,7 @@ export default function ArrearCalculatorPage() {
 
         <div className="space-y-4">
 
-
+          {/*
           <div>
             <label htmlFor="arrear-city-class" className="flex items-center gap-2 text-sm text-gray-700">
               <MapPin size={15} className="text-blue-500" />
@@ -302,6 +309,50 @@ export default function ArrearCalculatorPage() {
                 </option>
               ))}
             </select>
+          </div>
+
+          <div className="space-y-3">
+            <label className="text-sm font-medium text-gray-700">
+              Pension System
+            </label>
+
+            <div className="grid grid-cols-2 gap-3">
+              {["NPS", "OPS"].map((type) => (
+                <label
+                  key={type}
+                  className={`flex items-center gap-2 rounded-xl border px-4 py-2 text-sm ${pensionSystem === type
+                      ? "border-indigo-500 bg-indigo-50 text-indigo-700"
+                      : "border-gray-200"
+                    }`}
+                >
+                  <input
+                    type="radio"
+                    value={type}
+                    checked={pensionSystem === type}
+                    onChange={(e) => setPensionSystem(e.target.value)}
+                  />
+                  {type}
+                </label>
+              ))}
+            </div>
+
+            {pensionSystem === "OPS" && (
+              <div>
+                <label className="text-sm text-gray-600">
+                  GPF Contribution (Monthly)
+                </label>
+                <input
+                  type="number"
+                  placeholder="Default ~6% of Basic + DA"
+                  value={gpfInput}
+                  onChange={(e) => setGpfInput(e.target.value)}
+                  className="w-full mt-1 border rounded-lg px-3 py-2 text-sm"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Enter opted GPF amount (if different than default ~6%)
+                </p>
+              </div>
+            )}
           </div>
 
           <div>
@@ -352,12 +403,15 @@ export default function ArrearCalculatorPage() {
             </div>
           </div>
 
+           */}
+
+
           <div>
             <label className="flex items-center gap-2 text-sm text-gray-700">
               <CalendarClock size={15} className="text-indigo-500" />
               Service Joining Date
             </label>
-            <div className="mt-2 grid gap-3 sm:grid-cols-2">
+            <div className="mt-2 grid gap-3 grid-cols-2">
               {joiningOptions.map((option) => (
                 <label
                   key={option.value}
@@ -422,7 +476,7 @@ export default function ArrearCalculatorPage() {
             <div className="h-[2px] w-full bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 rounded-full"></div>
 
             <p className="text-xs sm:text-sm text-left text-gray-500">
-              Each row adds cumulatively to the 7th CPC base DA of 58% and the 8th CPC base DA of 0%.
+              7th CPC DA progresses from 58%, while 8th CPC DA starts from 0% and accumulates from subsequent periods.
             </p>
           </div>
 
@@ -463,17 +517,62 @@ export default function ArrearCalculatorPage() {
                   {period.label}
                 </div>
 
-                <select
-                  className="rounded-md border border-gray-300 px-2 sm:px-3 py-1.5 sm:py-2 text-sm focus:ring-2 focus:ring-indigo-400"
-                  value={daRates[index] ?? 2}
-                  onChange={(e) => updateDARate(index, Number(e.target.value))}
-                >
-                  {daIncreaseOptions.map((item) => (
-                    <option key={item} value={item}>
-                      {item}%
-                    </option>
-                  ))}
-                </select>
+                <div className="flex items-center gap-2">
+
+
+                  {index === 0 ? (
+
+                    <div
+                      className="
+      inline-flex items-center gap-1.5
+
+      rounded-md
+      border border-indigo-200
+
+      bg-indigo-50/80
+
+      px-2.5 py-1.5
+
+      text-xs sm:text-sm
+      font-medium
+      text-indigo-700
+
+      shadow-sm
+    "
+                    >
+                      <span>2%</span>
+
+                      <span className="h-3 w-px bg-indigo-200" />
+
+                      <span className="text-[10px] uppercase tracking-wide text-indigo-500">
+                        Fixed
+                      </span>
+                    </div>
+
+                  ) : (
+
+                    <select
+                      className="
+      rounded-md border border-gray-300
+      px-2 sm:px-3
+      py-1.5 sm:py-2
+      text-sm
+
+      focus:ring-2
+      focus:ring-indigo-400
+    "
+                      value={daRates[index] ?? 2}
+                      onChange={(e) => updateDARate(index, Number(e.target.value))}
+                    >
+                      {daIncreaseOptions.map((item) => (
+                        <option key={item} value={item}>
+                          {item}%
+                        </option>
+                      ))}
+                    </select>
+
+                  )}
+                </div>
 
               </div>
             ))}
@@ -640,8 +739,10 @@ export default function ArrearCalculatorPage() {
             implementationPeriod={implementationPeriod}
             fitmentFactor={fitmentFactor}
           />
-          <ArrearTimelineChart result={result} />
+
           <ArrearBreakdownTable result={result} />
+          <PremiumScrollableBreakdownCard result={result} />
+          <ArrearTimelineChart result={result} />
         </div>
       )}
 

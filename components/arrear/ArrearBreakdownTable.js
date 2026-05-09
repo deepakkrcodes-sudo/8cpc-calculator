@@ -18,9 +18,21 @@ function expandToMonthly(periods) {
   periods.forEach((p, idx) => {
     const totalMonths = 6;
 
-    const net7 = p.net7 || 0;
-    const net8 = p.net8 || 0;
-    const diff = p.diff ?? (net8 - net7);
+    const gross7 =
+      (p.basic7Total ?? p.basic7 ?? 0) +
+      (p.da7 ?? 0);
+
+    const gross8 =
+      (p.basic8Total ?? p.basic8 ?? 0) +
+      (p.da8 ?? 0);
+
+    const deduction7 = p.pension7 ?? p.nps7 ?? 0;
+    const deduction8 = p.pension8 ?? p.nps8 ?? 0;
+
+    const net7 = gross7 - deduction7;
+    const net8 = gross8 - deduction8;
+
+    const diff = net8 - net7;
 
     const mNet7 = net7 / totalMonths;
     const mNet8 = net8 / totalMonths;
@@ -44,10 +56,10 @@ function expandToMonthly(periods) {
 
       monthly.push({
         period: `${monthNames[mIdx]} ${y}`,
-        net7: Math.round(mNet7),
-        net8: Math.round(mNet8),
-        diff: Math.round(mDiff),
-        netArrear: Math.round(mDiff),
+        net7: Number(mNet7.toFixed(2)),
+        net8: Number(mNet8.toFixed(2)),
+        diff: Number(mDiff.toFixed(2)),
+        netArrear: Number(mDiff.toFixed(2)),
 
         isPromotion: i === 0 ? p.isPromotion : false,
         isIncrement: i === 0 ? p.isIncrement : false,
@@ -160,31 +172,43 @@ export default function ArrearBreakdownTable({ result }) {
 
               <tbody className="divide-y divide-gray-100">
                 {displayPeriods.map((p, i) => {
-                  let net7 = p.net7 ?? 0;
-                  let net8 = p.net8 ?? 0;
-                  let diff = p.diff ?? (net8 - net7);
+                  const gross7 =
+                    (p.basic7Total ?? p.basic7 ?? 0) +
+                    (p.da7 ?? 0);
+
+                  const gross8 =
+                    (p.basic8Total ?? p.basic8 ?? 0) +
+                    (p.da8 ?? 0);
+
+                  const deduction7 = p.pension7 ?? p.nps7 ?? 0;
+                  const deduction8 = p.pension8 ?? p.nps8 ?? 0;
+
+                  let net7 = gross7 - deduction7;
+                  let net8 = gross8 - deduction8;
+
+                  let diff = net8 - net7;
 
                   if (viewMode === "HALF_YEARLY") {
                     const months = 6;
 
                     // 👉 convert to monthly for display
-                    net7 = net7 / months;
-                    net8 = net8 / months;
-                    diff = diff / months;
+                    net7 = Number((net7 / months).toFixed(2));
+                    net8 = Number((net8 / months).toFixed(2));
+                    diff = Number((diff / months).toFixed(2));
                   }
 
                   const arrear =
                     viewMode === "MONTHLY"
                       ? p.netArrear ?? diff
-                      : (p.diff ?? (p.net8 - p.net7)); // 👉 full 6-month arrear
+                      : (p.netArrear ?? p.diff ?? (p.net8 - p.net7));
 
                   return (
                     <tr key={i} className="hover:bg-indigo-50/30">
                       <td
                         title={viewMode === "MONTHLY" ? p.period : formatPeriodLabel(p.period)}
                         className={`px-1 sm:px-3 py-1.5 sm:py-2 whitespace-nowrap text-[11px] sm:text-sm truncate ${viewMode === "HALF_YEARLY"
-                            ? "max-w-[95px] sm:max-w-none"
-                            : "max-w-[45px] sm:max-w-none"
+                          ? "max-w-[95px] sm:max-w-none"
+                          : "max-w-[45px] sm:max-w-none"
                           }`}
                       >
                         <div className="flex items-center gap-2">
