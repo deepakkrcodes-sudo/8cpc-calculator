@@ -374,6 +374,8 @@ export default function ArrearCalculatorPage() {
             </select>
           </div>
 
+          */}
+
           <div>
             <label className="flex items-center gap-2 text-sm text-gray-700">
               <CalendarClock size={15} className="text-purple-500" />
@@ -403,7 +405,7 @@ export default function ArrearCalculatorPage() {
             </div>
           </div>
 
-           */}
+           
 
 
           <div>

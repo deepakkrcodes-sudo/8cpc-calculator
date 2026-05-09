@@ -265,7 +265,7 @@ export default function SeventhSalaryCalculator() {
             <option value="DOUBLE_HIGHER">2× City Class X</option>
             <option value="DOUBLE_OTHER">2× City Class Y & Z</option>
 
-            <option value="NONE">No TPTA (Govt. Accommodation)</option>
+            <option value="NONE">No TPTA (Govt. Vehicle Provided)</option>
           </select>
 
         </div>

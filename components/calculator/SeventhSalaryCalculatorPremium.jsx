@@ -223,7 +223,7 @@ export default function SeventhSalaryCalculatorPremium() {
                             <option value="OTHER">City Class Y & Z</option>
                             <option value="PWD_HIGHER">2x City Class X (for PwD)</option>
                             <option value="PWD_OTHER">2x City Class Y & Z (for PwD)</option>
-                            <option value="NONE">None (Govt. Accomodation)</option>
+                            <option value="NONE">None (Govt. Vehicle Provided)</option>
                         </select>
                     </div>
 

@@ -215,7 +215,7 @@ export default function FixationInputs({ form, setForm, onCalculate }) {
               >
                 <option value="HIGHER">City Class X</option>
                 <option value="OTHER">City Class Y & Z</option>
-                <option value="NONE">None(Govt. Accommodation)</option>
+                <option value="NONE">None(Govt. Vehicle Provided)</option>
               </select>
             </div>
 
