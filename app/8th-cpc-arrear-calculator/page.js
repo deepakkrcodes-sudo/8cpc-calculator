@@ -15,7 +15,9 @@ export const metadata = {
     "salary arrear calculator 2026",
     "8th pay commission arrears calculation",
     "DA arrear calculation",
-    "government salary arrear calculator India"
+    "government salary arrear calculator India",
+    "8 cpc salary arrear calculator",
+    "8th cpc arrear calculator salaried"
   ],
 
   alternates: {
@@ -136,7 +138,7 @@ export default function Page() {
         <div className="p-2 text-center space-y-4">
           <h1 className="text-xl md:text-2xl font-semibold tracking-tight md:whitespace-nowrap md:overflow-hidden md:text-ellipsis">
             <span className="bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
-              8th CPC Salary Arrear Calculator (Salaried)
+              8th CPC Arrear Calculator (Salaried)
             </span>
           </h1>
 

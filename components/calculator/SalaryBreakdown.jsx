@@ -97,7 +97,6 @@ export default function SalaryBreakdown({
                 {Row("TA", r.seventh.ta, r.eighth.ta)}
 
                 {/* 🔥 ADD ALLOWANCES HERE */}
-                {/* 🔥 ALLOWANCES */}
                 <div className="mt-3 space-y-2">
 
                     {otherAllowances.map((a, i) => (

@@ -60,7 +60,6 @@ function expandToMonthly(periods) {
         net8: Number(mNet8.toFixed(2)),
         diff: Number(mDiff.toFixed(2)),
         netArrear: Number(mDiff.toFixed(2)),
-
         isPromotion: i === 0 ? p.isPromotion : false,
         isIncrement: i === 0 ? p.isIncrement : false,
       });
@@ -197,11 +196,13 @@ export default function ArrearBreakdownTable({ result }) {
                     diff = Number((diff / months).toFixed(2));
                   }
 
-                  const arrear =
-                    viewMode === "MONTHLY"
-                      ? p.netArrear ?? diff
-                      : (p.netArrear ?? p.diff ?? (p.net8 - p.net7));
-
+                  const arrear = Number(
+                    (
+                      viewMode === "MONTHLY"
+                        ? (p.netArrear ?? diff)
+                        : (p.netArrear ?? diff * 6)
+                    ).toFixed(2)
+                  );
                   return (
                     <tr key={i} className="hover:bg-indigo-50/30">
                       <td
