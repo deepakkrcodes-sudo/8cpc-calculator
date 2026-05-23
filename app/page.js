@@ -3,14 +3,24 @@ import Link from "next/link";
 import OtherToolsSection from "@/components/tools/OtherToolsSection";
 
 export const metadata = {
-  title: "8th CPC Salary Calculator 2026 | 7th vs 8th Pay Commission Salary",
+  title: "8th Pay Commission Salary Calculator 2026 | 8th CPC Calculator",
 
   description:
-    "Calculate your expected salary under the 8th Pay Commission with fitment factor, DA, HRA and allowances. Compare 7th vs 8th CPC salary instantly.",
+    "Calculate your expected 8th Pay Commission salary online using projected fitment factor, DA, HRA and transport allowance. Compare revised 8th CPC salary with current 7th CPC pay instantly.",
 
-  keywords:
-    ["8th CPC calculator", "8 cpc calculator", "8th pay commission salary calculator", "8th pay commission calculator", "fitment factor", "8th pay commission salary calculator", "7th vs 8th salary", "8th CPC fitment factor", "government salary calculator", "Central goverment Salary calculator"],
-
+  keywords: [
+    "8th pay commission salary calculator",
+    "8th CPC calculator",
+    "8 cpc calculator",
+    "8th cpc salary calculator",
+    "8th pay commission calculator",
+    "8th pay matrix calculator",
+    "7th vs 8th salary",
+    "8th CPC fitment factor",
+    "government salary calculator",
+    "central government salary calculator"
+  ],
+  
   alternates: {
     canonical: "https://8cpccalculator.com"
   }
