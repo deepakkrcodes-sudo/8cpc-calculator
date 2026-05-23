@@ -1,6 +1,12 @@
 import SalaryCalculator from "@/components/calculator/SalaryCalculator";
 import Link from "next/link";
 import OtherToolsSection from "@/components/tools/OtherToolsSection";
+import HomeFAQAccordion from "@/components/home/HomeFAQAccordion";
+import {
+  comparisonRows,
+  homepageFaqs,
+  howToUseSteps
+} from "@/data/homeSeoContent";
 
 export const metadata = {
   title: "8th Pay Commission Salary Calculator 2026 | 8th CPC Calculator",
@@ -28,14 +34,144 @@ export const metadata = {
 };
 
 export default function Home() {
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: homepageFaqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer
+      }
+    }))
+  };
+
+  const webApplicationSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: "8th Pay Commission Salary Calculator 2026",
+    url: "https://8cpccalculator.com",
+    applicationCategory: "FinanceApplication",
+    operatingSystem: "Any",
+    description:
+      "Online 8th Pay Commission salary calculator for estimating revised central government salary using projected fitment factor, DA, HRA and transport allowance assumptions."
+  };
 
   return (
 
     <main className="max-w-5xl mx-auto px-4 py-6 space-y-6">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webApplicationSchema) }}
+      />
+
+      
 
       {/* Salary Calculator */}
       <section>
         <SalaryCalculator />
+      </section>
+
+      <section className="bg-white p-4 rounded-xl shadow-sm">
+        <p className="text-sm text-gray-700 leading-relaxed">
+          Use this <strong>8th Pay Commission salary calculator</strong> to estimate
+          possible revised salary for central government employees and pensioners
+          under projected 8th CPC assumptions. The calculator helps compare current
+          7th CPC pay with expected revised salary by applying a selected fitment
+          factor, allowance assumptions and pay matrix values.
+        </p>
+        <p className="text-sm text-gray-700 leading-relaxed mt-2">
+          Since the final fitment factor and implementation rules are not yet
+          officially approved, this 8th CPC calculator is designed for practical
+          scenario planning. You can also review possible payout impact through the{" "}
+          <Link href="/8th-cpc-arrear-calculator" className="text-indigo-600 font-medium hover:underline">
+            8th CPC Arrear Calculator
+          </Link>{" "}
+          and pension impact through the{" "}
+          <Link href="/8th-cpc-pension-arrear" className="text-indigo-600 font-medium hover:underline">
+            Pension Arrear Calculator
+          </Link>.
+        </p>
+      </section>
+
+      <section className="bg-white p-4 rounded-xl shadow-sm space-y-4">
+        <div>
+          <h2 className="text-lg font-semibold text-gray-900">
+            How to Use the 8th Pay Commission Salary Calculator
+          </h2>
+          <p className="text-sm text-gray-700 leading-relaxed mt-1">
+            Follow these steps to generate a clean estimate of your projected
+            revised salary without treating assumptions as official figures.
+          </p>
+        </div>
+
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+          {howToUseSteps.map((step, index) => (
+            <div
+              key={step}
+              className="rounded-lg border border-gray-200 bg-gray-50 p-3 shadow-sm"
+            >
+              <div className="mb-2 flex h-7 w-7 items-center justify-center rounded-full bg-indigo-50 text-xs font-semibold text-indigo-700">
+                {index + 1}
+              </div>
+              <p className="text-sm leading-relaxed text-gray-700">{step}</p>
+            </div>
+          ))}
+        </div>
+
+        <p className="text-sm text-gray-700 leading-relaxed">
+          For best results, use your exact current basic pay and test more than one
+          fitment scenario. A moderate fitment assumption can be compared with a
+          higher assumption to understand the possible salary range. For deeper
+          context, read the{" "}
+          <Link href="/8th-cpc/insights/most-probable-fitment-factor-8th-cpc" className="text-indigo-600 font-medium hover:underline">
+            Fitment Factor Analysis
+          </Link>.
+        </p>
+      </section>
+
+      <section className="bg-white p-4 rounded-xl shadow-sm space-y-4">
+        <div>
+          <h2 className="text-lg font-semibold text-gray-900">
+            7th CPC vs Expected 8th CPC Salary Structure
+          </h2>
+          <p className="text-sm text-gray-700 leading-relaxed mt-1">
+            The comparison below summarizes how the current 7th CPC framework may
+            differ from the expected 8th CPC structure once final rules are approved.
+          </p>
+        </div>
+
+        <div className="overflow-x-auto rounded-xl border border-gray-200">
+          <table className="w-full min-w-[640px] text-sm">
+            <thead className="bg-gray-50 text-gray-700">
+              <tr>
+                <th className="px-3 py-2 text-left font-semibold">Component</th>
+                <th className="px-3 py-2 text-left font-semibold">7th CPC</th>
+                <th className="px-3 py-2 text-left font-semibold">Expected 8th CPC</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {comparisonRows.map(([label, seventh, eighth]) => (
+                <tr key={label} className="bg-white">
+                  <td className="px-3 py-2 font-medium text-gray-900">{label}</td>
+                  <td className="px-3 py-2 text-gray-700">{seventh}</td>
+                  <td className="px-3 py-2 text-gray-700">{eighth}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <p className="text-xs text-gray-500">
+          8th CPC figures are projected estimates and final recommendations are yet
+          to be officially approved. Salary arrears, pension arrears and DA reset
+          rules should be reviewed after formal notification.
+        </p>
       </section>
 
       {/* Latest Update Banner */}
@@ -349,6 +485,20 @@ export default function Home() {
           pension benefits.
         </p>
 
+      </section>
+
+      <section className="bg-white p-4 rounded-xl shadow-sm space-y-4">
+        <div>
+          <h2 className="text-lg font-semibold text-gray-900">
+            8th Pay Commission Salary Calculator FAQs
+          </h2>
+          <p className="text-sm text-gray-700 leading-relaxed mt-1">
+            Clear answers to practical questions about fitment factor, revised
+            salary, arrears, pension impact, DA reset and calculator assumptions.
+          </p>
+        </div>
+
+        <HomeFAQAccordion faqs={homepageFaqs} />
       </section>
 
     </main>

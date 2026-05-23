@@ -222,8 +222,8 @@ export default function SalaryCalculator() {
                 </h1>
 
                 {/* Subtitle */}
-                <p className="text-xs md:text-sm text-gray-600 mx-auto md:whitespace-nowrap md:overflow-hidden md:text-ellipsis">
-                    Estimate your expected salary under the 8th Pay Commission based on projected fitment factors and assumptions.
+                <p className="text-xs md:text-sm text-gray-600 mx-auto max-w-3xl leading-relaxed">
+                    Calculate your expected revised salary under the 8th CPC using projected fitment factor, DA, HRA and transport allowance. Compare your estimated 8th CPC salary with current 7th CPC pay instantly.
                 </p>
 
                 {/* Premium gradient line */}
