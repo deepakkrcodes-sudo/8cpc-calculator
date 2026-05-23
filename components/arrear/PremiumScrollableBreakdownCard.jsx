@@ -21,33 +21,29 @@ function formatShortLabel(period) {
   return month === "Jan" ? `Jan-Jun ${year}` : `Jul-Dec ${year}`;
 }
 
-function toTimelineItems(periods) {
-  const items = [];
+function getItemLabel(period) {
+  return period.label && period.label !== period.period
+    ? period.label
+    : formatShortLabel(period.period);
+}
 
-  periods.forEach((period, index) => {
-    items.push({
+function toTimelineItems(periods) {
+  return periods
+    .map((period, index) => ({
       ...period,
       id: `period-${period.period}-${index}`,
       type: "period",
-      label: formatShortLabel(period.period),
-      sortDate: getSortDate(period.period).getTime()
-    });
-
-    if (period.isPromotion) {
-      items.push({
-        ...period,
-        id: `promotion-${period.promotionDate || index}`,
-        type: "promotion",
-        label: "Promotion Event",
-        sortDate: Number(period.promotionDate) || getSortDate(period.period).getTime()
-      });
-    }
-  });
-
-  return items.sort((a, b) => a.sortDate - b.sortDate || (a.type === "promotion" ? 1 : -1));
+      label: getItemLabel(period),
+      sortDate: getSortDate(period.startDate ?? period.period).getTime()
+    }))
+    .sort((a, b) => a.sortDate - b.sortDate);
 }
 
 function getSortDate(period) {
+  if (period?.includes(",") || period?.split(" ").length === 3) {
+    return new Date(`${period} UTC`);
+  }
+
   const [month, year] = period.split(" ");
   return new Date(Number(year), month === "Jan" ? 0 : 6, 1);
 }
@@ -59,6 +55,67 @@ function money(value) {
 function monthlyValue(value, item) {
   const months = Number(item?.eligibleMonths || 6);
   return months > 0 ? Number(value || 0) / months : Number(value || 0);
+}
+
+function monthlySalary(item) {
+  const basic7 = Number(item.basic7 || 0);
+  const basic8 = Number(item.basic8 || 0);
+  const da7 = Math.round(basic7 * Number(item.da7Percent || 0) / 100);
+  const da8 = Math.round(basic8 * Number(item.da8Percent || 0) / 100);
+  const pension7 = Math.round((basic7 + da7) * 0.1);
+  const pension8 = Math.round((basic8 + da8) * 0.1);
+  const gross7 = basic7 + da7;
+  const gross8 = basic8 + da8;
+  const net7 = gross7 - pension7;
+  const net8 = gross8 - pension8;
+
+  return {
+    basic7,
+    basic8,
+    da7,
+    da8,
+    pension7,
+    pension8,
+    gross7,
+    gross8,
+    net7,
+    net8
+  };
+}
+
+function parseDisplayDate(value) {
+  return new Date(`${value} UTC`);
+}
+
+function getCalendarProratedMonths(startDate, endDate) {
+  let cursor = parseDisplayDate(startDate);
+  const inclusiveEnd = parseDisplayDate(endDate);
+  let months = 0;
+
+  while (cursor <= inclusiveEnd) {
+    const nextMonthStart = new Date(Date.UTC(
+      cursor.getUTCFullYear(),
+      cursor.getUTCMonth() + 1,
+      1
+    ));
+    const endExclusive = nextMonthStart <= inclusiveEnd
+      ? nextMonthStart
+      : new Date(inclusiveEnd.getTime() + 86400000);
+    const days = Math.max(
+      Math.round((endExclusive.getTime() - cursor.getTime()) / 86400000),
+      0
+    );
+    const daysInMonth = new Date(Date.UTC(
+      cursor.getUTCFullYear(),
+      cursor.getUTCMonth() + 1,
+      0
+    )).getUTCDate();
+
+    months += days / daysInMonth;
+    cursor = endExclusive;
+  }
+
+  return months;
 }
 
 export default function PremiumScrollableBreakdownCard({ result }) {
@@ -270,7 +327,8 @@ function TimelineScroller({
 }
 
 function TimelineItem({ item, index, isActive, onSelect }) {
-  const isPromotion = item.type === "promotion";
+  const isPromotion = item.isPromotion;
+  const hasCustomRange = item.label && item.label !== formatShortLabel(item.period);
 
   return (
     <button
@@ -327,8 +385,10 @@ function TimelineItem({ item, index, isActive, onSelect }) {
           }`}
       >
         {isPromotion
-          ? "Promotion & Pay Fixation"
-          : ""}
+          ? "Promoted period"
+          : hasCustomRange
+            ? formatShortLabel(item.period)
+            : ""}
       </div>
       <div className="mt-2 flex gap-1.5">
 
@@ -346,25 +406,29 @@ function TimelineItem({ item, index, isActive, onSelect }) {
 }
 
 function ActivePeriodDetails({ item, tableStyle }) {
-  const monthlyGross7 = monthlyValue(item.gross7, item);
-  const monthlyGross8 = monthlyValue(item.gross8, item);
-  const monthlyDeduction7 = monthlyValue(item.pension7 ?? item.nps7, item);
-  const monthlyDeduction8 = monthlyValue(item.pension8 ?? item.nps8, item);
-  const monthlyNet7 = monthlyGross7 - monthlyDeduction7;
-  const monthlyNet8 = monthlyGross8 - monthlyDeduction8;
+  const salary = monthlySalary(item);
+  const monthlyGross7 = salary.gross7;
+  const monthlyGross8 = salary.gross8;
+  const monthlyDeduction7 = salary.pension7;
+  const monthlyDeduction8 = salary.pension8;
+  const monthlyNet7 = salary.net7;
+  const monthlyNet8 = salary.net8;
   const netDifference = monthlyNet8 - monthlyNet7;
-  const periodArrear = item.periodArrear ?? item.netArrear;
+  const periodArrear = netDifference * getCalendarProratedMonths(
+    item.startDate,
+    item.endDate
+  );
   const incomeRows = [
     [
       "Basic Pay",
-      monthlyValue(item.basic7Total ?? item.basic7, item),
-      monthlyValue(item.basic8Total ?? item.basic8, item)
+      salary.basic7,
+      salary.basic8
     ],
-    ["DA", monthlyValue(item.da7, item), monthlyValue(item.da8, item)],
+    ["DA", salary.da7, salary.da8],
     [
       "Gross Income",
-      monthlyValue(item.gross7, item),
-      monthlyValue(item.gross8, item),
+      salary.gross7,
+      salary.gross8,
       true
     ]
   ];
@@ -551,7 +615,7 @@ function SummaryCards({
         title="Net Monthly Difference"
         value={netDifference}
         arrear={periodArrear}
-        arrearLabel="6 Month Period Net Arrear"
+        arrearLabel="Period Net Arrear"
         tone="blue"
       />
     </div>

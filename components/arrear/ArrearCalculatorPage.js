@@ -405,7 +405,7 @@ export default function ArrearCalculatorPage() {
             </div>
           </div>
 
-           
+
 
 
           <div>
@@ -735,16 +735,24 @@ export default function ArrearCalculatorPage() {
       </div>
 
       {result && (
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-5">
+        <div className="space-y-5">
+
+          {/* Summary Card */}
           <PremiumArrearSummaryCard
             result={result}
             implementationPeriod={implementationPeriod}
             fitmentFactor={fitmentFactor}
           />
 
+          {/* Breakdown Table */}
           <ArrearBreakdownTable result={result} />
+
+          {/* Scrollable Breakdown */}
           <PremiumScrollableBreakdownCard result={result} />
+
+          {/* Timeline Chart */}
           <ArrearTimelineChart result={result} />
+
         </div>
       )}
 

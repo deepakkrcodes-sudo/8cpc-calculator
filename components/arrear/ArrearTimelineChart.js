@@ -19,7 +19,38 @@ import {
 // ======================
 
 function formatPeriods(periods) {
-    return periods.map((p, index) => {
+    const groupedPeriods = Array.from(
+        periods.reduce((map, period) => {
+            const existing = map.get(period.period);
+
+            if (!existing) {
+                map.set(period.period, { ...period });
+                return map;
+            }
+
+            map.set(period.period, {
+                ...existing,
+                arrearForChart:
+                    (existing.arrearForChart ?? existing.salaryNetArrear ?? existing.netArrear ?? 0) +
+                    (period.salaryNetArrear ?? period.netArrear ?? 0),
+                netArrear:
+                    (existing.netArrear ?? 0) + (period.netArrear ?? 0),
+                salaryNetArrear:
+                    (existing.salaryNetArrear ?? existing.netArrear ?? 0) +
+                    (period.salaryNetArrear ?? period.netArrear ?? 0),
+                isPromotion: existing.isPromotion || period.isPromotion,
+                isIncrement: existing.isIncrement || period.isIncrement,
+                promotionDate: existing.promotionDate || period.promotionDate,
+                incrementDate: existing.incrementDate || period.incrementDate,
+                basic8: period.basic8 ?? existing.basic8,
+                da8Percent: period.da8Percent ?? existing.da8Percent
+            });
+
+            return map;
+        }, new Map()).values()
+    );
+
+    return groupedPeriods.map((p, index) => {
         const [month, year] = p.period.split(" ");
         
         // Calculate timestamp for continuous X-axis
@@ -33,7 +64,7 @@ function formatPeriods(periods) {
             timestamp,
             shortLabel: month === "Jan" ? `H1 '${year.slice(-2)}` : `H2 '${year.slice(-2)}`,
             fullLabel: `${month} ${year} - ${end}`,
-            arrear: p.netArrear,
+            arrear: p.arrearForChart ?? p.salaryNetArrear ?? p.netArrear,
             promotion: p.isPromotion,
             increment: p.isIncrement,
             promotionDate: p.promotionDate,

@@ -10,63 +10,131 @@ function formatPeriodLabel(period) {
   return `${month} ${year} - ${end}`;
 }
 
+function getDisplayPeriodLabel(period) {
+  return period.label && period.label !== period.period
+    ? period.label
+    : formatPeriodLabel(period.period);
+}
+
 function expandToMonthly(periods) {
   const monthly = [];
-
   const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-  periods.forEach((p, idx) => {
-    const totalMonths = 6;
+  periods.forEach((p) => {
+    const salary = calculateMonthlySalary(p);
+    const monthlyDiff = salary.net8 - salary.net7;
+    const start = parseDisplayDate(p.startDate);
+    const end = parseDisplayDate(p.endDate);
 
-    const gross7 =
-      (p.basic7Total ?? p.basic7 ?? 0) +
-      (p.da7 ?? 0);
-
-    const gross8 =
-      (p.basic8Total ?? p.basic8 ?? 0) +
-      (p.da8 ?? 0);
-
-    const deduction7 = p.pension7 ?? p.nps7 ?? 0;
-    const deduction8 = p.pension8 ?? p.nps8 ?? 0;
-
-    const net7 = gross7 - deduction7;
-    const net8 = gross8 - deduction8;
-
-    const diff = net8 - net7;
-
-    const mNet7 = net7 / totalMonths;
-    const mNet8 = net8 / totalMonths;
-    const mDiff = diff / totalMonths;
-
-    let startIndex;
-
-    const year = Number(p.period.split(" ")[1]);
-
-    if (idx % 2 === 0) {
-      // Jan block
-      startIndex = 0;
-    } else {
-      // Jul block
-      startIndex = 6;
-    }
-
-    for (let i = 0; i < totalMonths; i++) {
-      const mIdx = (startIndex + i) % 12;
-      const y = year + Math.floor((startIndex + i) / 12);
+    iterateMonthlySegments(start, end).forEach((segment, index) => {
+      const segmentMonths = Number((segment.days / segment.daysInMonth).toFixed(4));
+      const label = segment.isFullMonth
+        ? `${monthNames[segment.start.getUTCMonth()]} ${segment.start.getUTCFullYear()}`
+        : `${monthNames[segment.start.getUTCMonth()]} ${segment.start.getUTCFullYear()} (${segment.start.getUTCDate()}-${segment.end.getUTCDate()})`;
 
       monthly.push({
-        period: `${monthNames[mIdx]} ${y}`,
-        net7: Number(mNet7.toFixed(2)),
-        net8: Number(mNet8.toFixed(2)),
-        diff: Number(mDiff.toFixed(2)),
-        netArrear: Number(mDiff.toFixed(2)),
-        isPromotion: i === 0 ? p.isPromotion : false,
-        isIncrement: i === 0 ? p.isIncrement : false,
+        period: label,
+        net7: Number(salary.net7.toFixed(2)),
+        net8: Number(salary.net8.toFixed(2)),
+        diff: Number(monthlyDiff.toFixed(2)),
+        netArrear: Number((monthlyDiff * segmentMonths).toFixed(2)),
+        isPromotion: index === 0 ? p.isPromotion : false,
+        isIncrement: index === 0 ? p.isIncrement : false,
       });
-    }
+    });
   });
 
   return monthly;
+}
+
+function parseDisplayDate(value) {
+  return new Date(`${value} UTC`);
+}
+
+function iterateMonthlySegments(start, end) {
+  const segments = [];
+  let cursor = new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), start.getUTCDate()));
+  const inclusiveEnd = new Date(Date.UTC(end.getUTCFullYear(), end.getUTCMonth(), end.getUTCDate()));
+
+  while (cursor <= inclusiveEnd) {
+    const nextMonthStart = new Date(Date.UTC(cursor.getUTCFullYear(), cursor.getUTCMonth() + 1, 1));
+    const segmentEndExclusive = nextMonthStart <= inclusiveEnd
+      ? nextMonthStart
+      : new Date(inclusiveEnd.getTime() + 86400000);
+    const segmentEnd = new Date(segmentEndExclusive.getTime() - 86400000);
+    const monthStart = new Date(Date.UTC(cursor.getUTCFullYear(), cursor.getUTCMonth(), 1));
+    const monthEnd = new Date(Date.UTC(cursor.getUTCFullYear(), cursor.getUTCMonth() + 1, 0));
+
+    segments.push({
+      start: new Date(cursor),
+      end: segmentEnd,
+      days: Math.max(Math.round((segmentEndExclusive.getTime() - cursor.getTime()) / 86400000), 0),
+      daysInMonth: monthEnd.getUTCDate(),
+      isFullMonth:
+        cursor.getTime() === monthStart.getTime() &&
+        segmentEnd.getTime() === monthEnd.getTime()
+    });
+
+    cursor = segmentEndExclusive;
+  }
+
+  return segments;
+}
+
+function calculateMonthlySalary(period) {
+  const basic7 = Number(period.basic7 || 0);
+  const basic8 = Number(period.basic8 || 0);
+  const da7 = Math.round(basic7 * Number(period.da7Percent || 0) / 100);
+  const da8 = Math.round(basic8 * Number(period.da8Percent || 0) / 100);
+  const pension7 = Math.round((basic7 + da7) * 0.1);
+  const pension8 = Math.round((basic8 + da8) * 0.1);
+  const net7 = basic7 + da7 - pension7;
+  const net8 = basic8 + da8 - pension8;
+
+  return {
+    net7,
+    net8
+  };
+}
+
+function getCalendarProratedMonths(startDate, endDate) {
+  let cursor = parseDisplayDate(startDate);
+  const inclusiveEnd = parseDisplayDate(endDate);
+  let months = 0;
+
+  while (cursor <= inclusiveEnd) {
+    const nextMonthStart = new Date(Date.UTC(
+      cursor.getUTCFullYear(),
+      cursor.getUTCMonth() + 1,
+      1
+    ));
+    const endExclusive = nextMonthStart <= inclusiveEnd
+      ? nextMonthStart
+      : new Date(inclusiveEnd.getTime() + 86400000);
+    const days = Math.max(
+      Math.round((endExclusive.getTime() - cursor.getTime()) / 86400000),
+      0
+    );
+    const daysInMonth = new Date(Date.UTC(
+      cursor.getUTCFullYear(),
+      cursor.getUTCMonth() + 1,
+      0
+    )).getUTCDate();
+
+    months += days / daysInMonth;
+    cursor = endExclusive;
+  }
+
+  return months;
+}
+
+function calculatePeriodArrear(period) {
+  const salary = calculateMonthlySalary(period);
+
+  return (salary.net8 - salary.net7) * getCalendarProratedMonths(
+    period.startDate,
+    period.endDate
+  );
 }
 
 export default function ArrearBreakdownTable({ result }) {
@@ -83,7 +151,10 @@ export default function ArrearBreakdownTable({ result }) {
   const totalArrear =
     viewMode === "MONTHLY"
       ? displayPeriods.reduce((sum, p) => sum + p.netArrear, 0)
-      : result.totalNetArrear;
+      : displayPeriods.reduce(
+        (sum, p) => sum + calculatePeriodArrear(p),
+        0
+      );
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
@@ -171,49 +242,31 @@ export default function ArrearBreakdownTable({ result }) {
                   <th className="px-1 sm:px-3 py-1.5 sm:py-2 text-right text-gray-600 text-[11px] whitespace-nowrap">8th CPC Net</th>
                   <th className="px-1 sm:px-3 py-1.5 sm:py-2 text-right text-gray-600 text-[11px] whitespace-nowrap">Difference</th>
                   <th className="px-1 sm:px-3 py-1.5 sm:py-2 text-right text-gray-600 text-[11px] whitespace-nowrap">
-                    {viewMode === "HALF_YEARLY" ? "Arrear (6 months)" : "Arrear"}
+                    {viewMode === "HALF_YEARLY" ? "Arrear (Period)" : "Arrear"}
                   </th>
                 </tr>
               </thead>
 
               <tbody className="divide-y divide-gray-100">
                 {displayPeriods.map((p, i) => {
-                  const gross7 =
-                    (p.basic7Total ?? p.basic7 ?? 0) +
-                    (p.da7 ?? 0);
-
-                  const gross8 =
-                    (p.basic8Total ?? p.basic8 ?? 0) +
-                    (p.da8 ?? 0);
-
-                  const deduction7 = p.pension7 ?? p.nps7 ?? 0;
-                  const deduction8 = p.pension8 ?? p.nps8 ?? 0;
-
-                  let net7 = gross7 - deduction7;
-                  let net8 = gross8 - deduction8;
-
-                  let diff = net8 - net7;
-
-                  if (viewMode === "HALF_YEARLY") {
-                    const months = 6;
-
-                    // 👉 convert to monthly for display
-                    net7 = Number((net7 / months).toFixed(2));
-                    net8 = Number((net8 / months).toFixed(2));
-                    diff = Number((diff / months).toFixed(2));
-                  }
+                  const salary = viewMode === "HALF_YEARLY"
+                    ? calculateMonthlySalary(p)
+                    : p;
+                  const net7 = Number(salary.net7 || 0);
+                  const net8 = Number(salary.net8 || 0);
+                  const diff = Number(salary.diff ?? (net8 - net7));
 
                   const arrear = Number(
                     (
                       viewMode === "MONTHLY"
                         ? (p.netArrear ?? diff)
-                        : (p.netArrear ?? diff * 6)
+                        : calculatePeriodArrear(p)
                     ).toFixed(2)
                   );
                   return (
                     <tr key={i} className="hover:bg-indigo-50/30">
                       <td
-                        title={viewMode === "MONTHLY" ? p.period : formatPeriodLabel(p.period)}
+                        title={viewMode === "MONTHLY" ? p.period : getDisplayPeriodLabel(p)}
                         className={`px-1 sm:px-3 py-1.5 sm:py-2 whitespace-nowrap text-[11px] sm:text-sm truncate ${viewMode === "HALF_YEARLY"
                           ? "max-w-[95px] sm:max-w-none"
                           : "max-w-[45px] sm:max-w-none"
@@ -223,7 +276,7 @@ export default function ArrearBreakdownTable({ result }) {
                           <span>
                             {viewMode === "MONTHLY"
                               ? p.period
-                              : formatPeriodLabel(p.period)}
+                              : getDisplayPeriodLabel(p)}
                           </span>
 
                           <div className="flex gap-1">
