@@ -1,10 +1,10 @@
 import PayFixationCalculator from "@/components/payfixation/PayFixationCalculator";
 import OtherToolsSection from "@/components/tools/OtherToolsSection";
 export const metadata = {
-  title: "Pay Fixation Calculator (7th to 8th CPC) – Promotion & Increment Comparison",
+  title: "Pay Fixation Calculator – Promotion vs DNI Comparison",
 
   description:
-    "Calculate pay fixation after promotion using 7th CPC rules and estimate 8th CPC salary using fitment factor. Compare Date of Promotion vs Date of Next Increment.",
+    "Compare pay fixation based on promotion date and next increment under 7th CPC with projected 8th CPC salary impact.",
 
   keywords: [
     "pay fixation calculator",
