@@ -7,7 +7,7 @@ export const metadata = {
   title: "8th CPC Arrear Calculator 2026",
 
   description:
-    "Estimate your 8th Pay Commission arrears with dynamic DA progression, fitment factors, annual increments, and promotion adjustments for accurate salary projections of central government employees.",
+    "Calculate estimated 8th CPC arrears with DA progression, fitment factor, increments and promotion impact for central government employees.",
 
   keywords: [
     "8th CPC arrear calculator",

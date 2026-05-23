@@ -155,6 +155,7 @@ export default function ArrearBreakdownTable({ result }) {
         (sum, p) => sum + calculatePeriodArrear(p),
         0
       );
+  const roundedTotalArrear = Number(totalArrear.toFixed(2));
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
@@ -211,14 +212,12 @@ export default function ArrearBreakdownTable({ result }) {
 
       </div>
 
-      <div className="mt-1 flex items-start gap-1.5 text-[10px] leading-relaxed bg-gray-20 text-amber-700/90 sm:text-[12px]">
-
-        <span className="mt-[3px] h-1.5 w-1.5 shrink-0 rounded-full bg-amber-400" />
-
-        <span>
-          Arrear estimation considers Basic Pay and DA only; fixed deductions and regular tax are assumed unchanged during accrual.
+      <div className="mt-2 px-1 text-[10px] leading-relaxed text-amber-700 sm:text-[12px]">
+        <span className="mr-1 font-semibold text-amber-900">
+          Note:
         </span>
 
+        Arrears are generally calculated using Basic Pay and DA only, with NPS deduction; fixed deductions and regular tax are assumed unchanged during accrual.
       </div>
 
       {/* MOBILE HINT */}
@@ -305,7 +304,7 @@ export default function ArrearBreakdownTable({ result }) {
                   </td>
                   <td className="px-1 py-3 text-right">
                     <span className="font-bold text-lg text-emerald-700">
-                      ₹{formatINR(totalArrear)}
+                      ₹{formatINR(roundedTotalArrear)}
                     </span>
                   </td>
                 </tr>

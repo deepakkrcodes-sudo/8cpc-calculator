@@ -162,14 +162,12 @@ export default function PremiumScrollableBreakdownCard({ result }) {
         </div>
 
         <div className="space-y-3">
-          <div className="mt-1 flex items-start gap-1.5 text-[10px] leading-relaxed text-amber-700/90 sm:text-[12px]">
-
-            <span className="mt-[3px] h-1.5 w-1.5 shrink-0 rounded-full bg-amber-400" />
-
-            <span>
-              Arrear estimation considers Basic Pay and DA only; fixed deductions and regular tax are assumed unchanged during accrual.
+          <div className="mt-2 px-1 text-[10px] leading-relaxed text-amber-700 sm:text-[12px]">
+            <span className="mr-1 font-semibold text-amber-900">
+              Note:
             </span>
 
+            Arrears are generally calculated using Basic Pay and DA only, with NPS deduction; fixed deductions and regular tax are assumed unchanged during accrual.
           </div>
 
           {/* TIMELINE */}
