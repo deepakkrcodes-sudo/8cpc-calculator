@@ -154,7 +154,7 @@ export function calculateSalary({
 
   const basic7 = basic;
 
-  const da7 = Math.round(basic7 * 0.60); // current DA
+  const da7 = Math.round(basic7 * 0.63); // current DA
 
   const hra7PercentMap = {
     X: 30,
@@ -172,7 +172,7 @@ export function calculateSalary({
   const taBase7 = getTABase(level, basic7, tptaType);
 
   const ta7 = Math.round(
-    taBase7 * (1 + 0.60)
+    taBase7 * (1 + 0.63)
   );
 
   const otherAllow7 =
